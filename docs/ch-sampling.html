@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis</title>
+  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis" />
+  
+  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+<meta name="author" content="Shizhe Chen" />
+
+
+<meta name="date" content="2020-03-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ch-est.html"/>
+<link rel="next" href="ch-CI.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STA 108, Spring 2020</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
+<li class="chapter" data-level="1.4" data-path="ch-lmR.html"><a href="ch-lmR.html#note"><i class="fa fa-check"></i><b>1.4</b> Note</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-est.html"><a href="ch-est.html"><i class="fa fa-check"></i><b>2</b> Estimation</a></li>
+<li class="chapter" data-level="3" data-path="ch-sampling.html"><a href="ch-sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-sampling.html"><a href="ch-sampling.html#understanding-sampling-distribution-via-simulation"><i class="fa fa-check"></i><b>3.1</b> Understanding sampling distribution via simulation</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-sampling.html"><a href="ch-sampling.html#shapes-of-sampling-distributions"><i class="fa fa-check"></i><b>3.2</b> Shapes of sampling distributions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-sampling.html"><a href="ch-sampling.html#asymptotic-distribution"><i class="fa fa-check"></i><b>3.2.1</b> Asymptotic distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="ch-CI.html"><a href="ch-CI.html#prediction-interval"><i class="fa fa-check"></i><b>4.2</b> Prediction interval</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-CI.html"><a href="ch-CI.html#simultaneous-confidence-intervalsbandsregions"><i class="fa fa-check"></i><b>4.3</b> Simultaneous confidence intervals/bands/regions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-test.html"><a href="ch-test.html"><i class="fa fa-check"></i><b>5</b> Statistical inference: Hypothesis testing</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-test.html"><a href="ch-test.html#hypothesit-testing"><i class="fa fa-check"></i><b>5.1</b> Hypothesit testing</a></li>
+<li class="chapter" data-level="5.2" data-path="ch-test.html"><a href="ch-test.html#multiple-testing"><i class="fa fa-check"></i><b>5.2</b> Multiple testing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Model diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#residual-plot"><i class="fa fa-check"></i><b>6.1</b> Residual plot</a></li>
+<li class="chapter" data-level="6.2" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#remedies-for-non-linearity"><i class="fa fa-check"></i><b>6.2</b> Remedies for non-linearity</a></li>
+<li class="chapter" data-level="6.3" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#independence"><i class="fa fa-check"></i><b>6.3</b> Independence</a></li>
+<li class="chapter" data-level="6.4" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#normality"><i class="fa fa-check"></i><b>6.4</b> Normality</a></li>
+<li class="chapter" data-level="6.5" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#homoscedasticity"><i class="fa fa-check"></i><b>6.5</b> Homoscedasticity</a></li>
+<li class="chapter" data-level="6.6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#influential-observations-and-outliers"><i class="fa fa-check"></i><b>6.6</b> Influential Observations and Outliers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-multiple.html"><a href="ch-multiple.html"><i class="fa fa-check"></i><b>7</b> Multiple covariates</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-multiple.html"><a href="ch-multiple.html#examples"><i class="fa fa-check"></i><b>7.1</b> Examples</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ch-multiple.html"><a href="ch-multiple.html#advertising-data-1"><i class="fa fa-check"></i><b>7.1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ch-multiple.html"><a href="ch-multiple.html#flu-shot-1"><i class="fa fa-check"></i><b>7.1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="7.1.3" data-path="ch-multiple.html"><a href="ch-multiple.html#project-star-1"><i class="fa fa-check"></i><b>7.1.3</b> Project STAR</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ch-multiple.html"><a href="ch-multiple.html#classification-of-variables"><i class="fa fa-check"></i><b>7.2</b> Classification of variables</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-multiple.html"><a href="ch-multiple.html#least-squares-estimation"><i class="fa fa-check"></i><b>7.3</b> Least squares estimation</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-multiple.html"><a href="ch-multiple.html#underfitting-and-overfitting"><i class="fa fa-check"></i><b>7.4</b> Underfitting and overfitting</a></li>
+<li class="chapter" data-level="7.5" data-path="ch-multiple.html"><a href="ch-multiple.html#sampling-distribution-and-inference"><i class="fa fa-check"></i><b>7.5</b> Sampling distribution and inference</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="ch-multiple.html"><a href="ch-multiple.html#anova"><i class="fa fa-check"></i><b>7.5.1</b> ANOVA</a></li>
+<li class="chapter" data-level="7.5.2" data-path="ch-multiple.html"><a href="ch-multiple.html#wald-test"><i class="fa fa-check"></i><b>7.5.2</b> Wald test</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-selection.html"><a href="ch-selection.html"><i class="fa fa-check"></i><b>8</b> Model selection</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-selection.html"><a href="ch-selection.html#criteria"><i class="fa fa-check"></i><b>8.1</b> Criteria</a></li>
+<li class="chapter" data-level="8.2" data-path="ch-selection.html"><a href="ch-selection.html#selection-procedure"><i class="fa fa-check"></i><b>8.2</b> Selection procedure</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
+<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
+<li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
+<li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
+<li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
+<li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
+<li class="chapter" data-level="C.1" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-univariate"><i class="fa fa-check"></i><b>C.1</b> Simulation and visualization: univariate</a></li>
+<li class="chapter" data-level="C.2" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-multivariate"><i class="fa fa-check"></i><b>C.2</b> Simulation and visualization: multivariate</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods: Regression Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch:sampling" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Sampling distribution</h1>
+<div id="understanding-sampling-distribution-via-simulation" class="section level2">
+<h2><span class="header-section-number">3.1</span> Understanding sampling distribution via simulation</h2>
+<p><b>Reading materials</b>: Slides 24 - 33 in STA108_LinearRegression_S20.pdf.</p>
+<p>In this section, we assume a true data generating model in order to draw samples from the true popluation distribution. In particular, we assume that <span class="math display">\[ y_i = x_i \beta_1 + \beta_0 + \epsilon_i, \ i=1,\ldots, 50\]</span> where <span class="math inline">\(\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)\)</span>. We set <span class="math inline">\(\beta_1=0.15\)</span> and <span class="math inline">\(\beta_0=20\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### We will simulate synthetic data to understand the concept of sampling distribution
+
+### To match our setup, we will generate the covarates and keep them fixed in the remainder of the simulation. 
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.15</span>)
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+
+error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+y=Ey<span class="op">+</span>error.terms;
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+
+
+<span class="kw">plot</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">cex=</span><span class="dv">2</span>)
+<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)
+
+
+### We can run the simulation by putting the above lines into a large for-loop
+### We will wrap them up into one function
+
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+  error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+  <span class="kw">return</span>(beta.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+beta.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true));
+
+
+<span class="co"># Draw the histogram for the estimated intercept </span>
+<span class="kw">hist</span>(beta.sim[<span class="dv">1</span>,<span class="dv">1</span>,],<span class="dt">xlab=</span><span class="st">&#39;Fitted intercept&#39;</span>,<span class="dt">main=</span><span class="st">&#39;&#39;</span>)
+<span class="kw">abline</span>(<span class="dt">v=</span>beta.true[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</code></pre></div>
+<p>Recall from the lecture notes that the variance of <span class="math inline">\(\hat{\beta}_1\)</span> is <span class="math display">\[{\rm var}\big(\hat{\beta}_1\big)=\frac{1}{\sum_{i=1}^n (x_i-\bar{x})^2} \sigma^2.\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Using the simulation results, we can verify the statement on Slide 26
+
+### Expectation 
+<span class="kw">mean</span>(beta.sim[<span class="dv">1</span>,<span class="dv">1</span>,])<span class="op">-</span>beta.true[<span class="dv">1</span>] <span class="co"># intercept </span>
+<span class="kw">mean</span>(beta.sim[<span class="dv">2</span>,<span class="dv">1</span>,])<span class="op">-</span>beta.true[<span class="dv">2</span>] <span class="co"># slope </span>
+
+### Variance 
+sigma.sq =<span class="st"> </span><span class="dv">5</span><span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="dv">12</span>; <span class="co"># variance of the error: (runif(n)-0.5)*5;</span>
+
+<span class="co"># slope:</span>
+sigma.sq<span class="op">/</span><span class="kw">sum</span>(  (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span>  ) <span class="co"># theoretical value </span>
+<span class="kw">var</span>(beta.sim[<span class="dv">2</span>,<span class="dv">1</span>,]) <span class="co"># variance from the simulation </span>
+
+
+<span class="co"># intercept:</span>
+sigma.sq<span class="op">*</span><span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">sum</span>(  (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span>  )<span class="op">/</span>n <span class="co"># theoretical value </span>
+<span class="kw">var</span>(beta.sim[<span class="dv">1</span>,<span class="dv">1</span>,]) <span class="co"># variance from the simulation </span></code></pre></div>
+<p>Q: How would you verify the Gauss-Markove theorem in this simulation?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A very simple simulation to compare the LSE with another linear unbiased estimator: </span>
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+  error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+  slope.hat=beta.hat[<span class="dv">2</span>];
+  slope.dot=<span class="st"> </span>(y[n]<span class="op">-</span>y[<span class="dv">1</span>])<span class="op">/</span>(x[n]<span class="op">-</span>x[<span class="dv">1</span>])
+  <span class="kw">return</span>(<span class="kw">c</span>(slope.hat,slope.dot))
+}
+
+### Set the number of replicates to be 10000
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+slope.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true));
+
+<span class="kw">apply</span>(slope.sim,<span class="dv">1</span>,mean) <span class="co"># both are unbiased</span>
+<span class="kw">apply</span>(slope.sim,<span class="dv">1</span>,var) <span class="co"># variance of LSE is smaller</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Estimate the variance of errors using the residuals 
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+y=Ey<span class="op">+</span>error.terms;
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+
+residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+sigma.sq.hat=residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) <span class="co"># estimates from one instance</span>
+
+## Run a simulation to verify the claim
+
+## <span class="al">NOTE</span>: we will use the same function name
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+  error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+  residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+sigma.sq.hat=residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) <span class="co"># estimates from one instance</span>
+
+  <span class="kw">return</span>(sigma.sq.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+sigma.sq.hat.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true));
+
+<span class="kw">mean</span>(sigma.sq.hat.sim)
+sigma.sq</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## To wrap this up
+## For any new fits, we can estiamte the variance and standad errors of the estimators 
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+y=Ey<span class="op">+</span>error.terms;
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+
+estimate.sigma.sq&lt;-<span class="cf">function</span>(beta,covariate,outcome){
+   residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta,<span class="dt">covariate=</span>covariate,<span class="dt">outcome=</span>outcome)
+   n=<span class="kw">length</span>(outcome)
+   sigma.sq.hat=residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) 
+   <span class="kw">return</span>(sigma.sq.hat)
+}
+
+estimate.coef.var&lt;-<span class="cf">function</span>(beta,covariate,outcome){
+  sigma.sq.hat=<span class="kw">estimate.sigma.sq</span>(beta,covariate,outcome)
+  var.hat.beta=beta;
+  var.hat.beta[<span class="dv">2</span>]=sigma.sq.hat<span class="op">/</span><span class="kw">sum</span>(  (covariate<span class="op">-</span><span class="kw">mean</span>(covariate))<span class="op">^</span><span class="dv">2</span>  ) 
+  n=<span class="kw">length</span>(outcome)
+  var.hat.beta[<span class="dv">1</span>]=sigma.sq.hat<span class="op">*</span><span class="kw">sum</span>(covariate<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">sum</span>((covariate<span class="op">-</span><span class="kw">mean</span>(covariate))<span class="op">^</span><span class="dv">2</span>  )<span class="op">/</span>n
+  <span class="kw">return</span>( var.hat.beta)
+}
+
+estimate.coef.sd&lt;-<span class="cf">function</span>(beta,covariate,outcome){
+  var.hat.beta=<span class="kw">estimate.coef.var</span>(beta,covariate,outcome)
+ sd.hat.beta=<span class="kw">sqrt</span>(var.hat.beta);
+  <span class="kw">return</span>(sd.hat.beta)
+}
+<span class="kw">estimate.coef.sd</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+## Compare your numbers with the output from lm()
+<span class="kw">summary</span>(<span class="kw">lm</span>(y<span class="op">~</span>x<span class="op">+</span><span class="dv">1</span>))</code></pre></div>
+</div>
+<div id="shapes-of-sampling-distributions" class="section level2">
+<h2><span class="header-section-number">3.2</span> Shapes of sampling distributions</h2>
+<p><b>Reading materials</b>: Slide 34 in STA108_LinearRegression_S20.pdf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There can be multiple distributions with the same mean and variance. Consider three distributions discussed in the lecture notes.</span>
+
+xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">5</span>, <span class="dt">by=</span><span class="fl">0.01</span>);
+norm_density=<span class="kw">dnorm</span>(xgrid,<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span><span class="kw">sqrt</span>(<span class="dv">2</span>));
+unif_density=<span class="kw">dunif</span>(xgrid,<span class="dt">min=</span><span class="op">-</span><span class="kw">sqrt</span>(<span class="dv">6</span>),<span class="dt">max=</span><span class="kw">sqrt</span>(<span class="dv">6</span>));
+
+xbin=<span class="kw">c</span>(<span class="op">-</span><span class="kw">sqrt</span>(<span class="dv">2</span>),<span class="kw">sqrt</span>(<span class="dv">2</span>));
+ybin=<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>);
+
+
+<span class="kw">plot</span>(norm_density<span class="op">~</span>xgrid,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.52</span>),<span class="dt">xlab=</span><span class="st">&quot;z&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;density&quot;</span>)
+<span class="kw">lines</span>(unif_density<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="st">&#39;black&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+<span class="kw">segments</span>(xbin[<span class="dv">1</span>],<span class="dv">0</span>,xbin[<span class="dv">1</span>],ybin[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;green&#39;</span>,<span class="dt">lwd=</span><span class="dv">10</span>)
+<span class="kw">segments</span>(xbin[<span class="dv">2</span>],<span class="dv">0</span>,xbin[<span class="dv">2</span>],ybin[<span class="dv">2</span>],<span class="dt">col=</span><span class="st">&#39;green&#39;</span>,<span class="dt">lwd=</span><span class="dv">10</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="fl">2.5</span>,<span class="dt">y=</span><span class="fl">0.5</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Uniform&quot;</span>,<span class="st">&quot;Normal&quot;</span>,<span class="st">&quot;Binary&quot;</span>),<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;black&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>))</code></pre></div>
+<div id="asymptotic-distribution" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Asymptotic distribution</h3>
+<p><b>Reading materials</b>: Slides 35 - 49 in STA108_LinearRegression_S20.pdf.</p>
+<p>The L-F central limit theorem claims that the asymptotic distribution for <span class="math inline">\(\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }\)</span> is <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Edit the simulation code 
+### This time with large n (n=500)
+### Three different versions of errors
+### Unequal variances  
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true,error.type){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+  vars=<span class="fl">0.1</span><span class="op">+</span><span class="kw">runif</span>(n)<span class="op">*</span><span class="dv">2</span>; <span class="co"># unequal variance </span>
+  <span class="cf">if</span>(error.type<span class="op">==</span><span class="st">&#39;uniform&#39;</span>){
+    error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="kw">sqrt</span>(vars);
+    
+  }<span class="cf">else</span> <span class="cf">if</span>(error.type<span class="op">==</span><span class="st">&#39;Bernoulli&#39;</span>){
+    error.terms=(<span class="kw">rbinom</span>(n,<span class="dt">size=</span><span class="dv">1</span>,<span class="dt">prob=</span><span class="fl">0.5</span>)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="kw">sqrt</span>(vars);
+  }<span class="cf">else</span>{
+    error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="kw">sqrt</span>(vars);
+  }
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+  
+  residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+sigma.sq.hat=residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) <span class="co"># estimates from one instance</span>
+
+  beta.hat.std =(beta.hat[<span class="dv">2</span>]<span class="op">-</span>beta.true[<span class="dv">2</span>])<span class="op">/</span><span class="kw">sqrt</span>(sigma.sq.hat)<span class="op">*</span><span class="kw">sqrt</span>( <span class="kw">sum</span>( (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span> ) );  <span class="co"># standardized intercept</span>
+  
+  <span class="kw">return</span>(beta.hat.std)
+}
+
+### Set the number of replicates to be 10000
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+n=<span class="dv">500</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.hat.std.uniform=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true,<span class="dt">error.type=</span><span class="st">&#39;uniform&#39;</span>));
+beta.hat.std.Bernoulli=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true,<span class="dt">error.type=</span><span class="st">&#39;Bernoulli&#39;</span>));
+beta.hat.std.normal=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true,<span class="dt">error.type=</span><span class="st">&#39;normal&#39;</span>));</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Draw the density plot</span>
+
+density.uniform=<span class="kw">density</span>( beta.hat.std.uniform);
+density.Bernoulli=<span class="kw">density</span>( beta.hat.std.Bernoulli);
+density.normal=<span class="kw">density</span>( beta.hat.std.normal);
+
+<span class="co"># Theoretical density:</span>
+xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="op">-</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">4</span>,<span class="dt">length.out=</span><span class="dv">100</span>);
+normal.pdf=<span class="st"> </span><span class="kw">dnorm</span>(xgrid)
+
+<span class="kw">plot</span>(density.uniform,<span class="dt">xlab=</span><span class="st">&quot;Standardized intercept&quot;</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>),<span class="dt">main=</span><span class="st">&#39;&#39;</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(density.Bernoulli,<span class="dt">col=</span><span class="st">&#39;green&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(density.normal,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="dv">2</span>,<span class="dt">y=</span><span class="fl">0.46</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Uniform errors&quot;</span>,<span class="st">&quot;Bernoulli errors&quot;</span>,<span class="st">&quot;Normal errors&quot;</span>, <span class="st">&quot;N(0,1)&quot;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>,<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>),<span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The L-F CLT allows us to write down the asymptotic distribution in closed-form
+## The bootstrap method is an alternative when analytic solution is not available 
+## Note: Bootstrap is not that useful for linear regression, but has proven to be a powerful tool for other methods. 
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+<span class="co"># Generate one set of data: </span>
+n=<span class="dv">500</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+vars=<span class="fl">0.1</span><span class="op">+</span><span class="kw">runif</span>(n)<span class="op">*</span><span class="dv">2</span>; <span class="co"># unequal variance </span>
+error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="kw">sqrt</span>(vars);
+y=Ey<span class="op">+</span>error.terms;
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+
+
+<span class="co"># Now write a function for bootstrap </span>
+boot.one.instance&lt;-<span class="cf">function</span>(covariate,outcome){
+  n=<span class="kw">length</span>(outcome);
+  sample_indices =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n,n,<span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># sampling with replacement</span>
+  covariate.boot=<span class="st"> </span>covariate[sample_indices]; outcome.boot=<span class="st"> </span>outcome[sample_indices];
+   
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>covariate.boot,<span class="dt">outcome=</span>outcome.boot);
+  <span class="kw">return</span>(beta.hat[<span class="dv">2</span>]) 
+}
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+B=<span class="fl">1e5</span>;
+beta.hat.boot=<span class="kw">replicate</span>(B,<span class="kw">boot.one.instance</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y));</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Compare the bootstrap distribution of the standardized slope against that from the CLT 
+
+
+density.boot=<span class="kw">density</span>((beta.hat.boot<span class="op">-</span><span class="kw">mean</span>(beta.hat.boot))<span class="op">/</span><span class="kw">sd</span>(beta.hat.boot));
+<span class="co"># Theoretical density (from CLT)</span>
+xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="op">-</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">4</span>,<span class="dt">length.out=</span><span class="dv">100</span>);
+normal.pdf=<span class="st"> </span><span class="kw">dnorm</span>(xgrid)
+
+<span class="kw">plot</span>(density.boot,<span class="dt">xlab=</span><span class="st">&quot;Standardized intercept&quot;</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>),<span class="dt">main=</span><span class="st">&#39;&#39;</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="dv">2</span>,<span class="dt">y=</span><span class="fl">0.46</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Bootstrap&quot;</span>, <span class="st">&quot;N(0,1)&quot;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>,<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>),<span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Compare the distributions using the raw bootstrap distribution, and the distribution using the moments only
+
+
+density.boot=<span class="kw">density</span>(beta.hat.boot);
+<span class="co"># Theoretical density (from CLT)</span>
+xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="kw">min</span>(beta.hat.boot),<span class="dt">to=</span><span class="kw">max</span>(beta.hat.boot),<span class="dt">length.out=</span><span class="dv">100</span>);
+normal.pdf=<span class="st"> </span><span class="kw">dnorm</span>(xgrid,<span class="dt">mean=</span><span class="kw">mean</span>(beta.hat.boot),<span class="dt">sd=</span><span class="kw">sd</span>(beta.hat.boot))
+
+<span class="kw">plot</span>(density.boot,<span class="dt">xlab=</span><span class="st">&quot;Standardized intercept&quot;</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">main=</span><span class="st">&#39;&#39;</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="fl">0.15</span>,<span class="dt">y=</span><span class="dv">50</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Empirical&quot;</span>, <span class="st">&quot;Moment-based&quot;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>,<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>),<span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</code></pre></div>
+</div>
+</div>
+<div id="small-sample-size" class="section level2">
+<h2><span class="header-section-number">3.3</span> Small sample size</h2>
+<p><b>Reading materials</b>: Slides 50 - 57 in STA108_LinearRegression_S20.pdf.</p>
+<p>When the sample size is small, the asymptotic distribution is not close to the true sampling distribution. Neither the central limit theorem or the bootstrap distribution are good approximation of the asymptotic distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulation with small sample size</span>
+<span class="co"># We will demonstrate the case with 5 samples</span>
+<span class="co"># You will find the code in this trunk almost identical with previous code</span>
+
+<span class="co"># Generate one set of data:</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">10</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.15</span>)
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+
+error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">5</span>; <span class="co"># Normal errors!</span>
+y=Ey<span class="op">+</span>error.terms;
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+<span class="kw">plot</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">cex=</span><span class="dv">2</span>)
+<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)
+
+
+## Simulate the true sampling distribution:
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+  error.terms=<span class="st"> </span>(<span class="kw">runif</span>(n)<span class="op">-</span><span class="fl">0.5</span>)<span class="op">*</span><span class="dv">5</span>;
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
+  <span class="kw">return</span>(beta.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=<span class="fl">1e4</span>;
+true.beta.hat=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.true));
+
+### Obtain the mean and standard deviation using CLT:
+residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+sigma.sq.hat=residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) <span class="co"># estimates from one instance</span>
+
+  
+### Obtain the bootstrap distribution 
+B=<span class="fl">1e5</span>;
+boot.beta.hat=<span class="kw">replicate</span>(B,<span class="kw">boot.one.instance</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y));</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">density.true=<span class="kw">density</span>( (true.beta.hat[<span class="dv">2</span>,<span class="dv">1</span>,]<span class="op">-</span><span class="kw">mean</span>(true.beta.hat[<span class="dv">2</span>,<span class="dv">1</span>,]))<span class="op">/</span><span class="kw">sd</span>(true.beta.hat[<span class="dv">2</span>,<span class="dv">1</span>,]) );
+
+density.boot=<span class="kw">density</span>((boot.beta.hat<span class="op">-</span><span class="kw">mean</span>(boot.beta.hat))<span class="op">/</span><span class="kw">sd</span>(boot.beta.hat));
+<span class="co"># Theoretical density (from CLT)</span>
+xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="op">-</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">4</span>,<span class="dt">length.out=</span><span class="dv">100</span>);
+normal.pdf=<span class="st"> </span><span class="kw">dnorm</span>(xgrid)
+
+
+<span class="kw">plot</span>(density.true,<span class="dt">xlab=</span><span class="st">&quot;Estimated intercept&quot;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>),<span class="dt">main=</span><span class="st">&#39;&#39;</span>,<span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">lines</span>(density.boot,<span class="dt">col=</span><span class="st">&#39;green&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="dv">2</span>,<span class="dt">y=</span><span class="fl">0.5</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;True&quot;</span>,<span class="st">&quot;Bootstrap&quot;</span>,<span class="st">&quot;CLT&quot;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;black&#39;</span>,<span class="st">&#39;green&#39;</span>,<span class="st">&#39;red&#39;</span>),<span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## With very few samples, we have to exploit the parametric assumption
+## In this case, we take advantage of the normality assumption on the errors
+
+
+t.pdf=<span class="st"> </span><span class="kw">dt</span>(xgrid,<span class="dt">df=</span>n<span class="op">-</span><span class="dv">2</span>)
+
+<span class="kw">plot</span>(density.true,<span class="dt">xlab=</span><span class="st">&quot;Estimated intercept&quot;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>),<span class="dt">main=</span><span class="st">&#39;&#39;</span>,<span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">lines</span>(density.boot,<span class="dt">col=</span><span class="st">&#39;green&#39;</span>,<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+
+<span class="kw">lines</span>(t.pdf<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>,,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>)
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="dv">2</span>,<span class="dt">y=</span><span class="fl">0.5</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;True&quot;</span>,<span class="st">&quot;Bootstrap&quot;</span>,<span class="st">&quot;CLT&quot;</span>,<span class="st">&#39;Student t&#39;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;black&#39;</span>,<span class="st">&#39;green&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;blue&#39;</span>),<span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The Student t distribution grows more similar to the standard normal as its degrees of freedom increases 
+
+t_dist=<span class="kw">dt</span>(xgrid,<span class="dt">df=</span><span class="dv">1</span>);
+<span class="kw">plot</span>(t_dist<span class="op">~</span>xgrid,<span class="dt">xlab=</span><span class="st">&quot;beta 1 hat&quot;</span>,<span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>),<span class="dt">main=</span><span class="st">&#39;&#39;</span>)
+
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">10</span>){
+t_dist=<span class="kw">dt</span>(xgrid,<span class="dt">df=</span>i);
+
+<span class="kw">lines</span>(t_dist<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,i<span class="op">/</span><span class="dv">10</span>),<span class="dt">lwd=</span><span class="dv">3</span>)
+
+}
+
+<span class="kw">legend</span>(<span class="dt">x=</span><span class="dv">2</span>,<span class="dt">y=</span><span class="fl">0.46</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Student t&quot;</span>, <span class="st">&quot;N(0,1)&quot;</span>),<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>))
+
+<span class="kw">lines</span>(normal.pdf<span class="op">~</span>xgrid,<span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="fl">0.4</span>),<span class="dt">lwd=</span><span class="dv">5</span>)</code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch-est.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-CI.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STA108_bookdown.pdf", "STA108_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

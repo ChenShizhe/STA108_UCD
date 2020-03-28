@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Multiple covariates | Applied Statistical Methods: Regression Analysis</title>
+  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Multiple covariates | Applied Statistical Methods: Regression Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Multiple covariates | Applied Statistical Methods: Regression Analysis" />
+  
+  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+<meta name="author" content="Shizhe Chen" />
+
+
+<meta name="date" content="2020-03-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ch-diagnostics.html"/>
+<link rel="next" href="ch-selection.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STA 108, Spring 2020</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
+<li class="chapter" data-level="1.4" data-path="ch-lmR.html"><a href="ch-lmR.html#note"><i class="fa fa-check"></i><b>1.4</b> Note</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-est.html"><a href="ch-est.html"><i class="fa fa-check"></i><b>2</b> Estimation</a></li>
+<li class="chapter" data-level="3" data-path="ch-sampling.html"><a href="ch-sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-sampling.html"><a href="ch-sampling.html#understanding-sampling-distribution-via-simulation"><i class="fa fa-check"></i><b>3.1</b> Understanding sampling distribution via simulation</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-sampling.html"><a href="ch-sampling.html#shapes-of-sampling-distributions"><i class="fa fa-check"></i><b>3.2</b> Shapes of sampling distributions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-sampling.html"><a href="ch-sampling.html#asymptotic-distribution"><i class="fa fa-check"></i><b>3.2.1</b> Asymptotic distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="ch-CI.html"><a href="ch-CI.html#prediction-interval"><i class="fa fa-check"></i><b>4.2</b> Prediction interval</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-CI.html"><a href="ch-CI.html#simultaneous-confidence-intervalsbandsregions"><i class="fa fa-check"></i><b>4.3</b> Simultaneous confidence intervals/bands/regions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-test.html"><a href="ch-test.html"><i class="fa fa-check"></i><b>5</b> Statistical inference: Hypothesis testing</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-test.html"><a href="ch-test.html#hypothesit-testing"><i class="fa fa-check"></i><b>5.1</b> Hypothesit testing</a></li>
+<li class="chapter" data-level="5.2" data-path="ch-test.html"><a href="ch-test.html#multiple-testing"><i class="fa fa-check"></i><b>5.2</b> Multiple testing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Model diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#residual-plot"><i class="fa fa-check"></i><b>6.1</b> Residual plot</a></li>
+<li class="chapter" data-level="6.2" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#remedies-for-non-linearity"><i class="fa fa-check"></i><b>6.2</b> Remedies for non-linearity</a></li>
+<li class="chapter" data-level="6.3" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#independence"><i class="fa fa-check"></i><b>6.3</b> Independence</a></li>
+<li class="chapter" data-level="6.4" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#normality"><i class="fa fa-check"></i><b>6.4</b> Normality</a></li>
+<li class="chapter" data-level="6.5" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#homoscedasticity"><i class="fa fa-check"></i><b>6.5</b> Homoscedasticity</a></li>
+<li class="chapter" data-level="6.6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#influential-observations-and-outliers"><i class="fa fa-check"></i><b>6.6</b> Influential Observations and Outliers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-multiple.html"><a href="ch-multiple.html"><i class="fa fa-check"></i><b>7</b> Multiple covariates</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-multiple.html"><a href="ch-multiple.html#examples"><i class="fa fa-check"></i><b>7.1</b> Examples</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ch-multiple.html"><a href="ch-multiple.html#advertising-data-1"><i class="fa fa-check"></i><b>7.1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ch-multiple.html"><a href="ch-multiple.html#flu-shot-1"><i class="fa fa-check"></i><b>7.1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="7.1.3" data-path="ch-multiple.html"><a href="ch-multiple.html#project-star-1"><i class="fa fa-check"></i><b>7.1.3</b> Project STAR</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ch-multiple.html"><a href="ch-multiple.html#classification-of-variables"><i class="fa fa-check"></i><b>7.2</b> Classification of variables</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-multiple.html"><a href="ch-multiple.html#least-squares-estimation"><i class="fa fa-check"></i><b>7.3</b> Least squares estimation</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-multiple.html"><a href="ch-multiple.html#underfitting-and-overfitting"><i class="fa fa-check"></i><b>7.4</b> Underfitting and overfitting</a></li>
+<li class="chapter" data-level="7.5" data-path="ch-multiple.html"><a href="ch-multiple.html#sampling-distribution-and-inference"><i class="fa fa-check"></i><b>7.5</b> Sampling distribution and inference</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="ch-multiple.html"><a href="ch-multiple.html#anova"><i class="fa fa-check"></i><b>7.5.1</b> ANOVA</a></li>
+<li class="chapter" data-level="7.5.2" data-path="ch-multiple.html"><a href="ch-multiple.html#wald-test"><i class="fa fa-check"></i><b>7.5.2</b> Wald test</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-selection.html"><a href="ch-selection.html"><i class="fa fa-check"></i><b>8</b> Model selection</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-selection.html"><a href="ch-selection.html#criteria"><i class="fa fa-check"></i><b>8.1</b> Criteria</a></li>
+<li class="chapter" data-level="8.2" data-path="ch-selection.html"><a href="ch-selection.html#selection-procedure"><i class="fa fa-check"></i><b>8.2</b> Selection procedure</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
+<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
+<li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
+<li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
+<li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
+<li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
+<li class="chapter" data-level="C.1" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-univariate"><i class="fa fa-check"></i><b>C.1</b> Simulation and visualization: univariate</a></li>
+<li class="chapter" data-level="C.2" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-multivariate"><i class="fa fa-check"></i><b>C.2</b> Simulation and visualization: multivariate</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods: Regression Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch:multiple" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Multiple covariates</h1>
+<div id="examples" class="section level2">
+<h2><span class="header-section-number">7.1</span> Examples</h2>
+<p><b>Reading materials</b>: Slides 103 - 111 in STA108_LinearRegression_S20.pdf.</p>
+<p>We will revisit the examples that have been studied in Chapter <a href="#lmR"><strong>??</strong></a>.</p>
+<div id="advertising-data-1" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Advertising data</h3>
+<p>We now consider all the covariates in the data set. The resulting model is <span class="math display">\[
+    y_i =  \beta_0 + \sum_{j=1}^3 x_{i,j} \beta_j  +  \epsilon_i, i=1,\ldots, 200,
+    \]</span> where <span class="math inline">\(y_i\)</span> is the <code>sales</code> (1 unit = 1000 dollars) for the <span class="math inline">\(i\)</span>th entry, <span class="math inline">\(x_{i,1}\)</span> is the TV advertising budget for the <span class="math inline">\(i\)</span>th entry, <span class="math inline">\(x_{i,2}\)</span> is the radio advertising budget for the <span class="math inline">\(i\)</span>th entry, <span class="math inline">\(x_{i,3}\)</span> is the newspaper advertising budget for the <span class="math inline">\(i\)</span>th entry. In addition, we assume that the errors <span class="math inline">\(\{\epsilon_i\}_{i=1}^{200}\)</span> satisfy that <span class="math inline">\(\epsilon_1,\ldots, \epsilon_200\)</span> are independently and identically distributed (i.i.d.), <span class="math inline">\(\mathbb{E}[\epsilon_i]= 0\)</span> for <span class="math inline">\(i=1,2,\ldots, 200\)</span> and <span class="math inline">\(\mathrm{var}(\epsilon_i)=\sigma^2\)</span> for <span class="math inline">\(i=1,2,\ldots, 200\)</span>. Recall that we consider fixed design (i.e., <span class="math inline">\(x_i\)</span> is not random) in this course for simplicity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat.advertising=<span class="kw">read.csv</span>(<span class="st">&#39;./data/advertising.csv&#39;</span>);
+<span class="co"># Fit a multiple linear regression</span>
+fit.advertising =<span class="st"> </span><span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span>radio<span class="op">+</span>newspaper<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.advertising) 
+
+fit.advertising.slr =<span class="st"> </span><span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.advertising.slr) </code></pre></div>
+<p>How would you interpret the fitted results? How do they compare with the results from the simple linear regression in Chapter <a href="#lmR"><strong>??</strong></a>?</p>
+</div>
+<div id="flu-shot-1" class="section level3">
+<h3><span class="header-section-number">7.1.2</span> Flu shot</h3>
+<p>We will include <code>age</code> and <code>female</code>(gender) in the regression in addition to the treatment received. What can you conclude from the fitted results?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat.flu =<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./data/flu240.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
+<span class="co"># Fit a multiple linear regression</span>
+fit.flu=<span class="st"> </span><span class="kw">lm</span>(outcome<span class="op">~</span>treatment.received<span class="op">+</span>age<span class="op">+</span>female<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.flu); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.flu) </code></pre></div>
+<p>In addition, we can fit a regression with treatment received as the outcome, where treatment assigned, age and gender are covariates. What can you conclude now?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit.trt=<span class="st"> </span><span class="kw">lm</span>(treatment.received<span class="op">~</span>treatment.assigned<span class="op">+</span>age<span class="op">+</span>female<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.flu); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.trt) </code></pre></div>
+</div>
+<div id="project-star-1" class="section level3">
+<h3><span class="header-section-number">7.1.3</span> Project STAR</h3>
+<p>Project STAR is a stratified randomized experiment, where randomization happened within each school. Hence, we will add <code>schoolid2</code> as an additional factor in the regression.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(AER)
+<span class="kw">data</span>(<span class="st">&quot;STAR&quot;</span>)
+dat.STAR=STAR; <span class="co"># Just to be consistent</span>
+<span class="co"># Fit a simple linear regression</span>
+fit.STAR=<span class="st"> </span><span class="kw">lm</span>(math2<span class="op">~</span><span class="kw">as.factor</span>(star2)<span class="op">+</span><span class="kw">as.factor</span>(schoolid2)<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.STAR); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.STAR)<span class="op">$</span>coef[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,]
+
+<span class="co"># We can no longer draw a fitted line here...</span></code></pre></div>
+</div>
+</div>
+<div id="classification-of-variables" class="section level2">
+<h2><span class="header-section-number">7.2</span> Classification of variables</h2>
+<p><b>Reading materials</b>: Slides 112 - 118 in STA108_LinearRegression_S20.pdf.</p>
+<p>We will use simulation to examine the roles of the variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;sources.r&#39;</span>)
+
+simulate.one.instance.data&lt;-<span class="cf">function</span>(){
+n=<span class="dv">100</span>;
+confounder =<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>;
+precision =<span class="st"> </span><span class="kw">runif</span>(n);
+instrument =<span class="st"> </span><span class="kw">rbinom</span>(n,<span class="dt">size=</span><span class="dv">1</span>,<span class="dt">prob=</span><span class="fl">0.4</span>);
+trt=<span class="kw">rnorm</span>(n) <span class="op">+</span><span class="st"> </span>confounder<span class="op">*</span><span class="fl">0.4</span><span class="op">-</span>instrument;
+y=trt<span class="op">*</span><span class="dv">1</span><span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>confounder<span class="op">+</span>precision<span class="op">*</span><span class="fl">0.7</span><span class="op">+</span><span class="fl">0.5</span><span class="op">*</span><span class="kw">rnorm</span>(n);
+out=<span class="kw">data.frame</span>(<span class="dt">y=</span>y,<span class="dt">trt=</span>trt,<span class="dt">confounder=</span>confounder, <span class="dt">precision=</span>precision, <span class="dt">instrument=</span>instrument)
+<span class="kw">return</span>(out)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Effect if ignoring confounder:
+
+simulate.one.instance&lt;-<span class="cf">function</span>(){
+  dat=<span class="kw">simulate.one.instance.data</span>();
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>dat[,<span class="st">&#39;trt&#39;</span>],<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  
+  beta.hat.confounder=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="kw">c</span>(<span class="st">&#39;trt&#39;</span>,<span class="st">&#39;confounder&#39;</span>)]),<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  <span class="kw">return</span>(<span class="kw">c</span>(beta.hat[<span class="dv">2</span>],beta.hat.confounder[<span class="dv">2</span>]))
+}
+N.sim=<span class="dv">10000</span>;
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+sim.confounder=<span class="kw">replicate</span>(N.sim, <span class="kw">simulate.one.instance</span>());
+<span class="kw">apply</span>(sim.confounder,<span class="dv">1</span>,mean) <span class="co"># The true value is 1</span>
+<span class="kw">apply</span>( (sim.confounder<span class="op">-</span><span class="dv">1</span>),<span class="dv">1</span>,<span class="cf">function</span>(x){ <span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>) }) <span class="co"># The mean squared error</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Effect if ignoring precision variable:
+
+simulate.one.instance&lt;-<span class="cf">function</span>(){
+  dat=<span class="kw">simulate.one.instance.data</span>();
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="kw">c</span>(<span class="st">&#39;trt&#39;</span>,<span class="st">&#39;confounder&#39;</span>)]),<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  
+  beta.hat.precision=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="kw">c</span>(<span class="st">&#39;trt&#39;</span>,<span class="st">&#39;confounder&#39;</span>,<span class="st">&#39;precision&#39;</span>)]),<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  <span class="kw">return</span>(<span class="kw">c</span>(beta.hat[<span class="dv">2</span>],beta.hat.precision[<span class="dv">2</span>]))
+}
+N.sim=<span class="dv">10000</span>;
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+sim.precision=<span class="kw">replicate</span>(N.sim, <span class="kw">simulate.one.instance</span>());
+<span class="kw">apply</span>(sim.precision,<span class="dv">1</span>,mean) <span class="co"># The true value is 1</span>
+<span class="kw">apply</span>( (sim.precision<span class="op">-</span><span class="dv">1</span>),<span class="dv">1</span>,<span class="cf">function</span>(x){ <span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>) }) <span class="co"># The mean squared error</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The power of instruments
+###  If the confounder is unobserved, we can use the two stage least squares method
+
+simulate.one.instance&lt;-<span class="cf">function</span>(){
+  dat=<span class="kw">simulate.one.instance.data</span>();
+  beta.hat.naive=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="st">&#39;trt&#39;</span>]),<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  
+  yiv=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="kw">c</span>(<span class="st">&#39;instrument&#39;</span>)]),<span class="dt">outcome=</span>dat<span class="op">$</span>y)
+  
+  trtiv=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">as.matrix</span>(dat[,<span class="kw">c</span>(<span class="st">&#39;instrument&#39;</span>)]),<span class="dt">outcome=</span>dat<span class="op">$</span>trt)
+  
+  
+  <span class="kw">return</span>(<span class="kw">c</span>(beta.hat.naive[<span class="dv">2</span>],yiv[<span class="dv">2</span>]<span class="op">/</span>trtiv[<span class="dv">2</span>]))
+}
+N.sim=<span class="dv">10000</span>;
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+sim.iv=<span class="kw">replicate</span>(N.sim, <span class="kw">simulate.one.instance</span>());
+<span class="kw">apply</span>(sim.iv,<span class="dv">1</span>,mean) <span class="co"># The true value is 1</span>
+<span class="kw">apply</span>( (sim.iv<span class="op">-</span><span class="dv">1</span>),<span class="dv">1</span>,<span class="cf">function</span>(x){ <span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>) }) <span class="co"># The mean squared error</span></code></pre></div>
+</div>
+<div id="least-squares-estimation" class="section level2">
+<h2><span class="header-section-number">7.3</span> Least squares estimation</h2>
+<p><b>Reading materials</b>: Slides 119 - 141 in STA108_LinearRegression_S20.pdf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Consider another data set with a bit more covariates </span>
+<span class="kw">library</span>(AER)
+<span class="kw">data</span>(<span class="st">&quot;Fatalities&quot;</span>)
+dat.fatalities =<span class="st"> </span>Fatalities
+<span class="co"># This dataset contains 34 variables</span>
+<span class="co"># It is actually a longitudinal/panel data</span>
+<span class="co"># We will ignore the spatial temporal structure in this class</span>
+
+y=dat.fatalities<span class="op">$</span>fatal; <span class="co">#Number of vehicle fatalities.</span>
+X=<span class="kw">as.matrix</span>(dat.fatalities[,<span class="kw">c</span>(<span class="st">&#39;spirits&#39;</span>,<span class="st">&#39;unemp&#39;</span>,<span class="st">&#39;income&#39;</span>,<span class="st">&#39;beertax&#39;</span>,<span class="st">&#39;baptist&#39;</span>,<span class="st">&#39;mormon&#39;</span>,<span class="st">&#39;drinkage&#39;</span>,<span class="st">&#39;dry&#39;</span>,<span class="st">&#39;youngdrivers&#39;</span>,<span class="st">&#39;miles&#39;</span>,<span class="st">&#39;gsp&#39;</span>)]);
+
+
+<span class="co"># Rewrite the functions in Chapter 2</span>
+linear.model&lt;-<span class="cf">function</span>(beta,covariate){
+  <span class="co"># beta: a 2-vector, where the first entry is the intercept</span>
+  beta=<span class="kw">as.matrix</span>(beta,<span class="dt">nrow=</span><span class="kw">length</span>(beta))
+  yout=covariate<span class="op">%*%</span>beta[<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span>beta[<span class="dv">1</span>];
+  <span class="kw">return</span>(yout);
+  <span class="co"># Note: this function only works with simple linear regression model</span>
+  <span class="co"># How would you generalize it?</span>
+}
+sum.of.squares&lt;-<span class="cf">function</span>(beta,covariate,outcome){
+  yout=<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta,<span class="dt">covariate=</span>covariate);
+  res=outcome<span class="op">-</span>yout;
+  sos=<span class="st"> </span><span class="kw">sum</span>(res<span class="op">^</span><span class="dv">2</span>);
+  <span class="kw">return</span>(sos)
+}
+fit.linear.model&lt;-<span class="cf">function</span>(covariate,outcome){
+  X=<span class="kw">cbind</span>(<span class="dv">1</span>,covariate);
+  
+  beta.fit=<span class="kw">solve</span>( <span class="kw">t</span>(X)<span class="op">%*%</span>X )<span class="op">%*%</span><span class="kw">t</span>(X)<span class="op">%*%</span>outcome;
+  <span class="kw">return</span>(beta.fit)
+}
+
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>X,<span class="dt">outcome=</span>y)
+
+<span class="co"># Compare with lm()</span>
+fit.lm=<span class="kw">lm</span>(y<span class="op">~</span>X<span class="op">+</span><span class="dv">1</span>);
+beta.hat</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Hat matrix </span>
+calculate.hat&lt;-<span class="cf">function</span>(covariate){
+  X=<span class="kw">cbind</span>(<span class="dv">1</span>,covariate);
+  P=X<span class="op">%*%</span><span class="kw">solve</span>(<span class="kw">t</span>(X)<span class="op">%*%</span>X)<span class="op">%*%</span><span class="kw">t</span>(X);
+  <span class="kw">return</span>(P)
+}
+P=<span class="kw">calculate.hat</span>(<span class="dt">covariate=</span>X);
+
+<span class="co"># Verify the properties of the hat matrix:</span>
+## Residuals 
+resid=<span class="st"> </span>y<span class="op">-</span><span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>X);
+resid.hat =<span class="st"> </span>(<span class="kw">diag</span>(<span class="kw">length</span>(y))<span class="op">-</span>P)<span class="op">%*%</span>y;
+<span class="kw">sum</span>((resid<span class="op">-</span>resid.hat)<span class="op">^</span><span class="dv">2</span>)
+
+## Idempotent 
+<span class="kw">max</span>( <span class="kw">abs</span>(P<span class="op">%*%</span>P<span class="op">-</span>P))
+
+## Orthogonality 
+<span class="kw">max</span>(<span class="kw">abs</span>((<span class="kw">diag</span>(<span class="kw">length</span>(y))<span class="op">-</span>P)<span class="op">%*%</span>X))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sum of squares with the hat matrix:</span>
+n=<span class="kw">length</span>(y);J=<span class="kw">matrix</span>(<span class="dv">1</span>,n,n);I=<span class="kw">diag</span>(n)
+total.sum.of.squares=<span class="st"> </span><span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y
+explained.sum.of.squares=<span class="kw">t</span>(y)<span class="op">%*%</span>(P<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y
+residual.sum.of.squares=<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>P)<span class="op">%*%</span>y
+
+<span class="co"># Check if it is true</span>
+<span class="kw">sum.of.squares</span>(beta.hat,<span class="dt">covariate =</span> X,<span class="dt">outcome =</span> y)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># R^2</span>
+R.sq =<span class="st"> </span>explained.sum.of.squares<span class="op">/</span>total.sum.of.squares;
+
+<span class="co"># Through more variables into X</span>
+<span class="co"># These variables are meaningless</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">5</span><span class="op">*</span>n),<span class="dt">nrow=</span>n,<span class="dt">ncol=</span><span class="dv">5</span>);
+X.Z=<span class="kw">cbind</span>(X,Z);
+
+P.Z=<span class="kw">calculate.hat</span>(<span class="dt">covariate=</span>X.Z);
+
+R.sq.Z=<span class="st"> </span><span class="kw">t</span>(y)<span class="op">%*%</span>(P.Z<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span><span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y;
+
+R.sq.Z
+R.sq
+
+<span class="co"># Hence the adjusted R^2:</span>
+R.sq.adj=<span class="dv">1</span><span class="op">-</span>(residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(total.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));
+
+R.sq.Z.adj=<span class="dv">1</span><span class="op">-</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>P.Z)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X.Z)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));</code></pre></div>
+</div>
+<div id="underfitting-and-overfitting" class="section level2">
+<h2><span class="header-section-number">7.4</span> Underfitting and overfitting</h2>
+<p><b>Reading materials</b>: Slides 142 - 152 in STA108_LinearRegression_S20.pdf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Underfitting
+simulate.one.instance&lt;-<span class="cf">function</span>(beta.true,X,Z){
+  eta=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>);
+ n=<span class="st"> </span><span class="kw">dim</span>(X)[<span class="dv">1</span>];
+  noise =<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">/</span><span class="dv">2</span>;
+  y.XZ=X<span class="op">%*%</span>beta.true<span class="op">+</span>Z<span class="op">%*%</span>eta <span class="op">+</span><span class="st"> </span>noise;
+  
+  beta.full =<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">cbind</span>(X,Z),<span class="dt">outcome=</span>y.XZ)
+  beta.under=<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>X,<span class="dt">outcome=</span>y.XZ)
+  
+  <span class="kw">return</span>(<span class="kw">cbind</span>(beta.full[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true,beta.under[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true))
+}
+
+beta.true=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
+n=<span class="dv">100</span>;
+X=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+  
+<span class="kw">set.seed</span>(<span class="dv">1</span>);
+N.sim=<span class="dv">10000</span>;
+under.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(beta.true,X,Z))
+<span class="co"># Fitting the true model gives</span>
+
+<span class="kw">apply</span>(under.sim[<span class="dv">1</span>,,],<span class="dv">1</span>,mean) <span class="co"># Non-zero bias</span>
+
+<span class="co"># Does it contradict the claim about precision variable?</span>
+<span class="co"># Try another simulation:</span>
+simulate.one.instance.pre&lt;-<span class="cf">function</span>(beta.true){
+  eta=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>);
+n=<span class="dv">100</span>;
+X=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+  noise =<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">/</span><span class="dv">2</span>;
+  y.XZ=X<span class="op">%*%</span>beta.true<span class="op">+</span>Z<span class="op">%*%</span>eta <span class="op">+</span><span class="st"> </span>noise;
+  
+  beta.full =<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">cbind</span>(X,Z),<span class="dt">outcome=</span>y.XZ)
+  beta.under=<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>X,<span class="dt">outcome=</span>y.XZ)
+  
+  <span class="kw">return</span>(<span class="kw">cbind</span>(beta.full[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true,beta.under[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true))
+}
+
+beta.true=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
+  
+<span class="kw">set.seed</span>(<span class="dv">1</span>);
+N.sim=<span class="dv">10000</span>;
+pre.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance.pre</span>(beta.true))
+
+<span class="kw">apply</span>(pre.sim[<span class="dv">1</span>,,],<span class="dv">1</span>,mean) <span class="co"># almost zero bias</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Overfitting
+<span class="co"># Just modify the code slightly..</span>
+simulate.one.instance&lt;-<span class="cf">function</span>(beta.true,X,Z){
+  eta=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>);
+ n=<span class="st"> </span><span class="kw">dim</span>(X)[<span class="dv">1</span>];
+  noise =<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">/</span><span class="dv">2</span>;
+  y.X=X<span class="op">%*%</span>beta.true<span class="op">+</span><span class="st"> </span>noise;
+  
+  beta.over=<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span><span class="kw">cbind</span>(X,Z),<span class="dt">outcome=</span>y.X)
+  beta.full=<span class="st"> </span><span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>X,<span class="dt">outcome=</span>y.X)
+  
+  <span class="kw">return</span>(<span class="kw">cbind</span>(beta.full[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true,beta.over[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span>beta.true))
+}
+
+beta.true=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
+n=<span class="dv">100</span>;
+X=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span>n),<span class="dt">ncol=</span><span class="dv">2</span>)
+  
+<span class="kw">set.seed</span>(<span class="dv">1</span>);
+N.sim=<span class="dv">10000</span>;
+over.sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(beta.true,X,Z))
+<span class="co"># Fitting the true model gives</span>
+
+<span class="kw">apply</span>(over.sim[<span class="dv">1</span>,,],<span class="dv">1</span>,mean) <span class="co"># No bias</span></code></pre></div>
+</div>
+<div id="sampling-distribution-and-inference" class="section level2">
+<h2><span class="header-section-number">7.5</span> Sampling distribution and inference</h2>
+<p><b>Reading materials</b>: Slides 153 - 165 in STA108_LinearRegression_S20.pdf.</p>
+<p>We will skip the part for multivariate normal distribution. You will learn more about this in STA 135: Multivariate Data Analysis.</p>
+<div id="anova" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> ANOVA</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(dat.advertising)
+full.model=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span>radio<span class="op">+</span>newspaper);
+reduced.model=<span class="kw">lm</span>(sales<span class="op">~</span>TV);
+<span class="kw">anova</span>(reduced.model,full.model)
+
+RSS.Reduced&lt;-<span class="kw">sum</span>((<span class="kw">summary</span>(reduced.model)<span class="op">$</span>residuals)<span class="op">^</span><span class="dv">2</span>);
+RSS.Full&lt;-<span class="kw">sum</span>((<span class="kw">summary</span>(full.model)<span class="op">$</span>residuals)<span class="op">^</span><span class="dv">2</span>);
+df.Reduced &lt;-<span class="st"> </span><span class="kw">summary</span>(reduced.model)<span class="op">$</span>df[<span class="dv">2</span>];
+df.Full &lt;-<span class="st"> </span><span class="kw">summary</span>(full.model)<span class="op">$</span>df[<span class="dv">2</span>];
+
+tF&lt;-((RSS.Reduced<span class="op">-</span>RSS.Full)<span class="op">/</span>(df.Reduced<span class="op">-</span>df.Full))<span class="op">/</span>(RSS.Full<span class="op">/</span>df.Full);
+tF</code></pre></div>
+</div>
+<div id="wald-test" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> Wald test</h3>
+<p>Suppose that we want to test the null hypothesis <span class="math display">\[H_0: \beta_1-2\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1-2\beta_2 \neq 0,\]</span> where <span class="math inline">\(\beta_1\)</span> is the regression coefficient for <code>TV</code> and <span class="math inline">\(\beta_2\)</span> is the regression coefficient for <code>radio</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">full.model=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span>radio<span class="op">+</span>newspaper);
+covariance.LSE=<span class="kw">vcov</span>(full.model); <span class="co"># Calculate the covariance for the least squares estimators</span>
+coef.LSE=<span class="kw">coef</span>(full.model);
+covariance.test =<span class="st"> </span>covariance.LSE[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]; <span class="co"># Extract the submatrix of covariance for beta1 and beta2</span>
+coef.test=coef.LSE[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>];
+R=<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>);
+R[<span class="dv">1</span>,<span class="dv">1</span>]=<span class="dv">1</span>;R[<span class="dv">1</span>,<span class="dv">2</span>]=<span class="op">-</span><span class="dv">2</span>;
+
+test.stat=<span class="kw">t</span>(R<span class="op">%*%</span>coef.test)<span class="op">%*%</span><span class="kw">solve</span>(R<span class="op">%*%</span>covariance.test<span class="op">%*%</span><span class="kw">t</span>(R))<span class="op">%*%</span>(R<span class="op">%*%</span>coef.test);
+p.value=<span class="dv">1</span><span class="op">-</span><span class="kw">pchisq</span>(test.stat,<span class="dt">df=</span><span class="dv">1</span>);</code></pre></div>
+<p>We can verify that the Wald test yields similar results with the F-test using <code>anova</code>. <span class="math display">\[H_0: \beta_1=\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1\neq 0, \beta_2 \neq 0.\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">full.model=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span>radio<span class="op">+</span>newspaper);
+covariance.LSE=<span class="kw">vcov</span>(full.model); <span class="co"># Calculate the covariance for the least squares estimators</span>
+coef.LSE=<span class="kw">coef</span>(full.model);
+covariance.test =<span class="st"> </span>covariance.LSE[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]; <span class="co"># Extract the submatrix of covariance for beta1 and beta2</span>
+coef.test=coef.LSE[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>];
+R=<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>);
+R[<span class="dv">1</span>,<span class="dv">1</span>]=<span class="dv">1</span>;R[<span class="dv">2</span>,<span class="dv">2</span>]=<span class="dv">1</span>;
+
+test.stat=<span class="kw">t</span>(R<span class="op">%*%</span>coef.test)<span class="op">%*%</span><span class="kw">solve</span>(R<span class="op">%*%</span>covariance.test<span class="op">%*%</span><span class="kw">t</span>(R))<span class="op">%*%</span>(R<span class="op">%*%</span>coef.test);
+p_value=<span class="dv">1</span><span class="op">-</span><span class="kw">pchisq</span>(test.stat,<span class="dt">df=</span><span class="dv">2</span>);
+
+
+reduced_model=<span class="kw">lm</span>(sales<span class="op">~</span>newspaper);
+<span class="kw">anova</span>(reduced.model,full.model)</code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch-diagnostics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-selection.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STA108_bookdown.pdf", "STA108_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

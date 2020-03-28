@@ -1,0 +1,174 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+#  Linear algebra   {#ch:algebra}
+
+<b>Reading materials</b>:  STA108_LinearAlgebra_S20.pdf
+
+
+
+## Vector
+
+```{r}
+  x = c(1,2,4,2.5,-1.7,1) # creates a vector (you can use "<-" instead of "=")
+
+  length(x) # check the length of x
+  class(x) # class of the object; you can also check typeof()
+  ### Try z=list(); class(z);
+
+  x[ 3 ] # extract one element in x..
+  x[c(1,2,3)]
+  x[2:4]
+
+  z<-numeric(10)
+
+
+  y = x^2
+  ### Q: what is the length of y?
+  length(y)
+
+  ### The "default" operation in R is elementwise:
+  x/y # elementwise division
+  y-x*x # all elementwise..
+
+  ### There are other operators..
+  x %o% y # outer product of x and y
+
+  x %*% y # Matrix product. Q: what is R doing here?
+
+  sum(x*y)
+```
+
+
+## Matrix
+
+```{r}
+
+M = matrix(0,2,3) # matrix with 2 rows and 3 columns with all entries 0
+# ?matrix
+
+
+Xmat1 = matrix(x,2,3) # 2 x 3 matrix formed by elements of vector x,
+### ordered in *column-wise* manner
+Xmat2 = matrix(x,2,3,byrow=T) # ordered row-wise
+
+
+M<- Xmat1;
+dimnames(M)
+rownames(M) = c("first","second")
+colnames(M) = c("a","b","c")
+
+dimnames(M)
+typeof(dimnames(M))
+
+### access elements through names of rows/columns
+M[,"a"]
+M[,1]
+
+M[,c("a","c")]
+M[,c(1,3)]
+
+M %*% c(4,-3,1)  # multiply matrix M to vector c(4,-3,1)
+M + c(1,-2) # add the column vector c(1,-2) to each column of M
+
+M2 = cbind(M,c(4,5))  # create matrix M2 by appending column c(4,5) to M
+### How to append row to M2?
+new_row = c(1,3,5,7)
+#?cbind
+#?rbind
+
+### What if we call length() on a matrix?
+length(M)
+dim(M)
+
+
+
+### elementwise product of Xmat1 and Xmat2
+Xmat1*Xmat2
+
+### Matrix multiplication
+Xmat1%*%Xmat2
+dim(Xmat1)
+dim(Xmat2)
+Xmat1%*%t(Xmat2)
+
+
+### Inverse of a marix
+solve(Xmat1) # what does the error message say?
+
+
+Xmat12=Xmat1%*%t(Xmat2);
+
+Xmat12.inv=solve(Xmat12);
+
+Xmat12.inv%*%Xmat12
+Xmat12%*%Xmat12.inv
+
+
+
+svd(Xmat1)  # singular value decomposition of Xmat1
+### Q: what is the SVD?
+### Try ?svd
+        
+```
+
+## Other operations on vectors and matrices
+
+```{r}
+### How does R handle mathematically invalid operations?
+### Example 1:
+w = c(1:3)  # short-handed for c(1,2,3)
+### Q: What is the length of w?
+
+x + w  # no error displayed, but not quite a mathematically valid operation
+### Q: what did R just do???
+c(x[1:3]+w, x[4:6]+w)
+
+### What if...
+# Create a vector of length 4 (from 1 to 4)
+n<-1:4;
+x+n
+
+### Example 2:
+
+z = sin(x) + x^{1.5}* exp(-x^3)
+### What is (-1.7)^{1.5}???
+### How did R handle this?
+x[5]
+z[5]
+
+### Defining sequences
+3.1:8.9
+# or use seq()
+```
+
+### Array
+
+```{r}
+### Arrays, a.k.a. tensors
+### A matrix is a two-way array
+
+?array # check for R documentation on array
+
+A = array(rnorm(2*3*4),dim=c(2,3,4))  # creates an array with entries that are i.i.d. N(0,1)
+?rnorm
+dim(A) # checks the dimension of A
+
+A[,1,] # returns the 2 x 4 matrix formed by restricting the second dimension index to 1
+
+### What is the dimension of A[,1,]?
+
+A[2,,] # returns the 3 x 4 matrix formed by restricting the first dimension index to 2
+
+A[2,1,2]
+A[A<0]
+```

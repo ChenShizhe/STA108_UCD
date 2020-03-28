@@ -1,0 +1,437 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+
+
+# Multiple covariates {#ch:multiple}
+
+## Examples 
+
+<b>Reading materials</b>:  Slides 103 - 111 in STA108_LinearRegression_S20.pdf. 
+
+We will revisit the examples that have been studied in Chapter \@ref(lmR).
+
+### Advertising data 
+
+We now consider all the covariates in the data set. The resulting model is
+	\[
+	y_i =  \beta_0 + \sum_{j=1}^3 x_{i,j} \beta_j  +  \epsilon_i, i=1,\ldots, 200,
+	\]
+	where $y_i$ is the `sales` (1 unit = 1000 dollars) for the $i$th entry, $x_{i,1}$ is the TV advertising budget for the $i$th entry,  $x_{i,2}$ is the radio advertising budget for the $i$th entry, $x_{i,3}$ is the newspaper advertising budget for the $i$th entry. In addition, we assume that the errors $\{\epsilon_i\}_{i=1}^{200}$ satisfy that $\epsilon_1,\ldots, \epsilon_200$ are independently and identically distributed (i.i.d.),  $\mathbb{E}[\epsilon_i]= 0$ for  $i=1,2,\ldots, 200$
+and $\mathrm{var}(\epsilon_i)=\sigma^2$ for  $i=1,2,\ldots, 200$. Recall that we consider fixed design (i.e., $x_i$ is not random) in this course for simplicity. 
+
+```{r}
+dat.advertising=read.csv('./data/advertising.csv');
+# Fit a multiple linear regression
+fit.advertising = lm(sales~TV+radio+newspaper+1,data=dat.advertising); 
+# Summarize the fitted results
+summary(fit.advertising) 
+
+fit.advertising.slr = lm(sales~TV+1,data=dat.advertising); 
+# Summarize the fitted results
+summary(fit.advertising.slr) 
+
+
+```
+
+How would you interpret the fitted results? How do they compare with the results from the simple linear regression in Chapter \@ref(lmR)?
+
+### Flu shot
+
+We will include `age` and `female`(gender) in the regression in addition to the treatment received. What can you conclude from the fitted results?
+
+
+```{r}
+dat.flu = read.table("./data/flu240.txt", header = TRUE)
+# Fit a multiple linear regression
+fit.flu= lm(outcome~treatment.received+age+female+1,data=dat.flu); 
+# Summarize the fitted results
+summary(fit.flu) 
+```
+In addition, we can fit a regression with treatment received as the outcome, where treatment assigned, age and gender are covariates.  What can you conclude now? 
+```{r}
+fit.trt= lm(treatment.received~treatment.assigned+age+female+1,data=dat.flu); 
+# Summarize the fitted results
+summary(fit.trt) 
+```
+
+### Project STAR
+
+
+Project STAR is a stratified randomized experiment, where randomization happened within each school. Hence, we will add `schoolid2` as an additional factor in the regression. 
+
+```{r}
+
+library(AER)
+data("STAR")
+dat.STAR=STAR; # Just to be consistent
+# Fit a simple linear regression
+fit.STAR= lm(math2~as.factor(star2)+as.factor(schoolid2)+1,data=dat.STAR); 
+# Summarize the fitted results
+summary(fit.STAR)$coef[1:3,]
+
+# We can no longer draw a fitted line here...
+
+```
+
+
+
+
+## Classification of variables 
+
+
+<b>Reading materials</b>:  Slides 112 - 118 in STA108_LinearRegression_S20.pdf. 
+
+We will use simulation to examine the roles of the variables. 
+
+```{r}
+source('sources.r')
+
+simulate.one.instance.data<-function(){
+n=100;
+confounder = rnorm(n)*2;
+precision = runif(n);
+instrument = rbinom(n,size=1,prob=0.4);
+trt=rnorm(n) + confounder*0.4-instrument;
+y=trt*1-0.5*confounder+precision*0.7+0.5*rnorm(n);
+out=data.frame(y=y,trt=trt,confounder=confounder, precision=precision, instrument=instrument)
+return(out)
+}
+
+```
+
+```{r}
+## Effect if ignoring confounder:
+
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat=fit.linear.model(covariate=dat[,'trt'],outcome=dat$y)
+  
+  beta.hat.confounder=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder')]),outcome=dat$y)
+  return(c(beta.hat[2],beta.hat.confounder[2]))
+}
+N.sim=10000;
+
+set.seed(1)
+
+sim.confounder=replicate(N.sim, simulate.one.instance());
+apply(sim.confounder,1,mean) # The true value is 1
+apply( (sim.confounder-1),1,function(x){ sum(x^2) }) # The mean squared error
+```
+
+```{r}
+## Effect if ignoring precision variable:
+
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder')]),outcome=dat$y)
+  
+  beta.hat.precision=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder','precision')]),outcome=dat$y)
+  return(c(beta.hat[2],beta.hat.precision[2]))
+}
+N.sim=10000;
+
+set.seed(1)
+
+sim.precision=replicate(N.sim, simulate.one.instance());
+apply(sim.precision,1,mean) # The true value is 1
+apply( (sim.precision-1),1,function(x){ sum(x^2) }) # The mean squared error
+```
+
+```{r}
+## The power of instruments
+###  If the confounder is unobserved, we can use the two stage least squares method
+
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat.naive=fit.linear.model(covariate=as.matrix(dat[,'trt']),outcome=dat$y)
+  
+  yiv=fit.linear.model(covariate=as.matrix(dat[,c('instrument')]),outcome=dat$y)
+  
+  trtiv=fit.linear.model(covariate=as.matrix(dat[,c('instrument')]),outcome=dat$trt)
+  
+  
+  return(c(beta.hat.naive[2],yiv[2]/trtiv[2]))
+}
+N.sim=10000;
+
+set.seed(1)
+
+sim.iv=replicate(N.sim, simulate.one.instance());
+apply(sim.iv,1,mean) # The true value is 1
+apply( (sim.iv-1),1,function(x){ sum(x^2) }) # The mean squared error
+```
+
+
+## Least squares estimation 
+
+<b>Reading materials</b>:  Slides 119 - 141 in STA108_LinearRegression_S20.pdf. 
+
+
+
+```{r}
+# Consider another data set with a bit more covariates 
+library(AER)
+data("Fatalities")
+dat.fatalities = Fatalities
+# This dataset contains 34 variables
+# It is actually a longitudinal/panel data
+# We will ignore the spatial temporal structure in this class
+
+y=dat.fatalities$fatal; #Number of vehicle fatalities.
+X=as.matrix(dat.fatalities[,c('spirits','unemp','income','beertax','baptist','mormon','drinkage','dry','youngdrivers','miles','gsp')]);
+
+
+# Rewrite the functions in Chapter 2
+linear.model<-function(beta,covariate){
+  # beta: a 2-vector, where the first entry is the intercept
+  beta=as.matrix(beta,nrow=length(beta))
+  yout=covariate%*%beta[-1]+beta[1];
+  return(yout);
+  # Note: this function only works with simple linear regression model
+  # How would you generalize it?
+}
+sum.of.squares<-function(beta,covariate,outcome){
+  yout=linear.model(beta=beta,covariate=covariate);
+  res=outcome-yout;
+  sos= sum(res^2);
+  return(sos)
+}
+fit.linear.model<-function(covariate,outcome){
+  X=cbind(1,covariate);
+  
+  beta.fit=solve( t(X)%*%X )%*%t(X)%*%outcome;
+  return(beta.fit)
+}
+
+beta.hat=fit.linear.model(covariate=X,outcome=y)
+
+# Compare with lm()
+fit.lm=lm(y~X+1);
+beta.hat
+```
+
+```{r}
+# Hat matrix 
+calculate.hat<-function(covariate){
+  X=cbind(1,covariate);
+  P=X%*%solve(t(X)%*%X)%*%t(X);
+  return(P)
+}
+P=calculate.hat(covariate=X);
+
+# Verify the properties of the hat matrix:
+## Residuals 
+resid= y-linear.model(beta=beta.hat,covariate=X);
+resid.hat = (diag(length(y))-P)%*%y;
+sum((resid-resid.hat)^2)
+
+## Idempotent 
+max( abs(P%*%P-P))
+
+## Orthogonality 
+max(abs((diag(length(y))-P)%*%X))
+```
+
+```{r}
+# Sum of squares with the hat matrix:
+n=length(y);J=matrix(1,n,n);I=diag(n)
+total.sum.of.squares= t(y)%*%(I-J/n)%*%y
+explained.sum.of.squares=t(y)%*%(P-J/n)%*%y
+residual.sum.of.squares=t(y)%*%(I-P)%*%y
+
+# Check if it is true
+sum.of.squares(beta.hat,covariate = X,outcome = y)
+```
+
+```{r}
+# R^2
+R.sq = explained.sum.of.squares/total.sum.of.squares;
+
+# Through more variables into X
+# These variables are meaningless
+set.seed(1)
+Z=matrix(rnorm(5*n),nrow=n,ncol=5);
+X.Z=cbind(X,Z);
+
+P.Z=calculate.hat(covariate=X.Z);
+
+R.sq.Z= t(y)%*%(P.Z-J/n)%*%y/t(y)%*%(I-J/n)%*%y;
+
+R.sq.Z
+R.sq
+
+# Hence the adjusted R^2:
+R.sq.adj=1-(residual.sum.of.squares/(n-dim(X)[2]-1) )/(total.sum.of.squares/(n-1));
+
+R.sq.Z.adj=1-(t(y)%*%(I-P.Z)%*%y/(n-dim(X.Z)[2]-1) )/(t(y)%*%(I-J/n)%*%y/(n-1));
+
+```
+
+
+## Underfitting and overfitting 
+
+
+<b>Reading materials</b>:  Slides 142 - 152 in STA108_LinearRegression_S20.pdf. 
+
+
+```{r}
+## Underfitting
+simulate.one.instance<-function(beta.true,X,Z){
+  eta=c(3,4);
+ n= dim(X)[1];
+  noise = rnorm(n)/2;
+  y.XZ=X%*%beta.true+Z%*%eta + noise;
+  
+  beta.full = fit.linear.model(covariate=cbind(X,Z),outcome=y.XZ)
+  beta.under= fit.linear.model(covariate=X,outcome=y.XZ)
+  
+  return(cbind(beta.full[2:3]-beta.true,beta.under[2:3]-beta.true))
+}
+
+beta.true=c(1,2)
+n=100;
+X=matrix(rnorm(2*n),ncol=2)
+Z=matrix(rnorm(2*n),ncol=2)
+  
+set.seed(1);
+N.sim=10000;
+under.sim=replicate(N.sim,simulate.one.instance(beta.true,X,Z))
+# Fitting the true model gives
+
+apply(under.sim[1,,],1,mean) # Non-zero bias
+
+# Does it contradict the claim about precision variable?
+# Try another simulation:
+simulate.one.instance.pre<-function(beta.true){
+  eta=c(3,4);
+n=100;
+X=matrix(rnorm(2*n),ncol=2)
+Z=matrix(rnorm(2*n),ncol=2)
+  noise = rnorm(n)/2;
+  y.XZ=X%*%beta.true+Z%*%eta + noise;
+  
+  beta.full = fit.linear.model(covariate=cbind(X,Z),outcome=y.XZ)
+  beta.under= fit.linear.model(covariate=X,outcome=y.XZ)
+  
+  return(cbind(beta.full[2:3]-beta.true,beta.under[2:3]-beta.true))
+}
+
+beta.true=c(1,2)
+  
+set.seed(1);
+N.sim=10000;
+pre.sim=replicate(N.sim,simulate.one.instance.pre(beta.true))
+
+apply(pre.sim[1,,],1,mean) # almost zero bias
+```
+
+```{r}
+### Overfitting
+# Just modify the code slightly..
+simulate.one.instance<-function(beta.true,X,Z){
+  eta=c(3,4);
+ n= dim(X)[1];
+  noise = rnorm(n)/2;
+  y.X=X%*%beta.true+ noise;
+  
+  beta.over= fit.linear.model(covariate=cbind(X,Z),outcome=y.X)
+  beta.full= fit.linear.model(covariate=X,outcome=y.X)
+  
+  return(cbind(beta.full[2:3]-beta.true,beta.over[2:3]-beta.true))
+}
+
+beta.true=c(1,2)
+n=100;
+X=matrix(rnorm(2*n),ncol=2)
+Z=matrix(rnorm(2*n),ncol=2)
+  
+set.seed(1);
+N.sim=10000;
+over.sim=replicate(N.sim,simulate.one.instance(beta.true,X,Z))
+# Fitting the true model gives
+
+apply(over.sim[1,,],1,mean) # No bias
+
+
+```
+
+## Sampling distribution and inference 
+
+
+<b>Reading materials</b>:  Slides 153 - 165 in STA108_LinearRegression_S20.pdf. 
+
+We will skip the part for multivariate normal distribution. You will learn more about this in STA 135: Multivariate Data Analysis.  
+
+### ANOVA
+
+```{r}
+attach(dat.advertising)
+full.model=lm(sales~TV+radio+newspaper);
+reduced.model=lm(sales~TV);
+anova(reduced.model,full.model)
+
+RSS.Reduced<-sum((summary(reduced.model)$residuals)^2);
+RSS.Full<-sum((summary(full.model)$residuals)^2);
+df.Reduced <- summary(reduced.model)$df[2];
+df.Full <- summary(full.model)$df[2];
+
+tF<-((RSS.Reduced-RSS.Full)/(df.Reduced-df.Full))/(RSS.Full/df.Full);
+tF
+```
+
+
+### Wald test
+
+
+Suppose that we want to test the null hypothesis
+$$H_0: \beta_1-2\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1-2\beta_2 \neq 0,$$
+  where $\beta_1$ is the regression coefficient for `TV` and $\beta_2$ is the regression coefficient for `radio`.
+
+
+```{r}
+full.model=lm(sales~TV+radio+newspaper);
+covariance.LSE=vcov(full.model); # Calculate the covariance for the least squares estimators
+coef.LSE=coef(full.model);
+covariance.test = covariance.LSE[2:3,2:3]; # Extract the submatrix of covariance for beta1 and beta2
+coef.test=coef.LSE[2:3];
+R=matrix(0,1,2);
+R[1,1]=1;R[1,2]=-2;
+
+test.stat=t(R%*%coef.test)%*%solve(R%*%covariance.test%*%t(R))%*%(R%*%coef.test);
+p.value=1-pchisq(test.stat,df=1);
+```
+
+
+We can verify that the Wald test yields similar results with the F-test using `anova`.
+$$H_0: \beta_1=\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1\neq 0, \beta_2 \neq 0.$$
+
+```{r}
+
+  
+full.model=lm(sales~TV+radio+newspaper);
+covariance.LSE=vcov(full.model); # Calculate the covariance for the least squares estimators
+coef.LSE=coef(full.model);
+covariance.test = covariance.LSE[2:3,2:3]; # Extract the submatrix of covariance for beta1 and beta2
+coef.test=coef.LSE[2:3];
+R=matrix(0,2,2);
+R[1,1]=1;R[2,2]=1;
+
+test.stat=t(R%*%coef.test)%*%solve(R%*%covariance.test%*%t(R))%*%(R%*%coef.test);
+p_value=1-pchisq(test.stat,df=2);
+
+
+reduced_model=lm(sales~newspaper);
+anova(reduced.model,full.model)
+
+```
+

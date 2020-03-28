@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Model selection | Applied Statistical Methods: Regression Analysis</title>
+  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Model selection | Applied Statistical Methods: Regression Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Model selection | Applied Statistical Methods: Regression Analysis" />
+  
+  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+<meta name="author" content="Shizhe Chen" />
+
+
+<meta name="date" content="2020-03-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ch-multiple.html"/>
+<link rel="next" href="ch-RBasics.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STA 108, Spring 2020</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
+<li class="chapter" data-level="1.4" data-path="ch-lmR.html"><a href="ch-lmR.html#note"><i class="fa fa-check"></i><b>1.4</b> Note</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-est.html"><a href="ch-est.html"><i class="fa fa-check"></i><b>2</b> Estimation</a></li>
+<li class="chapter" data-level="3" data-path="ch-sampling.html"><a href="ch-sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-sampling.html"><a href="ch-sampling.html#understanding-sampling-distribution-via-simulation"><i class="fa fa-check"></i><b>3.1</b> Understanding sampling distribution via simulation</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-sampling.html"><a href="ch-sampling.html#shapes-of-sampling-distributions"><i class="fa fa-check"></i><b>3.2</b> Shapes of sampling distributions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-sampling.html"><a href="ch-sampling.html#asymptotic-distribution"><i class="fa fa-check"></i><b>3.2.1</b> Asymptotic distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="ch-CI.html"><a href="ch-CI.html#prediction-interval"><i class="fa fa-check"></i><b>4.2</b> Prediction interval</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-CI.html"><a href="ch-CI.html#simultaneous-confidence-intervalsbandsregions"><i class="fa fa-check"></i><b>4.3</b> Simultaneous confidence intervals/bands/regions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-test.html"><a href="ch-test.html"><i class="fa fa-check"></i><b>5</b> Statistical inference: Hypothesis testing</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-test.html"><a href="ch-test.html#hypothesit-testing"><i class="fa fa-check"></i><b>5.1</b> Hypothesit testing</a></li>
+<li class="chapter" data-level="5.2" data-path="ch-test.html"><a href="ch-test.html#multiple-testing"><i class="fa fa-check"></i><b>5.2</b> Multiple testing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Model diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#residual-plot"><i class="fa fa-check"></i><b>6.1</b> Residual plot</a></li>
+<li class="chapter" data-level="6.2" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#remedies-for-non-linearity"><i class="fa fa-check"></i><b>6.2</b> Remedies for non-linearity</a></li>
+<li class="chapter" data-level="6.3" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#independence"><i class="fa fa-check"></i><b>6.3</b> Independence</a></li>
+<li class="chapter" data-level="6.4" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#normality"><i class="fa fa-check"></i><b>6.4</b> Normality</a></li>
+<li class="chapter" data-level="6.5" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#homoscedasticity"><i class="fa fa-check"></i><b>6.5</b> Homoscedasticity</a></li>
+<li class="chapter" data-level="6.6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#influential-observations-and-outliers"><i class="fa fa-check"></i><b>6.6</b> Influential Observations and Outliers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-multiple.html"><a href="ch-multiple.html"><i class="fa fa-check"></i><b>7</b> Multiple covariates</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-multiple.html"><a href="ch-multiple.html#examples"><i class="fa fa-check"></i><b>7.1</b> Examples</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ch-multiple.html"><a href="ch-multiple.html#advertising-data-1"><i class="fa fa-check"></i><b>7.1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ch-multiple.html"><a href="ch-multiple.html#flu-shot-1"><i class="fa fa-check"></i><b>7.1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="7.1.3" data-path="ch-multiple.html"><a href="ch-multiple.html#project-star-1"><i class="fa fa-check"></i><b>7.1.3</b> Project STAR</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ch-multiple.html"><a href="ch-multiple.html#classification-of-variables"><i class="fa fa-check"></i><b>7.2</b> Classification of variables</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-multiple.html"><a href="ch-multiple.html#least-squares-estimation"><i class="fa fa-check"></i><b>7.3</b> Least squares estimation</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-multiple.html"><a href="ch-multiple.html#underfitting-and-overfitting"><i class="fa fa-check"></i><b>7.4</b> Underfitting and overfitting</a></li>
+<li class="chapter" data-level="7.5" data-path="ch-multiple.html"><a href="ch-multiple.html#sampling-distribution-and-inference"><i class="fa fa-check"></i><b>7.5</b> Sampling distribution and inference</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="ch-multiple.html"><a href="ch-multiple.html#anova"><i class="fa fa-check"></i><b>7.5.1</b> ANOVA</a></li>
+<li class="chapter" data-level="7.5.2" data-path="ch-multiple.html"><a href="ch-multiple.html#wald-test"><i class="fa fa-check"></i><b>7.5.2</b> Wald test</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-selection.html"><a href="ch-selection.html"><i class="fa fa-check"></i><b>8</b> Model selection</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-selection.html"><a href="ch-selection.html#criteria"><i class="fa fa-check"></i><b>8.1</b> Criteria</a></li>
+<li class="chapter" data-level="8.2" data-path="ch-selection.html"><a href="ch-selection.html#selection-procedure"><i class="fa fa-check"></i><b>8.2</b> Selection procedure</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
+<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
+<li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
+<li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
+<li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
+<li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
+<li class="chapter" data-level="C.1" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-univariate"><i class="fa fa-check"></i><b>C.1</b> Simulation and visualization: univariate</a></li>
+<li class="chapter" data-level="C.2" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-multivariate"><i class="fa fa-check"></i><b>C.2</b> Simulation and visualization: multivariate</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods: Regression Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch:selection" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> Model selection</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(AER)
+<span class="kw">data</span>(<span class="st">&quot;Fatalities&quot;</span>)
+dat.fatalities =<span class="st"> </span>Fatalities[,<span class="kw">c</span>(<span class="st">&#39;fatal&#39;</span>,<span class="st">&#39;spirits&#39;</span>,<span class="st">&#39;unemp&#39;</span>,<span class="st">&#39;income&#39;</span>,<span class="st">&#39;beertax&#39;</span>,<span class="st">&#39;baptist&#39;</span>,<span class="st">&#39;mormon&#39;</span>,<span class="st">&#39;drinkage&#39;</span>,<span class="st">&#39;dry&#39;</span>,<span class="st">&#39;youngdrivers&#39;</span>,<span class="st">&#39;miles&#39;</span>,<span class="st">&#39;gsp&#39;</span>)]</code></pre></div>
+<div id="criteria" class="section level2">
+<h2><span class="header-section-number">8.1</span> Criteria</h2>
+<p><b>Reading materials</b>: Slides 166 - 181 in STA108_LinearRegression_S20.pdf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Information criteria</span>
+
+
+<span class="kw">BIC</span>(fit.full)
+<span class="kw">BIC</span>(fit.six)
+
+
+<span class="kw">AIC</span>(fit.full)
+<span class="kw">AIC</span>(fit.six) </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cross-validation:</span>
+<span class="co"># We will use a package for this:</span>
+<span class="kw">library</span>(boot)
+
+fit.full.g=<span class="kw">glm</span>(fatal<span class="op">~</span>spirits<span class="op">+</span>unemp<span class="op">+</span>income<span class="op">+</span>beertax<span class="op">+</span>baptist<span class="op">+</span>mormon<span class="op">+</span>drinkage<span class="op">+</span>dry<span class="op">+</span>youngdrivers<span class="op">+</span>miles<span class="op">+</span>gsp,<span class="dt">data=</span>dat.fatalities);
+fit.six.g=<span class="kw">glm</span>(fatal<span class="op">~</span>spirits<span class="op">+</span>unemp<span class="op">+</span>income<span class="op">+</span>beertax<span class="op">+</span>baptist<span class="op">+</span>mormon,<span class="dt">data=</span>dat.fatalities)
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+cv.full.<span class="dv">10</span>=<span class="kw">cv.glm</span>(dat.fatalities,fit.full.g,<span class="dt">K=</span><span class="dv">10</span>)
+cv.full.<span class="dv">10</span><span class="op">$</span>delta
+
+cv.six.<span class="dv">10</span>=<span class="kw">cv.glm</span>(dat.fatalities,fit.six.g,<span class="dt">K=</span><span class="dv">10</span>)
+cv.six.<span class="dv">10</span><span class="op">$</span>delta
+
+<span class="co"># From the helpfile, delta is:</span>
+
+<span class="co"># A vector of length two. The first component is the raw cross-validation estimate of prediction error. The second component is the adjusted cross-validation estimate. The adjustment is designed to compensate for the bias introduced by not using leave-one-out cross-validation.</span></code></pre></div>
+</div>
+<div id="selection-procedure" class="section level2">
+<h2><span class="header-section-number">8.2</span> Selection procedure</h2>
+<p><b>Reading materials</b>: Slides 182 - 189 in STA108_LinearRegression_S20.pdf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Model selection procedure </span>
+
+<span class="co"># Forward selection &amp; AIC</span>
+<span class="kw">step</span>(<span class="kw">lm</span>(fatal<span class="op">~</span>spirits<span class="op">+</span>unemp<span class="op">+</span>income<span class="op">+</span>beertax<span class="op">+</span>baptist<span class="op">+</span>mormon<span class="op">+</span>drinkage<span class="op">+</span>dry<span class="op">+</span>youngdrivers<span class="op">+</span>miles<span class="op">+</span>gsp,<span class="dt">data=</span>dat.fatalities),<span class="dt">direction=</span><span class="st">&quot;forward&quot;</span>,<span class="dt">k=</span><span class="dv">2</span>) 
+
+
+<span class="co"># Backward selection &amp; AIC</span>
+<span class="kw">step</span>(<span class="kw">lm</span>(fatal<span class="op">~</span>spirits<span class="op">+</span>unemp<span class="op">+</span>income<span class="op">+</span>beertax<span class="op">+</span>baptist<span class="op">+</span>mormon<span class="op">+</span>drinkage<span class="op">+</span>dry<span class="op">+</span>youngdrivers<span class="op">+</span>miles<span class="op">+</span>gsp,<span class="dt">data=</span>dat.fatalities),<span class="dt">direction=</span><span class="st">&quot;backward&quot;</span>, <span class="dt">k=</span><span class="dv">2</span>)
+
+
+
+<span class="co"># Backward selection &amp; BIC</span>
+<span class="kw">step</span>(<span class="kw">lm</span>(fatal<span class="op">~</span>spirits<span class="op">+</span>unemp<span class="op">+</span>income<span class="op">+</span>beertax<span class="op">+</span>baptist<span class="op">+</span>mormon<span class="op">+</span>drinkage<span class="op">+</span>dry<span class="op">+</span>youngdrivers<span class="op">+</span>miles<span class="op">+</span>gsp,<span class="dt">data=</span>dat.fatalities),<span class="dt">direction=</span><span class="st">&quot;backward&quot;</span>, <span class="dt">k=</span><span class="kw">log</span>(<span class="kw">dim</span>(dat.fatalities)[<span class="dv">1</span>]))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Penalized regression: lasso</span>
+<span class="kw">library</span>(glmnet)
+
+y=dat.fatalities<span class="op">$</span>fatal; <span class="co">#Number of vehicle fatalities.</span>
+X=<span class="kw">as.matrix</span>(dat.fatalities[,<span class="kw">c</span>(<span class="st">&#39;spirits&#39;</span>,<span class="st">&#39;unemp&#39;</span>,<span class="st">&#39;income&#39;</span>,<span class="st">&#39;beertax&#39;</span>,<span class="st">&#39;baptist&#39;</span>,<span class="st">&#39;mormon&#39;</span>,<span class="st">&#39;drinkage&#39;</span>,<span class="st">&#39;dry&#39;</span>,<span class="st">&#39;youngdrivers&#39;</span>,<span class="st">&#39;miles&#39;</span>,<span class="st">&#39;gsp&#39;</span>)]);
+
+
+fit.cv.glmnet=<span class="kw">cv.glmnet</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">nfold=</span><span class="dv">10</span>,<span class="dt">family=</span><span class="st">&#39;gaussian&#39;</span>);
+        
+fit.cv.glmnet<span class="op">$</span>lambda.min <span class="co"># selected tuning parameter</span>
+
+fit.glmnet=<span class="kw">glmnet</span>(<span class="dt">x=</span>X,<span class="dt">y=</span>y,<span class="dt">family=</span><span class="st">&#39;gaussian&#39;</span>,<span class="dt">alpha=</span><span class="dv">1</span>,<span class="dt">lambda=</span>fit.cv.glmnet<span class="op">$</span>lambda.min)
+
+fit.glmnet<span class="op">$</span>beta <span class="co"># One of the fitted coefficient is zero </span></code></pre></div>
+
+</div>
+</div>
+
+
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch-multiple.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-RBasics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STA108_bookdown.pdf", "STA108_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

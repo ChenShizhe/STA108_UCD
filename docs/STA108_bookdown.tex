@@ -1,0 +1,2761 @@
+\documentclass[12pt,]{book}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Applied Statistical Methods: Regression Analysis},
+            pdfauthor={Shizhe Chen},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{apalike}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Applied Statistical Methods: Regression Analysis}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Shizhe Chen}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2020-03-27}
+
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\chapter*{Preface}\label{pre}
+\addcontentsline{toc}{chapter}{Preface}
+
+This Gitbook only contains code and some comments that will be filled up
+slowly throughout the quarter. Lecture notes are available in separate
+files that you can find on Canvas.
+
+\chapter{Linear regression with R}\label{ch:lmR}
+
+Reading materials: Slides 4 - 12 in STA108\_LinearRegression\_S20.pdf
+
+Fitting a linear model is simple in \texttt{R}. The bare minimum
+requires you to know only two functions \texttt{lm()} and
+\texttt{summary()}. We will apply linear regression on three data set
+\texttt{advertising}, \texttt{flu\ shot}, and \texttt{Project\ STAR}.
+
+\section{Advertising data}\label{advertising-data}
+
+This data is taken from
+\href{http://faculty.marshall.usc.edu/gareth-james/ISL/}{An Introduction
+to Statistical Learning}, by James et al. A brief description from
+Section 2.1 in ISL is provided below. You may read more about the data
+set in the free e-book.
+
+\begin{quote}
+The Advertising data set consists of the sales of that product in 200
+different markets, along with advertising budgets for the product in
+each of those markets for three different media: TV, radio, and
+newspaper\ldots{} It is not possible for our client to directly increase
+sales of the product. On the other hand, they can control the
+advertising expenditure in each of the three media. Therefore, if we
+determine that there is an association between advertising and sales,
+then we can instruct our client to adjust advertising budgets, thereby
+indirectly increasing sales. In other words, our goal is to develop an
+accurate model that can be used to predict sales on the basis of the
+three media budgets.
+\end{quote}
+
+It is important to note that we will avoid making any causal statements
+(i.e., increasing TV advertising budget will increase the sales by
+\ldots{}) in our analysis. Causal inference on observational data is
+another major field in statistics. We will limit our discussion on
+association.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat.advertising=}\KeywordTok{read.csv}\NormalTok{(}\StringTok{'./data/advertising.csv'}\NormalTok{);}
+\CommentTok{# Use the code in Appendix C to visualize this data set}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(GGally)}
+\KeywordTok{ggpairs}\NormalTok{(dat.advertising)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# What is X in this data frame?}
+\NormalTok{dat.advertising=dat.advertising[,}\OperatorTok{-}\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+We will consider a simple linear regression model in this chapter. The
+only covariate/predictor/independent variable that we use here is the TV
+advertising budget. Therefore, the model is \[
+    y_i = x_i \beta_1  +\beta_0 +  \epsilon_i, i=1,\ldots, 200,
+    \] where \(y_i\) is the \texttt{sales} (1 unit = 1000 dollars) for
+the \(i\)th entry, \(x_i\) is the TV advertising budget for the \(i\)th
+entry, \(\beta_0\) is the intercept term, and \(\beta_1\) is the
+regression slope. In addition, we assume that the errors
+\(\{\epsilon_i\}_{i=1}^{200}\) satisfy that
+\(\epsilon_1,\ldots, \epsilon_200\) are independently and identically
+distributed (i.i.d.), \(\mathbb{E}[\epsilon_i]= 0\) for
+\(i=1,2,\ldots, 200\) and \(\mathrm{var}(\epsilon_i)=\sigma^2\) for
+\(i=1,2,\ldots, 200\). Recall that we consider fixed design (i.e.,
+\(x_i\) is not random) in this course for simplicity.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Fit a simple linear regression}
+\NormalTok{fit.advertising =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.advertising) }
+\end{Highlighting}
+\end{Shaded}
+
+We see that \(\hat{\beta}_1\) equals 0.05 and \(\hat{\beta}_0\) equals
+7.03. We can draw the line in the scatter plot.
+
+How would you interpret the fitted slope and intercept?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Draw the fitted line using ggplot2 }
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.advertising) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ TV, }\DataTypeTok{y =}\NormalTok{ sales)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{fortify}\NormalTok{(fit.advertising ), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ TV, }\DataTypeTok{y =}\NormalTok{ .fitted),}\DataTypeTok{color=}\StringTok{'red'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# In fact, you can use the following code without fitting the lm()}
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.advertising，a}\KeywordTok{es}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ TV, }\DataTypeTok{y =}\NormalTok{ sales)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# The band is a confidence band }
+\end{Highlighting}
+\end{Shaded}
+
+\section{Flu shot}\label{flu-shot}
+
+The data come from the following paper: McDonald, C., Hiu, S., AND
+Tierney, W. (1992). Effects of computer reminders for influenza
+vaccination on morbidity during influenza epidemics. MD Computing 9,
+304-312. (\href{https://www.ncbi.nlm.nih.gov/pubmed/1522792}{link}).
+
+Briefly, in this study, physicians were randomly selected to receive a
+letter encouraging them to inoculate patients at risk for flu. The
+treatment of interest is the actual flu shot, and the outcome is an
+indicator for flu-related hospital visits from the patients. In this
+data set, you can also find four important background covariates
+including gender, age, a chronic obstructive pulmonary disease (COPD)
+indicator, and a heart disease indicator. For further details, read the
+original publication or Hirano, Imbens, Rubin and Zhou (2000)
+(\href{https://www.ncbi.nlm.nih.gov/pubmed/12933526}{link}), or Chapter
+25 in Imbens and Rubin (2015)
+(\href{https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB}{link}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat.flu =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"./data/flu240.txt"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+
+\CommentTok{# Take a look at size of the data before proceed:}
+\KeywordTok{dim}\NormalTok{(dat.flu)}
+\KeywordTok{colnames}\NormalTok{(dat.flu)}
+\CommentTok{# Basic visulization:}
+\KeywordTok{ggpairs}\NormalTok{(dat.flu) }\CommentTok{# This might take a while..}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Do you think the plots are informative?}
+
+\CommentTok{# One strategy: jittering}
+
+\CommentTok{# Without jittering:}
+\KeywordTok{ggplot}\NormalTok{(dat.flu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{treatment.assigned, }\DataTypeTok{y=}\NormalTok{outcome)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# With jittering:}
+\KeywordTok{ggplot}\NormalTok{(dat.flu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{treatment.assigned, }\DataTypeTok{y=}\NormalTok{outcome)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{width =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Again, we will consider a simple linear regression model for now. The
+only covariate/predictor/independent variable that we use here is the
+treatment assignment. Therefore, the model is \[
+    y_i = x_i \beta_1  +\beta_0 +  \epsilon_i, i=1,\ldots, 2891,
+    \] where \(y_i\) is the \texttt{outcome} (0 or 1) for the \(i\)th
+patient, \(x_i\) is the treatment assignment (0 or 1) for the \(i\)th
+patient's physician, \(\beta_0\) is the intercept term, and \(\beta_1\)
+is the regression slope. In addition, we assume that the errors
+\(\{\epsilon_i\}_{i=1}^{2891}\) satisfy that
+\(\epsilon_1,\ldots, \epsilon_2891\) are independently and identically
+distributed (i.i.d.), \(\mathbb{E}[\epsilon_i]= 0\) for
+\(i=1,2,\ldots, 2891\) and \(\mathrm{var}(\epsilon_i)=\sigma^2\) for
+\(i=1,2,\ldots, 2891\). The following code is almost identical to those
+in the previous section.
+
+How would you interpret the fitted slope and intercept?
+
+Are there any violations to the assumptions on
+\(\{\epsilon_i\}_{i=1}^2891\)?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Fit a simple linear regression}
+\NormalTok{fit.flu=}\StringTok{ }\KeywordTok{lm}\NormalTok{(outcome}\OperatorTok{~}\NormalTok{treatment.assigned}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.flu); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.flu) }
+
+\CommentTok{# Draw the fitted line using ggplot2 }
+\KeywordTok{ggplot}\NormalTok{(dat.flu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{treatment.assigned, }\DataTypeTok{y=}\NormalTok{outcome)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{width =} \FloatTok{0.25}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Project STAR}\label{project-star}
+
+Tennesses Student/Teacher Achievement Ratio study (Project STAR) was
+conducted in the late 1980s to evaluate the effect of class size on test
+scores. This dataset has been used as a classic examples in many
+textbooks and research papers. Brieftly, the study randomly assigned
+students to small classes, regular classes, and regular classes with a
+teacher's aide. In order to randomize properly, schools were enrolled
+only if they had enough studybody to have at least one class of each
+type. Once the schools were enrolled, students were randomly assigned to
+the three types of classes, and one teacher was randomly assigned to one
+class. You can read more about the study on the Harvard dataverse
+(\href{https://dataverse.harvard.edu/dataverse/star}{link}) or Chapter 9
+in Imbens and Rubin (2015)
+(\href{https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB}{link}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(AER)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"STAR"}\NormalTok{)}
+\NormalTok{dat.STAR=STAR; }\CommentTok{# Just to be consistent}
+\CommentTok{# Take a look at size of the data before proceed:}
+\KeywordTok{dim}\NormalTok{(dat.STAR)}
+\KeywordTok{colnames}\NormalTok{(dat.STAR)}
+\CommentTok{# With 47 variables, you might want to read the help file to see what these variables are.}
+
+
+\CommentTok{# Basic visulization:}
+\CommentTok{# ggpairs(dat.flu) # This might take a really long time ...}
+
+\CommentTok{# We will consider the math scores and the class assignments in the second grade}
+
+\CommentTok{# With jittering:}
+\KeywordTok{ggplot}\NormalTok{(dat.STAR, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{star2, }\DataTypeTok{y=}\NormalTok{math2)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{width =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Again, we will consider a simple linear regression model for now. We
+will study the association between math scores and the class assignments
+in the second grade. Therefore, the model is \[
+    y_i =\beta_0 + x_{i,1} \beta_1  +x_{i,2} \beta_2  +  \epsilon_i, i=1,\ldots, 2891,
+    \] where \(y_i\) is the math score for the \(i\)th student,
+\(x_{i,1}\) is an indicator (0 or 1) whether the \(i\)th student is in
+the small class, and \(x_{i,1}\) is an indicator (0 or 1) whether the
+\(i\)th student is in the regular class with aide, \(\beta_0\) is the
+intercept term, and \(\beta_1\) and \(\beta_2\) are the regression
+coefficients for \(x_{i,1}\) and \(x_{i,2}\) , respectively. In
+addition, we assume that the errors \(\{\epsilon_i\}_{i=1}^{2891}\)
+satisfy that \(\epsilon_1,\ldots, \epsilon_2891\) are independently and
+identically distributed (i.i.d.), \(\mathbb{E}[\epsilon_i]= 0\) for
+\(i=1,2,\ldots, 2891\) and \(\mathrm{var}(\epsilon_i)=\sigma^2\) for
+\(i=1,2,\ldots, 2891\). The following code is almost identical to those
+in the previous section.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Fit a simple linear regression}
+\NormalTok{fit.STAR=}\StringTok{ }\KeywordTok{lm}\NormalTok{(math2}\OperatorTok{~}\KeywordTok{as.factor}\NormalTok{(star2)}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.STAR); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.STAR) }
+
+\CommentTok{# We can no longer draw a fitted line here...}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Note}\label{note}
+
+In the the midterm projects, you will be asked to reproduce the analysis
+on the \texttt{advertising} data using your own functions. The hope is
+that, by reinventing the wheels, you will have a thorough understanding
+of regression.
+
+\chapter{Estimation}\label{ch:est}
+
+Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
+
+\begin{itemize}
+\tightlist
+\item
+  Fourth week: Least squares estimation: optimization (Slides 22-27) Sum
+  of squares: (Slides 28 - 30) + add projection in this discussion
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Consider the advertising dataset}
+\NormalTok{dat.advertising=}\KeywordTok{read.csv}\NormalTok{(}\StringTok{'./data/advertising.csv'}\NormalTok{);}
+\CommentTok{# obtain the residuals:}
+\NormalTok{x=dat.advertising}\OperatorTok{$}\NormalTok{TV;}
+\NormalTok{y=dat.advertising}\OperatorTok{$}\NormalTok{sales;}
+\NormalTok{beta1=}\DecValTok{1}\NormalTok{;beta0=}\FloatTok{0.2}\NormalTok{; }\CommentTok{# Just two arbitrary numbers }
+\NormalTok{res=y}\OperatorTok{-}\NormalTok{x}\OperatorTok{*}\NormalTok{beta1}\OperatorTok{-}\NormalTok{beta0;}
+
+\CommentTok{# What if we want to feed in different numbers? }
+
+\CommentTok{# Write a function that can calculate x*beta1 + beta0}
+
+\NormalTok{linear.model<-}\ControlFlowTok{function}\NormalTok{(beta,covariate)\{}
+  \CommentTok{# beta: a 2-vector, where the first entry is the intercept}
+\NormalTok{  yout=covariate}\OperatorTok{*}\NormalTok{beta[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta[}\DecValTok{1}\NormalTok{]}
+  \KeywordTok{return}\NormalTok{(yout);}
+  \CommentTok{# Note: this function only works with simple linear regression model}
+  \CommentTok{# How would you generalize it?}
+\NormalTok{\}}
+
+\NormalTok{res.new=dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{-}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
+
+\KeywordTok{identical}\NormalTok{(res.new,res)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# With the above function, we can reproduce the plot in Slide 14}
+\NormalTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\FloatTok{0.03}\NormalTok{);}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\NormalTok{beta[}\DecValTok{1}\NormalTok{],}\DataTypeTok{b=}\NormalTok{beta[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\NormalTok{yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{dim}\NormalTok{(dat.advertising)[}\DecValTok{1}\NormalTok{])\{}
+  \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ dat.advertising}\OperatorTok{$}\NormalTok{sales[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{) }
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We can see that the line is less than ideal}
+\CommentTok{# We will move on to find the minimizer of the squared error loss }
+
+\NormalTok{sum.of.squares<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
+\NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate);}
+\NormalTok{  res=outcome}\OperatorTok{-}\NormalTok{yout;}
+\NormalTok{  sos=}\StringTok{ }\KeywordTok{sum}\NormalTok{(res}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+  \KeywordTok{return}\NormalTok{(sos)}
+\NormalTok{\}}
+
+\CommentTok{# There are many ways to minimize the sum of squares}
+
+\CommentTok{# 1, Use generic optimizer in R}
+\NormalTok{fit.optim=}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{),sum.of.squares,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
+\NormalTok{beta.hat.optim=fit.optim}\OperatorTok{$}\NormalTok{par;}
+\CommentTok{# 2. Use analytic form of the optimizer}
+
+\NormalTok{fit.linear.model<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+  \CommentTok{# I will write down the function for (multiple) linear regression here}
+\NormalTok{  X=}\KeywordTok{cbind}\NormalTok{(}\DecValTok{1}\NormalTok{,covariate);}
+\NormalTok{  beta.fit=}\KeywordTok{solve}\NormalTok{( }\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X )}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{outcome;}
+  \KeywordTok{return}\NormalTok{(beta.fit)}
+\NormalTok{\}}
+
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
+
+\CommentTok{# 3. Write your own version of Newton-Raphson method, or gradient descent }
+\CommentTok{# Not required or taught in this class }
+
+\CommentTok{# We might want to check if our solution matches that from lm()}
+
+\NormalTok{fit.advertising=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }
+
+\NormalTok{fit.advertising}\OperatorTok{$}\NormalTok{coef}
+\NormalTok{beta.hat}
+\NormalTok{beta.hat.optim}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Calculate the decomposition of sum of squares }
+\NormalTok{residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
+\NormalTok{explained.sum.of.squares=}\KeywordTok{sum}\NormalTok{((}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV)}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{total.sum.of.squares=}\KeywordTok{sum}\NormalTok{((dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{# Check if the equality holds..}
+\NormalTok{total.sum.of.squares}
+\NormalTok{explained.sum.of.squares}\OperatorTok{+}\NormalTok{residual.sum.of.squares}
+
+\CommentTok{# But if we use identical()...}
+\KeywordTok{identical}\NormalTok{(total.sum.of.squares,explained.sum.of.squares}\OperatorTok{+}\NormalTok{residual.sum.of.squares) }
+
+
+\CommentTok{# Calculate the coefficient of determination}
+\NormalTok{R.sq=}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
+
+\CommentTok{# Calculate the Pearson sample correlation }
+\NormalTok{cor.hat=}\KeywordTok{cor}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV,dat.advertising}\OperatorTok{$}\NormalTok{sales)}
+
+\CommentTok{# Verify the identity:}
+\NormalTok{R.sq}
+\NormalTok{cor.hat}\OperatorTok{^}\DecValTok{2}
+
+\CommentTok{# Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Sampling distribution}\label{ch:sampling}
+
+\section{Understanding sampling distribution via
+simulation}\label{understanding-sampling-distribution-via-simulation}
+
+Reading materials: Slides 24 - 33 in STA108\_LinearRegression\_S20.pdf.
+
+In this section, we assume a true data generating model in order to draw
+samples from the true popluation distribution. In particular, we assume
+that \[ y_i = x_i \beta_1 + \beta_0 + \epsilon_i, \ i=1,\ldots, 50\]
+where \(\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)\). We set
+\(\beta_1=0.15\) and \(\beta_0=20\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### We will simulate synthetic data to understand the concept of sampling distribution}
+
+\NormalTok{### To match our setup, we will generate the covarates and keep them fixed in the remainder of the simulation. }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+
+\NormalTok{error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+
+
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### We can run the simulation by putting the above lines into a large for-loop}
+\NormalTok{### We will wrap them up into one function}
+
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+  \KeywordTok{return}\NormalTok{(beta.hat)}
+\NormalTok{\}}
+
+\NormalTok{### Set the number of replicates to be 10000}
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{beta.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true));}
+
+
+\CommentTok{# Draw the histogram for the estimated intercept }
+\KeywordTok{hist}\NormalTok{(beta.sim[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,],}\DataTypeTok{xlab=}\StringTok{'Fitted intercept'}\NormalTok{,}\DataTypeTok{main=}\StringTok{''}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Recall from the lecture notes that the variance of \(\hat{\beta}_1\) is
+\[{\rm var}\big(\hat{\beta}_1\big)=\frac{1}{\sum_{i=1}^n (x_i-\bar{x})^2} \sigma^2.\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Using the simulation results, we can verify the statement on Slide 26}
+
+\NormalTok{### Expectation }
+\KeywordTok{mean}\NormalTok{(beta.sim[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,])}\OperatorTok{-}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{] }\CommentTok{# intercept }
+\KeywordTok{mean}\NormalTok{(beta.sim[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,])}\OperatorTok{-}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{] }\CommentTok{# slope }
+
+\NormalTok{### Variance }
+\NormalTok{sigma.sq =}\StringTok{ }\DecValTok{5}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\DecValTok{12}\NormalTok{; }\CommentTok{# variance of the error: (runif(n)-0.5)*5;}
+
+\CommentTok{# slope:}
+\NormalTok{sigma.sq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(  (x}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(x))}\OperatorTok{^}\DecValTok{2}\NormalTok{  ) }\CommentTok{# theoretical value }
+\KeywordTok{var}\NormalTok{(beta.sim[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]) }\CommentTok{# variance from the simulation }
+
+
+\CommentTok{# intercept:}
+\NormalTok{sigma.sq}\OperatorTok{*}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(  (x}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(x))}\OperatorTok{^}\DecValTok{2}\NormalTok{  )}\OperatorTok{/}\NormalTok{n }\CommentTok{# theoretical value }
+\KeywordTok{var}\NormalTok{(beta.sim[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,]) }\CommentTok{# variance from the simulation }
+\end{Highlighting}
+\end{Shaded}
+
+Q: How would you verify the Gauss-Markove theorem in this simulation?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# A very simple simulation to compare the LSE with another linear unbiased estimator: }
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+\NormalTok{  slope.hat=beta.hat[}\DecValTok{2}\NormalTok{];}
+\NormalTok{  slope.dot=}\StringTok{ }\NormalTok{(y[n]}\OperatorTok{-}\NormalTok{y[}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\NormalTok{(x[n]}\OperatorTok{-}\NormalTok{x[}\DecValTok{1}\NormalTok{])}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{c}\NormalTok{(slope.hat,slope.dot))}
+\NormalTok{\}}
+
+\NormalTok{### Set the number of replicates to be 10000}
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{slope.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true));}
+
+\KeywordTok{apply}\NormalTok{(slope.sim,}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# both are unbiased}
+\KeywordTok{apply}\NormalTok{(slope.sim,}\DecValTok{1}\NormalTok{,var) }\CommentTok{# variance of LSE is smaller}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Estimate the variance of errors using the residuals }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+
+\NormalTok{residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\NormalTok{sigma.sq.hat=residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# estimates from one instance}
+
+\NormalTok{## Run a simulation to verify the claim}
+
+\NormalTok{## }\AlertTok{NOTE}\NormalTok{: we will use the same function name}
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+\NormalTok{  residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\NormalTok{sigma.sq.hat=residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# estimates from one instance}
+
+  \KeywordTok{return}\NormalTok{(sigma.sq.hat)}
+\NormalTok{\}}
+
+\NormalTok{### Set the number of replicates to be 10000}
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{sigma.sq.hat.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true));}
+
+\KeywordTok{mean}\NormalTok{(sigma.sq.hat.sim)}
+\NormalTok{sigma.sq}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## To wrap this up}
+\NormalTok{## For any new fits, we can estiamte the variance and standad errors of the estimators }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+
+\NormalTok{estimate.sigma.sq<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
+\NormalTok{   residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate,}\DataTypeTok{outcome=}\NormalTok{outcome)}
+\NormalTok{   n=}\KeywordTok{length}\NormalTok{(outcome)}
+\NormalTok{   sigma.sq.hat=residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{) }
+   \KeywordTok{return}\NormalTok{(sigma.sq.hat)}
+\NormalTok{\}}
+
+\NormalTok{estimate.coef.var<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
+\NormalTok{  sigma.sq.hat=}\KeywordTok{estimate.sigma.sq}\NormalTok{(beta,covariate,outcome)}
+\NormalTok{  var.hat.beta=beta;}
+\NormalTok{  var.hat.beta[}\DecValTok{2}\NormalTok{]=sigma.sq.hat}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(  (covariate}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(covariate))}\OperatorTok{^}\DecValTok{2}\NormalTok{  ) }
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(outcome)}
+\NormalTok{  var.hat.beta[}\DecValTok{1}\NormalTok{]=sigma.sq.hat}\OperatorTok{*}\KeywordTok{sum}\NormalTok{(covariate}\OperatorTok{^}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\KeywordTok{sum}\NormalTok{((covariate}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(covariate))}\OperatorTok{^}\DecValTok{2}\NormalTok{  )}\OperatorTok{/}\NormalTok{n}
+  \KeywordTok{return}\NormalTok{( var.hat.beta)}
+\NormalTok{\}}
+
+\NormalTok{estimate.coef.sd<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
+\NormalTok{  var.hat.beta=}\KeywordTok{estimate.coef.var}\NormalTok{(beta,covariate,outcome)}
+\NormalTok{ sd.hat.beta=}\KeywordTok{sqrt}\NormalTok{(var.hat.beta);}
+  \KeywordTok{return}\NormalTok{(sd.hat.beta)}
+\NormalTok{\}}
+\KeywordTok{estimate.coef.sd}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\NormalTok{## Compare your numbers with the output from lm()}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Shapes of sampling
+distributions}\label{shapes-of-sampling-distributions}
+
+Reading materials: Slide 34 in STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# There can be multiple distributions with the same mean and variance. Consider three distributions discussed in the lecture notes.}
+
+\NormalTok{xgrid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \OperatorTok{-}\DecValTok{5}\NormalTok{, }\DataTypeTok{to =} \DecValTok{5}\NormalTok{, }\DataTypeTok{by=}\FloatTok{0.01}\NormalTok{);}
+\NormalTok{norm_density=}\KeywordTok{dnorm}\NormalTok{(xgrid,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{));}
+\NormalTok{unif_density=}\KeywordTok{dunif}\NormalTok{(xgrid,}\DataTypeTok{min=}\OperatorTok{-}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{6}\NormalTok{),}\DataTypeTok{max=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{6}\NormalTok{));}
+
+\NormalTok{xbin=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{),}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{));}
+\NormalTok{ybin=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.5}\NormalTok{);}
+
+
+\KeywordTok{plot}\NormalTok{(norm_density}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.52}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"z"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"density"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(unif_density}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\StringTok{'black'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{segments}\NormalTok{(xbin[}\DecValTok{1}\NormalTok{],}\DecValTok{0}\NormalTok{,xbin[}\DecValTok{1}\NormalTok{],ybin[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{10}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(xbin[}\DecValTok{2}\NormalTok{],}\DecValTok{0}\NormalTok{,xbin[}\DecValTok{2}\NormalTok{],ybin[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{10}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\FloatTok{2.5}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Uniform"}\NormalTok{,}\StringTok{"Normal"}\NormalTok{,}\StringTok{"Binary"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'black'}\NormalTok{,}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Asymptotic distribution}\label{asymptotic-distribution}
+
+Reading materials: Slides 35 - 49 in STA108\_LinearRegression\_S20.pdf.
+
+The L-F central limit theorem claims that the asymptotic distribution
+for \(\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }\) is
+\(\mathcal{N}(0,1)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Edit the simulation code }
+\NormalTok{### This time with large n (n=500)}
+\NormalTok{### Three different versions of errors}
+\NormalTok{### Unequal variances  }
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true,error.type)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  vars=}\FloatTok{0.1}\OperatorTok{+}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{; }\CommentTok{# unequal variance }
+  \ControlFlowTok{if}\NormalTok{(error.type}\OperatorTok{==}\StringTok{'uniform'}\NormalTok{)\{}
+\NormalTok{    error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(vars);}
+    
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(error.type}\OperatorTok{==}\StringTok{'Bernoulli'}\NormalTok{)\{}
+\NormalTok{    error.terms=(}\KeywordTok{rbinom}\NormalTok{(n,}\DataTypeTok{size=}\DecValTok{1}\NormalTok{,}\DataTypeTok{prob=}\FloatTok{0.5}\NormalTok{)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(vars);}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(vars);}
+\NormalTok{  \}}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+  
+\NormalTok{  residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\NormalTok{sigma.sq.hat=residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# estimates from one instance}
+
+\NormalTok{  beta.hat.std =(beta.hat[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\KeywordTok{sqrt}\NormalTok{(sigma.sq.hat)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{( }\KeywordTok{sum}\NormalTok{( (x}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(x))}\OperatorTok{^}\DecValTok{2}\NormalTok{ ) );  }\CommentTok{# standardized intercept}
+  
+  \KeywordTok{return}\NormalTok{(beta.hat.std)}
+\NormalTok{\}}
+
+\NormalTok{### Set the number of replicates to be 10000}
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{n=}\DecValTok{500}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.hat.std.uniform=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true,}\DataTypeTok{error.type=}\StringTok{'uniform'}\NormalTok{));}
+\NormalTok{beta.hat.std.Bernoulli=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true,}\DataTypeTok{error.type=}\StringTok{'Bernoulli'}\NormalTok{));}
+\NormalTok{beta.hat.std.normal=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true,}\DataTypeTok{error.type=}\StringTok{'normal'}\NormalTok{));}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Draw the density plot}
+
+\NormalTok{density.uniform=}\KeywordTok{density}\NormalTok{( beta.hat.std.uniform);}
+\NormalTok{density.Bernoulli=}\KeywordTok{density}\NormalTok{( beta.hat.std.Bernoulli);}
+\NormalTok{density.normal=}\KeywordTok{density}\NormalTok{( beta.hat.std.normal);}
+
+\CommentTok{# Theoretical density:}
+\NormalTok{xgrid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DataTypeTok{to=}\DecValTok{4}\NormalTok{,}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{);}
+\NormalTok{normal.pdf=}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(xgrid)}
+
+\KeywordTok{plot}\NormalTok{(density.uniform,}\DataTypeTok{xlab=}\StringTok{"Standardized intercept"}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(density.Bernoulli,}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(density.normal,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.46}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Uniform errors"}\NormalTok{,}\StringTok{"Bernoulli errors"}\NormalTok{,}\StringTok{"Normal errors"}\NormalTok{, }\StringTok{"N(0,1)"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'blue'}\NormalTok{,}\StringTok{'black'}\NormalTok{),}\DataTypeTok{lty=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## The L-F CLT allows us to write down the asymptotic distribution in closed-form}
+\NormalTok{## The bootstrap method is an alternative when analytic solution is not available }
+\NormalTok{## Note: Bootstrap is not that useful for linear regression, but has proven to be a powerful tool for other methods. }
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\CommentTok{# Generate one set of data: }
+\NormalTok{n=}\DecValTok{500}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{vars=}\FloatTok{0.1}\OperatorTok{+}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{; }\CommentTok{# unequal variance }
+\NormalTok{error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(vars);}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+
+
+\CommentTok{# Now write a function for bootstrap }
+\NormalTok{boot.one.instance<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(outcome);}
+\NormalTok{  sample_indices =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n,n,}\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# sampling with replacement}
+\NormalTok{  covariate.boot=}\StringTok{ }\NormalTok{covariate[sample_indices]; outcome.boot=}\StringTok{ }\NormalTok{outcome[sample_indices];}
+   
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{covariate.boot,}\DataTypeTok{outcome=}\NormalTok{outcome.boot);}
+  \KeywordTok{return}\NormalTok{(beta.hat[}\DecValTok{2}\NormalTok{]) }
+\NormalTok{\}}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{B=}\FloatTok{1e5}\NormalTok{;}
+\NormalTok{beta.hat.boot=}\KeywordTok{replicate}\NormalTok{(B,}\KeywordTok{boot.one.instance}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y));}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Compare the bootstrap distribution of the standardized slope against that from the CLT }
+
+
+\NormalTok{density.boot=}\KeywordTok{density}\NormalTok{((beta.hat.boot}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(beta.hat.boot))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(beta.hat.boot));}
+\CommentTok{# Theoretical density (from CLT)}
+\NormalTok{xgrid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DataTypeTok{to=}\DecValTok{4}\NormalTok{,}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{);}
+\NormalTok{normal.pdf=}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(xgrid)}
+
+\KeywordTok{plot}\NormalTok{(density.boot,}\DataTypeTok{xlab=}\StringTok{"Standardized intercept"}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.46}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Bootstrap"}\NormalTok{, }\StringTok{"N(0,1)"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'blue'}\NormalTok{,}\StringTok{'black'}\NormalTok{),}\DataTypeTok{lty=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Compare the distributions using the raw bootstrap distribution, and the distribution using the moments only}
+
+
+\NormalTok{density.boot=}\KeywordTok{density}\NormalTok{(beta.hat.boot);}
+\CommentTok{# Theoretical density (from CLT)}
+\NormalTok{xgrid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\KeywordTok{min}\NormalTok{(beta.hat.boot),}\DataTypeTok{to=}\KeywordTok{max}\NormalTok{(beta.hat.boot),}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{);}
+\NormalTok{normal.pdf=}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(xgrid,}\DataTypeTok{mean=}\KeywordTok{mean}\NormalTok{(beta.hat.boot),}\DataTypeTok{sd=}\KeywordTok{sd}\NormalTok{(beta.hat.boot))}
+
+\KeywordTok{plot}\NormalTok{(density.boot,}\DataTypeTok{xlab=}\StringTok{"Standardized intercept"}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{main=}\StringTok{''}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\FloatTok{0.15}\NormalTok{,}\DataTypeTok{y=}\DecValTok{50}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Empirical"}\NormalTok{, }\StringTok{"Moment-based"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'blue'}\NormalTok{,}\StringTok{'black'}\NormalTok{),}\DataTypeTok{lty=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Small sample size}\label{small-sample-size}
+
+Reading materials: Slides 50 - 57 in STA108\_LinearRegression\_S20.pdf.
+
+When the sample size is small, the asymptotic distribution is not close
+to the true sampling distribution. Neither the central limit theorem or
+the bootstrap distribution are good approximation of the asymptotic
+distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Simulation with small sample size}
+\CommentTok{# We will demonstrate the case with 5 samples}
+\CommentTok{# You will find the code in this trunk almost identical with previous code}
+
+\CommentTok{# Generate one set of data:}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{10}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{5}\NormalTok{; }\CommentTok{# Normal errors!}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Simulate the true sampling distribution:}
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\NormalTok{(}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{-}\FloatTok{0.5}\NormalTok{)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+  \KeywordTok{return}\NormalTok{(beta.hat)}
+\NormalTok{\}}
+
+\NormalTok{### Set the number of replicates to be 10000}
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\NormalTok{true.beta.hat=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true));}
+
+\NormalTok{### Obtain the mean and standard deviation using CLT:}
+\NormalTok{residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+\NormalTok{sigma.sq.hat=residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# estimates from one instance}
+
+  
+\NormalTok{### Obtain the bootstrap distribution }
+\NormalTok{B=}\FloatTok{1e5}\NormalTok{;}
+\NormalTok{boot.beta.hat=}\KeywordTok{replicate}\NormalTok{(B,}\KeywordTok{boot.one.instance}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y));}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{density.true=}\KeywordTok{density}\NormalTok{( (true.beta.hat[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(true.beta.hat[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(true.beta.hat[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]) );}
+
+\NormalTok{density.boot=}\KeywordTok{density}\NormalTok{((boot.beta.hat}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(boot.beta.hat))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(boot.beta.hat));}
+\CommentTok{# Theoretical density (from CLT)}
+\NormalTok{xgrid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DataTypeTok{to=}\DecValTok{4}\NormalTok{,}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{);}
+\NormalTok{normal.pdf=}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(xgrid)}
+
+
+\KeywordTok{plot}\NormalTok{(density.true,}\DataTypeTok{xlab=}\StringTok{"Estimated intercept"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(density.boot,}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"True"}\NormalTok{,}\StringTok{"Bootstrap"}\NormalTok{,}\StringTok{"CLT"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'black'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'red'}\NormalTok{),}\DataTypeTok{lty=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## With very few samples, we have to exploit the parametric assumption}
+\NormalTok{## In this case, we take advantage of the normality assumption on the errors}
+
+
+\NormalTok{t.pdf=}\StringTok{ }\KeywordTok{dt}\NormalTok{(xgrid,}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(density.true,}\DataTypeTok{xlab=}\StringTok{"Estimated intercept"}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(density.boot,}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{lines}\NormalTok{(t.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"True"}\NormalTok{,}\StringTok{"Bootstrap"}\NormalTok{,}\StringTok{"CLT"}\NormalTok{,}\StringTok{'Student t'}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'black'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'red'}\NormalTok{,}\StringTok{'blue'}\NormalTok{),}\DataTypeTok{lty=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## The Student t distribution grows more similar to the standard normal as its degrees of freedom increases }
+
+\NormalTok{t_dist=}\KeywordTok{dt}\NormalTok{(xgrid,}\DataTypeTok{df=}\DecValTok{1}\NormalTok{);}
+\KeywordTok{plot}\NormalTok{(t_dist}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{xlab=}\StringTok{"beta 1 hat"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\FloatTok{0.1}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\DecValTok{10}\NormalTok{)\{}
+\NormalTok{t_dist=}\KeywordTok{dt}\NormalTok{(xgrid,}\DataTypeTok{df=}\NormalTok{i);}
+
+\KeywordTok{lines}\NormalTok{(t_dist}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\KeywordTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,i}\OperatorTok{/}\DecValTok{10}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\NormalTok{\}}
+
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.46}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Student t"}\NormalTok{, }\StringTok{"N(0,1)"}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{))}
+
+\KeywordTok{lines}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{col=}\KeywordTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\FloatTok{0.4}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Statistical inference: confidence Intervals}\label{ch:CI}
+
+Reading materials: Slides 58 - 73 in STA108\_LinearRegression\_S20.pdf
+
+\section{Confidence interval}\label{confidence-interval}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## We will look at synthetic data here, because we have control over the truth }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# For a given confidence level alpha, construct a 100(1-alpha)% confidence interval }
+
+\NormalTok{alpha=}\FloatTok{0.023}\NormalTok{;}
+\CommentTok{# There is a function confint() in R}
+\NormalTok{fit.lm=}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{);}
+\KeywordTok{confint}\NormalTok{(fit.lm,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We will implement our own version}
+
+\NormalTok{## We actually have most of the part ready}
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+\NormalTok{beta.sd=}\KeywordTok{estimate.coef.sd}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+
+\NormalTok{## The only missing piece is the quantile}
+\NormalTok{conf.int.quantile<-}\ControlFlowTok{function}\NormalTok{(alpha,type,...)\{}
+  \ControlFlowTok{if}\NormalTok{(type}\OperatorTok{==}\StringTok{"t"}\NormalTok{)\{}
+\NormalTok{    out=}\KeywordTok{qt}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{,alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{), ... ) }
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type}\OperatorTok{==}\StringTok{"normal"}\NormalTok{)\{}
+\NormalTok{    out=}\KeywordTok{qnorm}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{,alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{), ... ) }
+\NormalTok{  \}}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\NormalTok{quants<-}\KeywordTok{conf.int.quantile}\NormalTok{(alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{,}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{beta.hat}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}\OperatorTok{-}\NormalTok{beta.sd}\OperatorTok{%*%}\NormalTok{quants}
+
+\NormalTok{## Compare with the output from confint }
+\KeywordTok{confint}\NormalTok{(fit.lm,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+
+\NormalTok{## How about using bootstrap to construct the CIs?}
+\NormalTok{boot.fit<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(outcome);}
+\NormalTok{  sample_indices =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n,n,}\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# sampling with replacement}
+\NormalTok{  covariate.boot=}\StringTok{ }\NormalTok{covariate[sample_indices]; outcome.boot=}\StringTok{ }\NormalTok{outcome[sample_indices];}
+   
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{covariate.boot,}\DataTypeTok{outcome=}\NormalTok{outcome.boot);}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{t}\NormalTok{(beta.hat ))}
+\NormalTok{\}}
+\NormalTok{B=}\FloatTok{1e5}\NormalTok{;}
+\NormalTok{beta.hat.boot=}\KeywordTok{replicate}\NormalTok{(B,}\KeywordTok{boot.fit}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y));}
+
+\KeywordTok{dim}\NormalTok{(beta.hat.boot)}
+\KeywordTok{apply}\NormalTok{(beta.hat.boot[}\DecValTok{1}\NormalTok{,,],}\DecValTok{1}\NormalTok{,quantile,}\DataTypeTok{probs=}\KeywordTok{c}\NormalTok{(alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{,}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{# We can wrap this up into a function}
+\NormalTok{conf.int<-}\ControlFlowTok{function}\NormalTok{(alpha,type,covariate,outcome,}\DataTypeTok{B=}\FloatTok{1e5}\NormalTok{)\{}
+  
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(covariate,outcome);}
+\NormalTok{  beta.sd=}\KeywordTok{estimate.coef.sd}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,covariate,outcome);}
+  \ControlFlowTok{if}\NormalTok{(type}\OperatorTok{==}\StringTok{'bootstrap'}\NormalTok{)\{}
+\NormalTok{    beta.hat.boot=}\KeywordTok{replicate}\NormalTok{(B,}\KeywordTok{boot.fit}\NormalTok{(covariate,outcome));}
+\NormalTok{    out=}\KeywordTok{t}\NormalTok{(}\KeywordTok{apply}\NormalTok{(beta.hat.boot[}\DecValTok{1}\NormalTok{,,],}\DecValTok{1}\NormalTok{,quantile,}\DataTypeTok{probs=}\KeywordTok{c}\NormalTok{(alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{,}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{)));}
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(type}\OperatorTok{==}\StringTok{'t'}\NormalTok{)\{}
+\NormalTok{    quants<-}\KeywordTok{conf.int.quantile}\NormalTok{(alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{,}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{)}
+\NormalTok{    out=beta.hat}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}\OperatorTok{-}\NormalTok{beta.sd}\OperatorTok{%*%}\NormalTok{quants;}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    quants<-}\KeywordTok{conf.int.quantile}\NormalTok{(alpha,}\DataTypeTok{type=}\StringTok{'normal'}\NormalTok{)}
+\NormalTok{    out=beta.hat}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}\OperatorTok{-}\NormalTok{beta.sd}\OperatorTok{%*%}\NormalTok{quants;}
+\NormalTok{  \}}
+  
+  \KeywordTok{colnames}\NormalTok{(out)=}\KeywordTok{c}\NormalTok{( }\KeywordTok{paste}\NormalTok{(}\KeywordTok{round}\NormalTok{(alpha}\OperatorTok{*}\DecValTok{50}\NormalTok{,}\DataTypeTok{digits=}\DecValTok{3}\NormalTok{),}\StringTok{'%'}\NormalTok{), }\KeywordTok{paste}\NormalTok{(}\DecValTok{100}\OperatorTok{-}\KeywordTok{round}\NormalTok{(alpha}\OperatorTok{*}\DecValTok{50}\NormalTok{,}\DataTypeTok{digits=}\DecValTok{3}\NormalTok{),}\StringTok{'%'}\NormalTok{)  )}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\KeywordTok{conf.int}\NormalTok{(}\DataTypeTok{alpha=}\NormalTok{alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+\KeywordTok{confint}\NormalTok{(fit.lm,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Verify the coverage of the confidence invervals }
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true,alpha)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  CIs=}\KeywordTok{conf.int}\NormalTok{(}\DataTypeTok{alpha=}\NormalTok{alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
+  \KeywordTok{return}\NormalTok{(CIs)}
+\NormalTok{\}}
+
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{sim.CIs=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.true,alpha));}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Visualize and verify the coverage for the slope }
+\NormalTok{coverage=}\KeywordTok{sum}\NormalTok{(sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]}\OperatorTok{<}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{] }\OperatorTok{&}\StringTok{ }\NormalTok{sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,]}\OperatorTok{>}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{N.sim;}
+\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}
+
+\KeywordTok{plot}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DataTypeTok{col=}\StringTok{"white"}\NormalTok{,}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,]),}\KeywordTok{max}\NormalTok{(sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,])),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{20}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{"Slope"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Index"}\NormalTok{,}\DataTypeTok{main=}\KeywordTok{paste}\NormalTok{(}\StringTok{'Average Coverage:'}\NormalTok{, }\KeywordTok{signif}\NormalTok{(coverage,}\DecValTok{3}\NormalTok{)))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{19}\NormalTok{)\{}
+  \KeywordTok{segments}\NormalTok{(sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,i],i,sim.CIs[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{,i],i,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Determine cutoffs}\label{determine-cutoffs}
+
+We can definite multiple confidence intervals of the same confidence
+levels for on the same sampling distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alpha=}\FloatTok{0.05}\NormalTok{;}
+
+\NormalTok{cutoffs=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.01}\NormalTok{,}\FloatTok{0.025}\NormalTok{,}\FloatTok{0.049}\NormalTok{);}
+
+\NormalTok{colorlist=}\KeywordTok{c}\NormalTok{(}\StringTok{'red'}\NormalTok{,}\StringTok{'green'}\NormalTok{,}\StringTok{'blue'}\NormalTok{);}
+\NormalTok{leg_text=}\KeywordTok{c}\NormalTok{(}\StringTok{"1"}\NormalTok{,}\StringTok{"2"}\NormalTok{,}\StringTok{"3"}\NormalTok{);}
+
+\NormalTok{normal.pdf=}\StringTok{ }\KeywordTok{dnorm}\NormalTok{(xgrid)}
+\KeywordTok{plot}\NormalTok{(normal.pdf}\OperatorTok{~}\NormalTok{xgrid,}\DataTypeTok{xlab=}\StringTok{"beta 1 hat"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Density"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{,}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{),}\DataTypeTok{main=}\StringTok{''}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(cutoffs))\{}
+\NormalTok{lower_bound =}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(cutoffs[i]);}
+\NormalTok{upper_bound =}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{+}\NormalTok{cutoffs[i]);}
+\KeywordTok{segments}\NormalTok{(lower_bound,}\DecValTok{0}\NormalTok{,lower_bound,}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{col=}\NormalTok{colorlist[i],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(upper_bound,}\DecValTok{0}\NormalTok{,upper_bound,}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{col=}\NormalTok{colorlist[i],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(lower_bound,i}\OperatorTok{*}\FloatTok{0.1}\NormalTok{,upper_bound,i}\OperatorTok{*}\FloatTok{0.1}\NormalTok{,}\DataTypeTok{col=}\NormalTok{colorlist[i],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\NormalTok{leg_text[i] =}\KeywordTok{paste}\NormalTok{(cutoffs[i],}\StringTok{"to"}\NormalTok{, }\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{+}\NormalTok{cutoffs[i], }\StringTok{"(length:"}\NormalTok{, }\KeywordTok{signif}\NormalTok{(upper_bound}\OperatorTok{-}\NormalTok{lower_bound,}\DecValTok{2}\NormalTok{), }\StringTok{")"}\NormalTok{);}
+\NormalTok{\}}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\OperatorTok{-}\DecValTok{5}\NormalTok{,}\DataTypeTok{y=}\FloatTok{0.5}\NormalTok{,}\DataTypeTok{legend=}\NormalTok{leg_text,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\NormalTok{colorlist)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Prediction interval}\label{prediction-interval}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{fit.lm=}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\KeywordTok{as.vector}\NormalTok{(x)}\OperatorTok{+}\DecValTok{1}\NormalTok{);}
+
+\NormalTok{alpha=}\FloatTok{0.05}\NormalTok{;}
+\NormalTok{dat.new =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{));}
+
+\CommentTok{# Prediction interval (assume normality)}
+\KeywordTok{predict}\NormalTok{(fit.lm,}\DataTypeTok{newdata=}\NormalTok{dat.new,}\DataTypeTok{interval=}\StringTok{"prediction"}\NormalTok{,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+
+\CommentTok{# and confidence interval}
+\KeywordTok{predict}\NormalTok{(fit.lm,}\DataTypeTok{newdata=}\NormalTok{dat.new,}\DataTypeTok{interval=}\StringTok{"confidence"}\NormalTok{,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Implementation is similar to our conf.int function, and is thus skipped.}
+\CommentTok{# You can verify the coverage by modifying the code above.}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Simultaneous confidence
+intervals/bands/regions}\label{simultaneous-confidence-intervalsbandsregions}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## We will return to the advertising data }
+\NormalTok{fit.lm=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising)}
+\NormalTok{fit.lm.sum=}\KeywordTok{summary}\NormalTok{(fit.lm)}
+\NormalTok{alpha=}\FloatTok{0.05}\NormalTok{;}
+\NormalTok{xgrid_pred=}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\DecValTok{5}\NormalTok{,}\DataTypeTok{to=}\DecValTok{50}\NormalTok{,}\DataTypeTok{by=}\FloatTok{2.5}\NormalTok{);}
+\NormalTok{dat.new =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{TV=}\NormalTok{xgrid_pred);}
+\NormalTok{pointwise=}\KeywordTok{predict}\NormalTok{(fit.lm,}\DataTypeTok{newdata=}\NormalTok{dat.new,}\DataTypeTok{interval=}\StringTok{"confidence"}\NormalTok{,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha)}
+
+\CommentTok{# Bonferroni corrected:}
+\NormalTok{Bonf=}\KeywordTok{predict}\NormalTok{(fit.lm,}\DataTypeTok{newdata=}\NormalTok{dat.new,}\DataTypeTok{interval=}\StringTok{"confidence"}\NormalTok{,}\DataTypeTok{level=}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\KeywordTok{length}\NormalTok{(xgrid_pred))}
+
+
+\CommentTok{# Working-Hotelling}
+\NormalTok{fstat=}\StringTok{ }\KeywordTok{qf}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha,}\DecValTok{2}\NormalTok{,}\KeywordTok{length}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV)}\OperatorTok{-}\DecValTok{2}\NormalTok{);}
+\NormalTok{xdense=}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\DecValTok{0}\NormalTok{,}\DataTypeTok{to=}\DecValTok{50}\NormalTok{,}\DataTypeTok{by=}\FloatTok{0.1}\NormalTok{);}
+\NormalTok{Sxx=}\StringTok{ }\KeywordTok{sum}\NormalTok{( (dat.advertising}\OperatorTok{$}\NormalTok{TV}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV))}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+\NormalTok{pivot=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{fstat)}\OperatorTok{*}\NormalTok{fit.lm.sum}\OperatorTok{$}\NormalTok{sigma}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\KeywordTok{length}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV)}\OperatorTok{+}\NormalTok{(xdense}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV))}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\NormalTok{Sxx);}
+\NormalTok{ylb=fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{xdense}\OperatorTok{+}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{]}\OperatorTok{-}\NormalTok{pivot;}
+\NormalTok{yub=fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{xdense}\OperatorTok{+}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\NormalTok{pivot;}
+
+
+\KeywordTok{plot}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{12}\NormalTok{),}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Sales'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(xgrid_pred))\{}
+
+\KeywordTok{segments}\NormalTok{(xgrid_pred[i]}\OperatorTok{-}\DecValTok{1}\NormalTok{,Bonf[i,}\DecValTok{2}\NormalTok{],xgrid_pred[i]}\OperatorTok{-}\DecValTok{1}\NormalTok{,Bonf[i,}\DecValTok{3}\NormalTok{],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{)}
+\KeywordTok{segments}\NormalTok{(xgrid_pred[i]}\OperatorTok{-}\DecValTok{1}\NormalTok{,pointwise[i,}\DecValTok{2}\NormalTok{],xgrid_pred[i]}\OperatorTok{-}\DecValTok{1}\NormalTok{,pointwise[i,}\DecValTok{3}\NormalTok{],}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{)}
+
+\NormalTok{\}}
+\KeywordTok{lines}\NormalTok{(ylb}\OperatorTok{~}\NormalTok{xdense,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{lines}\NormalTok{(yub}\OperatorTok{~}\NormalTok{xdense,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\DataTypeTok{x=}\DecValTok{32}\NormalTok{,}\DataTypeTok{y=}\DecValTok{6}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Pointwise"}\NormalTok{, }\StringTok{"Bonferroni"}\NormalTok{, }\StringTok{"W-H band"}\NormalTok{), }\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{, }\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{,}\StringTok{"green"}\NormalTok{,}\StringTok{"blue"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Statistical inference: Hypothesis testing}\label{ch:test}
+
+Reading materials: Slides 74 - 92 in STA108\_LinearRegression\_S20.pdf.
+
+We will continue working on synthetic data in this chapter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{; }\CommentTok{# Normal errors, in order to verify the performance of the t-test }
+\CommentTok{# You can change it to other distributions }
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Hypothesit testing}\label{hypothesit-testing}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# The lm() and summary() functions will automatically calculate the test statistics and p-values for you }
+\NormalTok{fit.lm<-}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{);fit.lm.summary<-}\KeywordTok{summary}\NormalTok{(fit.lm)}
+\NormalTok{fit.lm.summary}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We will create our own function for calculating the "t value"}
+\KeywordTok{source}\NormalTok{(}\StringTok{'sources.r'}\NormalTok{) }\CommentTok{# load the functions we have written }
+
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+\NormalTok{beta.hat.sd=}\KeywordTok{estimate.coef.sd}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\CommentTok{# The test statistics for H0: beta1=0, and H0: beta0=0 are }
+\NormalTok{beta.hat.t =}\StringTok{ }\NormalTok{(beta.hat}\OperatorTok{-}\DecValTok{0}\NormalTok{)}\OperatorTok{/}\NormalTok{beta.hat.sd;}
+
+\NormalTok{calculate.t<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{covariate,}\DataTypeTok{outcome=}\NormalTok{outcome)}
+\NormalTok{  beta.hat.sd=}\KeywordTok{estimate.coef.sd}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{covariate,}\DataTypeTok{outcome=}\NormalTok{outcome)}
+\NormalTok{  beta.hat.t =}\StringTok{ }\NormalTok{(beta.hat}\OperatorTok{-}\DecValTok{0}\NormalTok{)}\OperatorTok{/}\NormalTok{beta.hat.sd;}
+  \KeywordTok{return}\NormalTok{(beta.hat.t)}
+\NormalTok{\}}
+
+\CommentTok{# The p-values using the Student t distribution are }
+\DecValTok{2}\OperatorTok{*}\KeywordTok{apply}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{pt}\NormalTok{(}\OperatorTok{-}\KeywordTok{abs}\NormalTok{(beta.hat.t),}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{),(}\DecValTok{1}\OperatorTok{-}\KeywordTok{pt}\NormalTok{(}\KeywordTok{abs}\NormalTok{(beta.hat.t),}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{))),}\DecValTok{1}\NormalTok{,min)}
+
+\CommentTok{# We can also calculate the p-values using CLT}
+\DecValTok{2}\OperatorTok{*}\KeywordTok{apply}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{-}\KeywordTok{abs}\NormalTok{(beta.hat.t)),(}\DecValTok{1}\OperatorTok{-}\KeywordTok{pnorm}\NormalTok{(}\KeywordTok{abs}\NormalTok{(beta.hat.t)))),}\DecValTok{1}\NormalTok{,min)}
+
+\CommentTok{# Or to use the bootstrap }
+\CommentTok{# This part is NOT required}
+\CommentTok{# It is recommended to read more about bootstrap if you want to use it for hypothesis testing}
+\CommentTok{# since the empirical bootstrap procedure is not the most efficient one for this purpose }
+
+\NormalTok{beta.hat.boot=}\KeywordTok{replicate}\NormalTok{(}\FloatTok{1e5}\NormalTok{,}\KeywordTok{boot.fit}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y));}
+\NormalTok{pval=}\KeywordTok{numeric}\NormalTok{(}\KeywordTok{length}\NormalTok{(beta.hat));}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(beta.hat))\{}
+\NormalTok{  boot.est=beta.hat.boot[}\DecValTok{1}\NormalTok{,i,]}
+\NormalTok{  pval[i]=}\DecValTok{2}\OperatorTok{*}\KeywordTok{min}\NormalTok{( }\KeywordTok{mean}\NormalTok{(}\DecValTok{0}\OperatorTok{<}\NormalTok{boot.est), }\KeywordTok{mean}\NormalTok{(}\DecValTok{0}\OperatorTok{>}\NormalTok{boot.est) )}
+\NormalTok{\}}
+
+\NormalTok{## Wrap up the above code into one function}
+\NormalTok{calculate.pvalue<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome,type)\{}
+\NormalTok{  beta.hat.t=}\KeywordTok{calculate.t}\NormalTok{(covariate,outcome);}
+  \ControlFlowTok{if}\NormalTok{ (type}\OperatorTok{==}\StringTok{'t'}\NormalTok{)\{}
+\NormalTok{    n=}\KeywordTok{length}\NormalTok{(outcome);}
+\NormalTok{    pval=}\DecValTok{2}\OperatorTok{*}\KeywordTok{apply}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{pt}\NormalTok{(beta.hat.t,}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{),(}\DecValTok{1}\OperatorTok{-}\KeywordTok{pt}\NormalTok{(beta.hat.t,}\DataTypeTok{df=}\NormalTok{n}\OperatorTok{-}\DecValTok{2}\NormalTok{))),}\DecValTok{1}\NormalTok{,min);}
+
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type}\OperatorTok{==}\StringTok{'z'}\NormalTok{)\{}
+\NormalTok{    pval=}\DecValTok{2}\OperatorTok{*}\KeywordTok{apply}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{-}\KeywordTok{abs}\NormalTok{(beta.hat.t)),(}\DecValTok{1}\OperatorTok{-}\KeywordTok{pnorm}\NormalTok{(}\KeywordTok{abs}\NormalTok{(beta.hat.t)))),}\DecValTok{1}\NormalTok{,min);}
+    
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ 'bootstrap'}\NormalTok{)\{}
+    
+\NormalTok{    beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{covariate,}\DataTypeTok{outcome=}\NormalTok{outcome)}
+\NormalTok{    beta.hat.boot=}\KeywordTok{replicate}\NormalTok{(}\FloatTok{1e5}\NormalTok{,}\KeywordTok{boot.fit}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{covariate,}\DataTypeTok{outcome=}\NormalTok{outcome));}
+\NormalTok{    pval=}\KeywordTok{numeric}\NormalTok{(}\KeywordTok{length}\NormalTok{(beta.hat));}
+    \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(beta.hat))\{}
+\NormalTok{      boot.est=beta.hat.boot[}\DecValTok{1}\NormalTok{,i,]}
+\NormalTok{      pval[i]=}\DecValTok{2}\OperatorTok{*}\KeywordTok{min}\NormalTok{( }\KeywordTok{mean}\NormalTok{(}\DecValTok{0}\OperatorTok{<}\NormalTok{boot.est), }\KeywordTok{mean}\NormalTok{(}\DecValTok{0}\OperatorTok{>}\NormalTok{boot.est) )}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  \KeywordTok{return}\NormalTok{(pval)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Write a simulation to verify the equivalence between type I error rate and significance level, under the null H0: beta1=0 (slope is zero)}
+\NormalTok{alpha=}\FloatTok{0.03}\NormalTok{; }\CommentTok{# significance level }
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.null,alpha,type)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
+\NormalTok{  Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.null[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.null[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{;}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  pval=}\KeywordTok{calculate.pvalue}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y,}\DataTypeTok{type=}\NormalTok{type);}
+\NormalTok{  rej.flag=}\StringTok{ }\NormalTok{pval[}\DecValTok{2}\NormalTok{]}\OperatorTok{<}\NormalTok{alpha}
+  \KeywordTok{return}\NormalTok{(rej.flag)}
+\NormalTok{\}}
+
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.null=}\KeywordTok{c}\NormalTok{(beta.true[}\DecValTok{1}\NormalTok{],}\DecValTok{0}\NormalTok{)}
+\NormalTok{sim.typeI=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.null,alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{));}
+\KeywordTok{mean}\NormalTok{(sim.typeI)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Assess the power }
+\NormalTok{N.sim=}\FloatTok{1e4}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{powers<-}\KeywordTok{numeric}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(a }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)\{}
+\NormalTok{  beta.alt=}\KeywordTok{c}\NormalTok{(beta.true[}\DecValTok{1}\NormalTok{],a}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{  sim.rej=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta.alt,alpha,}\DataTypeTok{type=}\StringTok{'t'}\NormalTok{));}
+\NormalTok{  powers[a]<-}\KeywordTok{mean}\NormalTok{(sim.rej)}
+  
+\NormalTok{\}}
+\NormalTok{powers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Permutation test for testing H0: beta1 = 0 (slope is zero)}
+
+\NormalTok{permutation.test<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(outcome);}
+\NormalTok{  sample_indices =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n,n,}\DataTypeTok{replace=}\OtherTok{FALSE}\NormalTok{) }\CommentTok{# sampling without replacement}
+\NormalTok{  covariate.perm=}\StringTok{ }\NormalTok{covariate[sample_indices]; outcome.perm=}\StringTok{ }\NormalTok{outcome[sample_indices];}
+
+\NormalTok{  beta.hat.t=}\KeywordTok{calculate.t}\NormalTok{(covariate.perm,outcome.perm)}
+
+  \KeywordTok{return}\NormalTok{(beta.hat.t[}\DecValTok{2}\NormalTok{])}
+\NormalTok{\}}
+
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{; }\CommentTok{# Normal errors, in order to verify the performance of the t-test }
+\CommentTok{# You can change it to other distributions }
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+
+\NormalTok{beta.hat.t.perm=}\KeywordTok{replicate}\NormalTok{(}\FloatTok{1e5}\NormalTok{,}\KeywordTok{permutation.test}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y));}
+\NormalTok{beta.hat.t=}\KeywordTok{calculate.t}\NormalTok{(x,y)}
+\DecValTok{2}\OperatorTok{*}\KeywordTok{min}\NormalTok{( }\KeywordTok{mean}\NormalTok{(beta.hat.t[}\DecValTok{2}\NormalTok{]}\OperatorTok{<}\NormalTok{beta.hat.t.perm),}\KeywordTok{mean}\NormalTok{(beta.hat.t[}\DecValTok{2}\NormalTok{]}\OperatorTok{>}\NormalTok{beta.hat.t.perm))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## F-test can be done using the anova() function in R}
+\NormalTok{## It will be left as an exercise for you to write your version of F test}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{; }\CommentTok{# Normal errors, in order to verify the performance of the t-test }
+\CommentTok{# You can change it to other distributions }
+\NormalTok{y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+
+\NormalTok{full_model=}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{);}
+\NormalTok{reduced_model=}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\DecValTok{1}\NormalTok{);}
+\KeywordTok{anova}\NormalTok{(reduced_model,full_model)}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Multiple testing}\label{multiple-testing}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# To discuss multiple testing, we generate 1000 outcomes, among which 100 are truly associated with the covariate }
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{n=}\DecValTok{50}\NormalTok{;m=}\DecValTok{1000}\NormalTok{;}
+\NormalTok{x=}\KeywordTok{as.matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n,}\DataTypeTok{mean=}\DecValTok{10}\NormalTok{,}\DataTypeTok{sd=}\DecValTok{2}\NormalTok{),}\DataTypeTok{ncol=}\NormalTok{n);}
+\NormalTok{Y=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DataTypeTok{nrow=}\NormalTok{n,}\DataTypeTok{ncol=}\NormalTok{m)}
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{,}\FloatTok{0.6}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{m)\{}
+\NormalTok{Ey=}\StringTok{ }\NormalTok{x}\OperatorTok{*}\NormalTok{beta.true[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{(i}\OperatorTok{<}\DecValTok{101}\NormalTok{)}\OperatorTok{+}\NormalTok{beta.true[}\DecValTok{1}\NormalTok{];}
+\NormalTok{error.terms=}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{;  }
+\NormalTok{Y[,i]=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{\}}
+
+\CommentTok{# Conduct the same test }
+\NormalTok{pvalues=}\KeywordTok{numeric}\NormalTok{(m)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{m)\{}
+\NormalTok{  pval=}\KeywordTok{calculate.pvalue}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{Y[,i],}\DataTypeTok{type=}\StringTok{'z'}\NormalTok{);}
+\NormalTok{  pvalues[i]<-pval[}\DecValTok{2}\NormalTok{];}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Bonferroni correction }
+\NormalTok{alpha=}\FloatTok{0.05}\NormalTok{;}
+\NormalTok{alpha.Bonf=alpha}\OperatorTok{/}\NormalTok{m; }\CommentTok{# devided by the number of hypotheses}
+\NormalTok{rej.flag=pvalues}\OperatorTok{<}\NormalTok{alpha.Bonf;}
+
+\NormalTok{## True positive}
+\KeywordTok{sum}\NormalTok{(rej.flag }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{<}\DecValTok{101}\NormalTok{))}
+\NormalTok{## False positive }
+\KeywordTok{sum}\NormalTok{(rej.flag }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{>}\DecValTok{100}\NormalTok{))}
+\NormalTok{## True negative}
+\KeywordTok{sum}\NormalTok{(}\OperatorTok{!}\NormalTok{rej.flag }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{>}\DecValTok{100}\NormalTok{))}
+
+\NormalTok{## False negative}
+\KeywordTok{sum}\NormalTok{(}\OperatorTok{!}\NormalTok{rej.flag }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{<}\DecValTok{101}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Benjamini–Hochberg procedure for FDR control }
+
+\NormalTok{pvalues.sorted<-}\KeywordTok{sort}\NormalTok{(pvalues,}\DataTypeTok{index.return=}\NormalTok{T)}
+\NormalTok{alpha.BH<-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{*}\NormalTok{alpha}\OperatorTok{/}\NormalTok{m;}
+\NormalTok{k.hat<-}\KeywordTok{max}\NormalTok{(}\KeywordTok{which}\NormalTok{(pvalues.sorted}\OperatorTok{$}\NormalTok{x}\OperatorTok{<}\NormalTok{alpha.BH))}
+
+\NormalTok{rej.flag.BH=}\KeywordTok{numeric}\NormalTok{(m);}
+\NormalTok{rej.flag.BH[pvalues.sorted}\OperatorTok{$}\NormalTok{ix[}\DecValTok{1}\OperatorTok{:}\NormalTok{k.hat]]=}\DecValTok{1}\NormalTok{;}
+
+
+
+\NormalTok{## True positive}
+\KeywordTok{sum}\NormalTok{(rej.flag.BH }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{<}\DecValTok{101}\NormalTok{))}
+\NormalTok{## False positive }
+\KeywordTok{sum}\NormalTok{(rej.flag.BH }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{>}\DecValTok{100}\NormalTok{))}
+\NormalTok{## True negative}
+\KeywordTok{sum}\NormalTok{(}\OperatorTok{!}\NormalTok{rej.flag.BH }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{>}\DecValTok{100}\NormalTok{))}
+
+\NormalTok{## False negative}
+\KeywordTok{sum}\NormalTok{(}\OperatorTok{!}\NormalTok{rej.flag.BH }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{<}\DecValTok{101}\NormalTok{))}
+
+\NormalTok{## False positive rate}
+
+\KeywordTok{sum}\NormalTok{(rej.flag.BH }\OperatorTok{&}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{:}\NormalTok{m)}\OperatorTok{>}\DecValTok{100}\NormalTok{))}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(rej.flag.BH)}
+
+\CommentTok{# Run a simulation to verify this}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Model diagnostics}\label{ch:diagnostics}
+
+Reading materials: Slides 93 - 101 in STA108\_LinearRegression\_S20.pdf.
+
+Note: we will use existing functions in \texttt{R} for model diagnostics
+in this chapter. However, in your midterm report, you are still required
+to implement your own tools for model diagnostics.
+
+\section{Residual plot}\label{residual-plot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## We can extract residual from an `lm()` object.}
+
+\NormalTok{fit.lm =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }\CommentTok{# Fit the linear regression}
+\NormalTok{resid=}\StringTok{ }\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{residuals;}
+
+\KeywordTok{plot}\NormalTok{(resid}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Why don't we draw the residual plot as residuals v.s. the response? This
+is because the two quantities are surely positively correlated, and thus
+is hard to extract any useful information from the plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(resid}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Wrong plot'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+How about drawing residuals against the fitted values? This is a good
+choice to detect certain anomalies.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(resid}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(resid}\OperatorTok{~}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{fitted.values,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'Fitted values'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Remedies for non-linearity}\label{remedies-for-non-linearity}
+
+From the residual plot, we see that there exist some non-linearity
+between the residuals and the covariate, especially when the TV is
+number is small. This could suggest that the relationship between TV and
+sales is nonlinear. Typical form of nonlinearity takes form as
+\(\exp(x)\), \(x^{1/2}\), \(\log(x)\), \(x^2\), etc. We may be able to
+guess the nonlinearity from the residual plot, or use model selection to
+pick the best nonlinear function, if there is not scientific knowledge
+on the relationship. In this example, we will fit two regression
+\(y\sim \log(x)\beta_1 + \beta_0\) and
+\(y \sim x^{1/2} \beta_1 + \beta_0\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit.log =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\KeywordTok{log}\NormalTok{(TV)}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }\CommentTok{# Fit the linear regression}
+\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sqrtTV=dat.advertising}\OperatorTok{$}\NormalTok{TV}\OperatorTok{^}\NormalTok{\{}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{\};}
+\NormalTok{fit.sqrt =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{sqrtTV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }\CommentTok{# Fit the linear regression}
+
+\CommentTok{#par(mfrow=c(3,1))}
+\KeywordTok{plot}\NormalTok{(fit.log}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\KeywordTok{log}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV),}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (log TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'log(TV)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(fit.sqrt}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sqrtTV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (sq. rt. TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'sqrt(TV)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\CommentTok{#par(mfrow=c(1,1))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Independence}\label{independence}
+
+In the \texttt{advertising} data set, the residual plot does not tell us
+whether certain data points are correlated or not.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We will consider a model where we know the errors are correlated, and
+show that they may still be hard to recognized in practice. We consider
+a model with autoregressive error, AR(1), which is widely used in
+time-series data analysis (e.g., financial data). We consider a model
+where, for \(i=1,2,\ldots, n\),
+\[ y_i = x_i \beta_1 + \beta_0 + \epsilon_i,\] where
+\(\epsilon_i = 3\epsilon_{i-1}/4 + z_i/4\) and
+\(z_i\sim \mathcal{N}(0,1)\). Here \(i\) represents some unit of time
+(e.g., months, years, days).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{);}
+\NormalTok{z=}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{epsilon=}\StringTok{ }\KeywordTok{numeric}\NormalTok{(n);}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{n)\{}
+\ControlFlowTok{if}\NormalTok{ (i}\OperatorTok{==}\DecValTok{1}\NormalTok{)\{}
+\NormalTok{epsilon[i]=z[i];}
+
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{epsilon[i]=}\DecValTok{3}\OperatorTok{*}\NormalTok{epsilon[i}\OperatorTok{-}\DecValTok{1}\NormalTok{]}\OperatorTok{/}\DecValTok{4}\OperatorTok{+}\NormalTok{z[i]}\OperatorTok{/}\DecValTok{4}\NormalTok{;}
+\NormalTok{\}}
+\NormalTok{\}}
+\NormalTok{x=}\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{10}\OperatorTok{+}\DecValTok{5}\NormalTok{;}
+\NormalTok{y=x}\OperatorTok{*}\DecValTok{2}\OperatorTok{+}\DecValTok{1}\OperatorTok{+}\NormalTok{z;}
+
+\NormalTok{ARfits =}\StringTok{ }\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{x}\OperatorTok{+}\DecValTok{1}\NormalTok{);}
+
+
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(ARfits}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{x,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot 1'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(ARfits}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n),}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot 2'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Index i"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Normality}\label{normality}
+
+It is also hard to see normality based on the residual plot. We can use
+a Quantile-Quantile plot to check if the errors are normally
+distributed. In the Q-Q plot, we draw the quantiles of residuals against
+the quantiles of the thoeretical quantiles from a normal distribution.
+The \(100(i/n)\%\)th quantile of the residuals is defined as the \(i\)th
+smallest residual.
+
+Non-normal distributions in Q-Q plots.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n=}\DecValTok{500}\NormalTok{;}
+\NormalTok{distributions=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,n,}\DecValTok{4}\NormalTok{)}
+\NormalTok{distributions[,}\DecValTok{1}\NormalTok{] =}\OperatorTok{-}\KeywordTok{exp}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n));}
+\NormalTok{distributions[,}\DecValTok{2}\NormalTok{] =}\KeywordTok{exp}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n));}
+\NormalTok{distributions[,}\DecValTok{3}\NormalTok{]=}\KeywordTok{rt}\NormalTok{(n,}\DataTypeTok{df=}\DecValTok{3}\NormalTok{);}
+\NormalTok{distributions[,}\DecValTok{4}\NormalTok{]=}\KeywordTok{runif}\NormalTok{(n);}
+
+\NormalTok{titles =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Left skewed'}\NormalTok{, }\StringTok{'Right skewed'}\NormalTok{, }\StringTok{'Heavy-tailed'}\NormalTok{, }\StringTok{'Light-tailed'}\NormalTok{ )}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ ( i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{)\{}
+\NormalTok{this_dist=}\KeywordTok{sort}\NormalTok{(distributions[,i]);}
+\NormalTok{normal_mean =}\KeywordTok{mean}\NormalTok{(this_dist);normal_sd =}\StringTok{ }\KeywordTok{sd}\NormalTok{(this_dist);}
+\NormalTok{this_dist=(this_dist }\OperatorTok{-}\StringTok{ }\NormalTok{normal_mean)}\OperatorTok{/}\NormalTok{normal_sd;}
+\NormalTok{normal_quantiles =}\StringTok{ }\KeywordTok{qnorm}\NormalTok{( (}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(this_dist))}\OperatorTok{/}\KeywordTok{length}\NormalTok{(this_dist));}
+
+\KeywordTok{plot}\NormalTok{(this_dist}\OperatorTok{~}\NormalTok{normal_quantiles,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\NormalTok{titles[i],}\DataTypeTok{xlab=}\StringTok{'Normal quantiles'}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{'Sample quantiles'}\NormalTok{,}\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{),}\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\DecValTok{0}\NormalTok{,}\DataTypeTok{b=}\DecValTok{1}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Homoscedasticity}\label{homoscedasticity}
+
+We can see clearly that the residuals have wider spans when \texttt{TV}
+is larger, which suggested increasing variance. We can stablize the
+variance by transforming the response variable \(y^{1/2}\), \(\log(y)\),
+etc. You can also use the Box-Cox transformation to find the most
+appropriate function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit.ylog=}\KeywordTok{lm}\NormalTok{(}\KeywordTok{log}\NormalTok{(sales)}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising)}
+\NormalTok{fit.ysqrt=}\KeywordTok{lm}\NormalTok{(}\KeywordTok{sqrt}\NormalTok{(sales)}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising)}
+\CommentTok{#par(mfrow=c(3,1))}
+\KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (original)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(fit.ylog}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (log)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'residuals'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+
+\KeywordTok{plot}\NormalTok{(fit.ysqrt}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (sqrt)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"residuals"}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Influential Observations and
+Outliers}\label{influential-observations-and-outliers}
+
+The influential observations are samples that has a large leverage. You
+should search for a formal definition of leverage if you are interested.
+In plain words, the inflential observations are data points that live
+far away from others in terms of their values of the covariates.
+
+Outliters are the observations whose responses are far away from
+observations with similar covariates. We can see these from the usual
+scatter plots. We will not cover formal testing or measures for
+influential observations and outliers in this class.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{influential_cov=dat.advertising}\OperatorTok{$}\NormalTok{TV;influential_cov[}\DecValTok{1}\NormalTok{]=}\DecValTok{500}\NormalTok{;}
+\NormalTok{outliers_resp=fit.lm}\OperatorTok{$}\NormalTok{residuals;outliers_resp[}\DecValTok{1}\NormalTok{]=}\DecValTok{30}\NormalTok{;}
+
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{influential_cov,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Influential obs.'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{y=}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{residuals[}\DecValTok{1}\NormalTok{],}\DataTypeTok{x=}\NormalTok{influential_cov[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{)}
+
+
+\KeywordTok{plot}\NormalTok{(outliers_resp}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Outlier'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\DataTypeTok{y=}\NormalTok{outliers_resp[}\DecValTok{1}\NormalTok{],}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'green'}\NormalTok{,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Multiple covariates}\label{ch:multiple}
+
+\section{Examples}\label{examples}
+
+Reading materials: Slides 103 - 111 in
+STA108\_LinearRegression\_S20.pdf.
+
+We will revisit the examples that have been studied in Chapter
+\ref{lmR}.
+
+\subsection{Advertising data}\label{advertising-data-1}
+
+We now consider all the covariates in the data set. The resulting model
+is \[
+    y_i =  \beta_0 + \sum_{j=1}^3 x_{i,j} \beta_j  +  \epsilon_i, i=1,\ldots, 200,
+    \] where \(y_i\) is the \texttt{sales} (1 unit = 1000 dollars) for
+the \(i\)th entry, \(x_{i,1}\) is the TV advertising budget for the
+\(i\)th entry, \(x_{i,2}\) is the radio advertising budget for the
+\(i\)th entry, \(x_{i,3}\) is the newspaper advertising budget for the
+\(i\)th entry. In addition, we assume that the errors
+\(\{\epsilon_i\}_{i=1}^{200}\) satisfy that
+\(\epsilon_1,\ldots, \epsilon_200\) are independently and identically
+distributed (i.i.d.), \(\mathbb{E}[\epsilon_i]= 0\) for
+\(i=1,2,\ldots, 200\) and \(\mathrm{var}(\epsilon_i)=\sigma^2\) for
+\(i=1,2,\ldots, 200\). Recall that we consider fixed design (i.e.,
+\(x_i\) is not random) in this course for simplicity.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat.advertising=}\KeywordTok{read.csv}\NormalTok{(}\StringTok{'./data/advertising.csv'}\NormalTok{);}
+\CommentTok{# Fit a multiple linear regression}
+\NormalTok{fit.advertising =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\NormalTok{radio}\OperatorTok{+}\NormalTok{newspaper}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.advertising) }
+
+\NormalTok{fit.advertising.slr =}\StringTok{ }\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.advertising.slr) }
+\end{Highlighting}
+\end{Shaded}
+
+How would you interpret the fitted results? How do they compare with the
+results from the simple linear regression in Chapter \ref{lmR}?
+
+\subsection{Flu shot}\label{flu-shot-1}
+
+We will include \texttt{age} and \texttt{female}(gender) in the
+regression in addition to the treatment received. What can you conclude
+from the fitted results?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat.flu =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"./data/flu240.txt"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{# Fit a multiple linear regression}
+\NormalTok{fit.flu=}\StringTok{ }\KeywordTok{lm}\NormalTok{(outcome}\OperatorTok{~}\NormalTok{treatment.received}\OperatorTok{+}\NormalTok{age}\OperatorTok{+}\NormalTok{female}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.flu); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.flu) }
+\end{Highlighting}
+\end{Shaded}
+
+In addition, we can fit a regression with treatment received as the
+outcome, where treatment assigned, age and gender are covariates. What
+can you conclude now?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit.trt=}\StringTok{ }\KeywordTok{lm}\NormalTok{(treatment.received}\OperatorTok{~}\NormalTok{treatment.assigned}\OperatorTok{+}\NormalTok{age}\OperatorTok{+}\NormalTok{female}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.flu); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.trt) }
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Project STAR}\label{project-star-1}
+
+Project STAR is a stratified randomized experiment, where randomization
+happened within each school. Hence, we will add \texttt{schoolid2} as an
+additional factor in the regression.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(AER)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"STAR"}\NormalTok{)}
+\NormalTok{dat.STAR=STAR; }\CommentTok{# Just to be consistent}
+\CommentTok{# Fit a simple linear regression}
+\NormalTok{fit.STAR=}\StringTok{ }\KeywordTok{lm}\NormalTok{(math2}\OperatorTok{~}\KeywordTok{as.factor}\NormalTok{(star2)}\OperatorTok{+}\KeywordTok{as.factor}\NormalTok{(schoolid2)}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.STAR); }
+\CommentTok{# Summarize the fitted results}
+\KeywordTok{summary}\NormalTok{(fit.STAR)}\OperatorTok{$}\NormalTok{coef[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{,]}
+
+\CommentTok{# We can no longer draw a fitted line here...}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Classification of variables}\label{classification-of-variables}
+
+Reading materials: Slides 112 - 118 in
+STA108\_LinearRegression\_S20.pdf.
+
+We will use simulation to examine the roles of the variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{'sources.r'}\NormalTok{)}
+
+\NormalTok{simulate.one.instance.data<-}\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
+\NormalTok{confounder =}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{;}
+\NormalTok{precision =}\StringTok{ }\KeywordTok{runif}\NormalTok{(n);}
+\NormalTok{instrument =}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(n,}\DataTypeTok{size=}\DecValTok{1}\NormalTok{,}\DataTypeTok{prob=}\FloatTok{0.4}\NormalTok{);}
+\NormalTok{trt=}\KeywordTok{rnorm}\NormalTok{(n) }\OperatorTok{+}\StringTok{ }\NormalTok{confounder}\OperatorTok{*}\FloatTok{0.4}\OperatorTok{-}\NormalTok{instrument;}
+\NormalTok{y=trt}\OperatorTok{*}\DecValTok{1}\OperatorTok{-}\FloatTok{0.5}\OperatorTok{*}\NormalTok{confounder}\OperatorTok{+}\NormalTok{precision}\OperatorTok{*}\FloatTok{0.7}\OperatorTok{+}\FloatTok{0.5}\OperatorTok{*}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{out=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{trt=}\NormalTok{trt,}\DataTypeTok{confounder=}\NormalTok{confounder, }\DataTypeTok{precision=}\NormalTok{precision, }\DataTypeTok{instrument=}\NormalTok{instrument)}
+\KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Effect if ignoring confounder:}
+
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  dat=}\KeywordTok{simulate.one.instance.data}\NormalTok{();}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{dat[,}\StringTok{'trt'}\NormalTok{],}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  
+\NormalTok{  beta.hat.confounder=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\KeywordTok{c}\NormalTok{(}\StringTok{'trt'}\NormalTok{,}\StringTok{'confounder'}\NormalTok{)]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{c}\NormalTok{(beta.hat[}\DecValTok{2}\NormalTok{],beta.hat.confounder[}\DecValTok{2}\NormalTok{]))}
+\NormalTok{\}}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{sim.confounder=}\KeywordTok{replicate}\NormalTok{(N.sim, }\KeywordTok{simulate.one.instance}\NormalTok{());}
+\KeywordTok{apply}\NormalTok{(sim.confounder,}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# The true value is 1}
+\KeywordTok{apply}\NormalTok{( (sim.confounder}\OperatorTok{-}\DecValTok{1}\NormalTok{),}\DecValTok{1}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(x)\{ }\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{) \}) }\CommentTok{# The mean squared error}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Effect if ignoring precision variable:}
+
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  dat=}\KeywordTok{simulate.one.instance.data}\NormalTok{();}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\KeywordTok{c}\NormalTok{(}\StringTok{'trt'}\NormalTok{,}\StringTok{'confounder'}\NormalTok{)]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  
+\NormalTok{  beta.hat.precision=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\KeywordTok{c}\NormalTok{(}\StringTok{'trt'}\NormalTok{,}\StringTok{'confounder'}\NormalTok{,}\StringTok{'precision'}\NormalTok{)]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{c}\NormalTok{(beta.hat[}\DecValTok{2}\NormalTok{],beta.hat.precision[}\DecValTok{2}\NormalTok{]))}
+\NormalTok{\}}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{sim.precision=}\KeywordTok{replicate}\NormalTok{(N.sim, }\KeywordTok{simulate.one.instance}\NormalTok{());}
+\KeywordTok{apply}\NormalTok{(sim.precision,}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# The true value is 1}
+\KeywordTok{apply}\NormalTok{( (sim.precision}\OperatorTok{-}\DecValTok{1}\NormalTok{),}\DecValTok{1}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(x)\{ }\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{) \}) }\CommentTok{# The mean squared error}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## The power of instruments}
+\NormalTok{###  If the confounder is unobserved, we can use the two stage least squares method}
+
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  dat=}\KeywordTok{simulate.one.instance.data}\NormalTok{();}
+\NormalTok{  beta.hat.naive=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\StringTok{'trt'}\NormalTok{]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  
+\NormalTok{  yiv=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\KeywordTok{c}\NormalTok{(}\StringTok{'instrument'}\NormalTok{)]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{y)}
+  
+\NormalTok{  trtiv=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{as.matrix}\NormalTok{(dat[,}\KeywordTok{c}\NormalTok{(}\StringTok{'instrument'}\NormalTok{)]),}\DataTypeTok{outcome=}\NormalTok{dat}\OperatorTok{$}\NormalTok{trt)}
+  
+  
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{c}\NormalTok{(beta.hat.naive[}\DecValTok{2}\NormalTok{],yiv[}\DecValTok{2}\NormalTok{]}\OperatorTok{/}\NormalTok{trtiv[}\DecValTok{2}\NormalTok{]))}
+\NormalTok{\}}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{sim.iv=}\KeywordTok{replicate}\NormalTok{(N.sim, }\KeywordTok{simulate.one.instance}\NormalTok{());}
+\KeywordTok{apply}\NormalTok{(sim.iv,}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# The true value is 1}
+\KeywordTok{apply}\NormalTok{( (sim.iv}\OperatorTok{-}\DecValTok{1}\NormalTok{),}\DecValTok{1}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(x)\{ }\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{) \}) }\CommentTok{# The mean squared error}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Least squares estimation}\label{least-squares-estimation}
+
+Reading materials: Slides 119 - 141 in
+STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Consider another data set with a bit more covariates }
+\KeywordTok{library}\NormalTok{(AER)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"Fatalities"}\NormalTok{)}
+\NormalTok{dat.fatalities =}\StringTok{ }\NormalTok{Fatalities}
+\CommentTok{# This dataset contains 34 variables}
+\CommentTok{# It is actually a longitudinal/panel data}
+\CommentTok{# We will ignore the spatial temporal structure in this class}
+
+\NormalTok{y=dat.fatalities}\OperatorTok{$}\NormalTok{fatal; }\CommentTok{#Number of vehicle fatalities.}
+\NormalTok{X=}\KeywordTok{as.matrix}\NormalTok{(dat.fatalities[,}\KeywordTok{c}\NormalTok{(}\StringTok{'spirits'}\NormalTok{,}\StringTok{'unemp'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'beertax'}\NormalTok{,}\StringTok{'baptist'}\NormalTok{,}\StringTok{'mormon'}\NormalTok{,}\StringTok{'drinkage'}\NormalTok{,}\StringTok{'dry'}\NormalTok{,}\StringTok{'youngdrivers'}\NormalTok{,}\StringTok{'miles'}\NormalTok{,}\StringTok{'gsp'}\NormalTok{)]);}
+
+
+\CommentTok{# Rewrite the functions in Chapter 2}
+\NormalTok{linear.model<-}\ControlFlowTok{function}\NormalTok{(beta,covariate)\{}
+  \CommentTok{# beta: a 2-vector, where the first entry is the intercept}
+\NormalTok{  beta=}\KeywordTok{as.matrix}\NormalTok{(beta,}\DataTypeTok{nrow=}\KeywordTok{length}\NormalTok{(beta))}
+\NormalTok{  yout=covariate}\OperatorTok{%*%}\NormalTok{beta[}\OperatorTok{-}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\NormalTok{beta[}\DecValTok{1}\NormalTok{];}
+  \KeywordTok{return}\NormalTok{(yout);}
+  \CommentTok{# Note: this function only works with simple linear regression model}
+  \CommentTok{# How would you generalize it?}
+\NormalTok{\}}
+\NormalTok{sum.of.squares<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
+\NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate);}
+\NormalTok{  res=outcome}\OperatorTok{-}\NormalTok{yout;}
+\NormalTok{  sos=}\StringTok{ }\KeywordTok{sum}\NormalTok{(res}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+  \KeywordTok{return}\NormalTok{(sos)}
+\NormalTok{\}}
+\NormalTok{fit.linear.model<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
+\NormalTok{  X=}\KeywordTok{cbind}\NormalTok{(}\DecValTok{1}\NormalTok{,covariate);}
+  
+\NormalTok{  beta.fit=}\KeywordTok{solve}\NormalTok{( }\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X )}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{outcome;}
+  \KeywordTok{return}\NormalTok{(beta.fit)}
+\NormalTok{\}}
+
+\NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+\CommentTok{# Compare with lm()}
+\NormalTok{fit.lm=}\KeywordTok{lm}\NormalTok{(y}\OperatorTok{~}\NormalTok{X}\OperatorTok{+}\DecValTok{1}\NormalTok{);}
+\NormalTok{beta.hat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Hat matrix }
+\NormalTok{calculate.hat<-}\ControlFlowTok{function}\NormalTok{(covariate)\{}
+\NormalTok{  X=}\KeywordTok{cbind}\NormalTok{(}\DecValTok{1}\NormalTok{,covariate);}
+\NormalTok{  P=X}\OperatorTok{%*%}\KeywordTok{solve}\NormalTok{(}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X)}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X);}
+  \KeywordTok{return}\NormalTok{(P)}
+\NormalTok{\}}
+\NormalTok{P=}\KeywordTok{calculate.hat}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X);}
+
+\CommentTok{# Verify the properties of the hat matrix:}
+\NormalTok{## Residuals }
+\NormalTok{resid=}\StringTok{ }\NormalTok{y}\OperatorTok{-}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{X);}
+\NormalTok{resid.hat =}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\KeywordTok{length}\NormalTok{(y))}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{y;}
+\KeywordTok{sum}\NormalTok{((resid}\OperatorTok{-}\NormalTok{resid.hat)}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{## Idempotent }
+\KeywordTok{max}\NormalTok{( }\KeywordTok{abs}\NormalTok{(P}\OperatorTok{%*%}\NormalTok{P}\OperatorTok{-}\NormalTok{P))}
+
+\NormalTok{## Orthogonality }
+\KeywordTok{max}\NormalTok{(}\KeywordTok{abs}\NormalTok{((}\KeywordTok{diag}\NormalTok{(}\KeywordTok{length}\NormalTok{(y))}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{X))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Sum of squares with the hat matrix:}
+\NormalTok{n=}\KeywordTok{length}\NormalTok{(y);J=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\NormalTok{,n,n);I=}\KeywordTok{diag}\NormalTok{(n)}
+\NormalTok{total.sum.of.squares=}\StringTok{ }\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}
+\NormalTok{explained.sum.of.squares=}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(P}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}
+\NormalTok{residual.sum.of.squares=}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{y}
+
+\CommentTok{# Check if it is true}
+\KeywordTok{sum.of.squares}\NormalTok{(beta.hat,}\DataTypeTok{covariate =}\NormalTok{ X,}\DataTypeTok{outcome =}\NormalTok{ y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# R^2}
+\NormalTok{R.sq =}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
+
+\CommentTok{# Through more variables into X}
+\CommentTok{# These variables are meaningless}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{5}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{nrow=}\NormalTok{n,}\DataTypeTok{ncol=}\DecValTok{5}\NormalTok{);}
+\NormalTok{X.Z=}\KeywordTok{cbind}\NormalTok{(X,Z);}
+
+\NormalTok{P.Z=}\KeywordTok{calculate.hat}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X.Z);}
+
+\NormalTok{R.sq.Z=}\StringTok{ }\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(P.Z}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y;}
+
+\NormalTok{R.sq.Z}
+\NormalTok{R.sq}
+
+\CommentTok{# Hence the adjusted R^2:}
+\NormalTok{R.sq.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(total.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
+
+\NormalTok{R.sq.Z.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{P.Z)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X.Z)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Underfitting and
+overfitting}\label{underfitting-and-overfitting}
+
+Reading materials: Slides 142 - 152 in
+STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Underfitting}
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(beta.true,X,Z)\{}
+\NormalTok{  eta=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{);}
+\NormalTok{ n=}\StringTok{ }\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  noise =}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{/}\DecValTok{2}\NormalTok{;}
+\NormalTok{  y.XZ=X}\OperatorTok{%*%}\NormalTok{beta.true}\OperatorTok{+}\NormalTok{Z}\OperatorTok{%*%}\NormalTok{eta }\OperatorTok{+}\StringTok{ }\NormalTok{noise;}
+  
+\NormalTok{  beta.full =}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{cbind}\NormalTok{(X,Z),}\DataTypeTok{outcome=}\NormalTok{y.XZ)}
+\NormalTok{  beta.under=}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X,}\DataTypeTok{outcome=}\NormalTok{y.XZ)}
+  
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(beta.full[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true,beta.under[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true))}
+\NormalTok{\}}
+
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
+\NormalTok{X=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+  
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{);}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+\NormalTok{under.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(beta.true,X,Z))}
+\CommentTok{# Fitting the true model gives}
+
+\KeywordTok{apply}\NormalTok{(under.sim[}\DecValTok{1}\NormalTok{,,],}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# Non-zero bias}
+
+\CommentTok{# Does it contradict the claim about precision variable?}
+\CommentTok{# Try another simulation:}
+\NormalTok{simulate.one.instance.pre<-}\ControlFlowTok{function}\NormalTok{(beta.true)\{}
+\NormalTok{  eta=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{);}
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
+\NormalTok{X=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\NormalTok{  noise =}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{/}\DecValTok{2}\NormalTok{;}
+\NormalTok{  y.XZ=X}\OperatorTok{%*%}\NormalTok{beta.true}\OperatorTok{+}\NormalTok{Z}\OperatorTok{%*%}\NormalTok{eta }\OperatorTok{+}\StringTok{ }\NormalTok{noise;}
+  
+\NormalTok{  beta.full =}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{cbind}\NormalTok{(X,Z),}\DataTypeTok{outcome=}\NormalTok{y.XZ)}
+\NormalTok{  beta.under=}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X,}\DataTypeTok{outcome=}\NormalTok{y.XZ)}
+  
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(beta.full[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true,beta.under[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true))}
+\NormalTok{\}}
+
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+  
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{);}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+\NormalTok{pre.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance.pre}\NormalTok{(beta.true))}
+
+\KeywordTok{apply}\NormalTok{(pre.sim[}\DecValTok{1}\NormalTok{,,],}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# almost zero bias}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Overfitting}
+\CommentTok{# Just modify the code slightly..}
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(beta.true,X,Z)\{}
+\NormalTok{  eta=}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{);}
+\NormalTok{ n=}\StringTok{ }\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  noise =}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(n)}\OperatorTok{/}\DecValTok{2}\NormalTok{;}
+\NormalTok{  y.X=X}\OperatorTok{%*%}\NormalTok{beta.true}\OperatorTok{+}\StringTok{ }\NormalTok{noise;}
+  
+\NormalTok{  beta.over=}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{cbind}\NormalTok{(X,Z),}\DataTypeTok{outcome=}\NormalTok{y.X)}
+\NormalTok{  beta.full=}\StringTok{ }\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X,}\DataTypeTok{outcome=}\NormalTok{y.X)}
+  
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(beta.full[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true,beta.over[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{-}\NormalTok{beta.true))}
+\NormalTok{\}}
+
+\NormalTok{beta.true=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
+\NormalTok{X=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+  
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{);}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+\NormalTok{over.sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(beta.true,X,Z))}
+\CommentTok{# Fitting the true model gives}
+
+\KeywordTok{apply}\NormalTok{(over.sim[}\DecValTok{1}\NormalTok{,,],}\DecValTok{1}\NormalTok{,mean) }\CommentTok{# No bias}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Sampling distribution and
+inference}\label{sampling-distribution-and-inference}
+
+Reading materials: Slides 153 - 165 in
+STA108\_LinearRegression\_S20.pdf.
+
+We will skip the part for multivariate normal distribution. You will
+learn more about this in STA 135: Multivariate Data Analysis.
+
+\subsection{ANOVA}\label{anova}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attach}\NormalTok{(dat.advertising)}
+\NormalTok{full.model=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\NormalTok{radio}\OperatorTok{+}\NormalTok{newspaper);}
+\NormalTok{reduced.model=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV);}
+\KeywordTok{anova}\NormalTok{(reduced.model,full.model)}
+
+\NormalTok{RSS.Reduced<-}\KeywordTok{sum}\NormalTok{((}\KeywordTok{summary}\NormalTok{(reduced.model)}\OperatorTok{$}\NormalTok{residuals)}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+\NormalTok{RSS.Full<-}\KeywordTok{sum}\NormalTok{((}\KeywordTok{summary}\NormalTok{(full.model)}\OperatorTok{$}\NormalTok{residuals)}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+\NormalTok{df.Reduced <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(reduced.model)}\OperatorTok{$}\NormalTok{df[}\DecValTok{2}\NormalTok{];}
+\NormalTok{df.Full <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(full.model)}\OperatorTok{$}\NormalTok{df[}\DecValTok{2}\NormalTok{];}
+
+\NormalTok{tF<-((RSS.Reduced}\OperatorTok{-}\NormalTok{RSS.Full)}\OperatorTok{/}\NormalTok{(df.Reduced}\OperatorTok{-}\NormalTok{df.Full))}\OperatorTok{/}\NormalTok{(RSS.Full}\OperatorTok{/}\NormalTok{df.Full);}
+\NormalTok{tF}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Wald test}\label{wald-test}
+
+Suppose that we want to test the null hypothesis
+\[H_0: \beta_1-2\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1-2\beta_2 \neq 0,\]
+where \(\beta_1\) is the regression coefficient for \texttt{TV} and
+\(\beta_2\) is the regression coefficient for \texttt{radio}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{full.model=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\NormalTok{radio}\OperatorTok{+}\NormalTok{newspaper);}
+\NormalTok{covariance.LSE=}\KeywordTok{vcov}\NormalTok{(full.model); }\CommentTok{# Calculate the covariance for the least squares estimators}
+\NormalTok{coef.LSE=}\KeywordTok{coef}\NormalTok{(full.model);}
+\NormalTok{covariance.test =}\StringTok{ }\NormalTok{covariance.LSE[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{,}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]; }\CommentTok{# Extract the submatrix of covariance for beta1 and beta2}
+\NormalTok{coef.test=coef.LSE[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{];}
+\NormalTok{R=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{);}
+\NormalTok{R[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]=}\DecValTok{1}\NormalTok{;R[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]=}\OperatorTok{-}\DecValTok{2}\NormalTok{;}
+
+\NormalTok{test.stat=}\KeywordTok{t}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{coef.test)}\OperatorTok{%*%}\KeywordTok{solve}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{covariance.test}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(R))}\OperatorTok{%*%}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{coef.test);}
+\NormalTok{p.value=}\DecValTok{1}\OperatorTok{-}\KeywordTok{pchisq}\NormalTok{(test.stat,}\DataTypeTok{df=}\DecValTok{1}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+We can verify that the Wald test yields similar results with the F-test
+using \texttt{anova}.
+\[H_0: \beta_1=\beta_2 = 0 \ {\rm v.s.}\ H_a:  \beta_1\neq 0, \beta_2 \neq 0.\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{full.model=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\NormalTok{radio}\OperatorTok{+}\NormalTok{newspaper);}
+\NormalTok{covariance.LSE=}\KeywordTok{vcov}\NormalTok{(full.model); }\CommentTok{# Calculate the covariance for the least squares estimators}
+\NormalTok{coef.LSE=}\KeywordTok{coef}\NormalTok{(full.model);}
+\NormalTok{covariance.test =}\StringTok{ }\NormalTok{covariance.LSE[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{,}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]; }\CommentTok{# Extract the submatrix of covariance for beta1 and beta2}
+\NormalTok{coef.test=coef.LSE[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{];}
+\NormalTok{R=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{);}
+\NormalTok{R[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]=}\DecValTok{1}\NormalTok{;R[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{]=}\DecValTok{1}\NormalTok{;}
+
+\NormalTok{test.stat=}\KeywordTok{t}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{coef.test)}\OperatorTok{%*%}\KeywordTok{solve}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{covariance.test}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(R))}\OperatorTok{%*%}\NormalTok{(R}\OperatorTok{%*%}\NormalTok{coef.test);}
+\NormalTok{p_value=}\DecValTok{1}\OperatorTok{-}\KeywordTok{pchisq}\NormalTok{(test.stat,}\DataTypeTok{df=}\DecValTok{2}\NormalTok{);}
+
+
+\NormalTok{reduced_model=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{newspaper);}
+\KeywordTok{anova}\NormalTok{(reduced.model,full.model)}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Model selection}\label{ch:selection}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(AER)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"Fatalities"}\NormalTok{)}
+\NormalTok{dat.fatalities =}\StringTok{ }\NormalTok{Fatalities[,}\KeywordTok{c}\NormalTok{(}\StringTok{'fatal'}\NormalTok{,}\StringTok{'spirits'}\NormalTok{,}\StringTok{'unemp'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'beertax'}\NormalTok{,}\StringTok{'baptist'}\NormalTok{,}\StringTok{'mormon'}\NormalTok{,}\StringTok{'drinkage'}\NormalTok{,}\StringTok{'dry'}\NormalTok{,}\StringTok{'youngdrivers'}\NormalTok{,}\StringTok{'miles'}\NormalTok{,}\StringTok{'gsp'}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Criteria}\label{criteria}
+
+Reading materials: Slides 166 - 181 in
+STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Information criteria}
+
+
+\KeywordTok{BIC}\NormalTok{(fit.full)}
+\KeywordTok{BIC}\NormalTok{(fit.six)}
+
+
+\KeywordTok{AIC}\NormalTok{(fit.full)}
+\KeywordTok{AIC}\NormalTok{(fit.six) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# cross-validation:}
+\CommentTok{# We will use a package for this:}
+\KeywordTok{library}\NormalTok{(boot)}
+
+\NormalTok{fit.full.g=}\KeywordTok{glm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities);}
+\NormalTok{fit.six.g=}\KeywordTok{glm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon,}\DataTypeTok{data=}\NormalTok{dat.fatalities)}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{cv.full.}\DecValTok{10}\NormalTok{=}\KeywordTok{cv.glm}\NormalTok{(dat.fatalities,fit.full.g,}\DataTypeTok{K=}\DecValTok{10}\NormalTok{)}
+\NormalTok{cv.full.}\DecValTok{10}\OperatorTok{$}\NormalTok{delta}
+
+\NormalTok{cv.six.}\DecValTok{10}\NormalTok{=}\KeywordTok{cv.glm}\NormalTok{(dat.fatalities,fit.six.g,}\DataTypeTok{K=}\DecValTok{10}\NormalTok{)}
+\NormalTok{cv.six.}\DecValTok{10}\OperatorTok{$}\NormalTok{delta}
+
+\CommentTok{# From the helpfile, delta is:}
+
+\CommentTok{# A vector of length two. The first component is the raw cross-validation estimate of prediction error. The second component is the adjusted cross-validation estimate. The adjustment is designed to compensate for the bias introduced by not using leave-one-out cross-validation.}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Selection procedure}\label{selection-procedure}
+
+Reading materials: Slides 182 - 189 in
+STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Model selection procedure }
+
+\CommentTok{# Forward selection & AIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"forward"}\NormalTok{,}\DataTypeTok{k=}\DecValTok{2}\NormalTok{) }
+
+
+\CommentTok{# Backward selection & AIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"backward"}\NormalTok{, }\DataTypeTok{k=}\DecValTok{2}\NormalTok{)}
+
+
+
+\CommentTok{# Backward selection & BIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"backward"}\NormalTok{, }\DataTypeTok{k=}\KeywordTok{log}\NormalTok{(}\KeywordTok{dim}\NormalTok{(dat.fatalities)[}\DecValTok{1}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Penalized regression: lasso}
+\KeywordTok{library}\NormalTok{(glmnet)}
+
+\NormalTok{y=dat.fatalities}\OperatorTok{$}\NormalTok{fatal; }\CommentTok{#Number of vehicle fatalities.}
+\NormalTok{X=}\KeywordTok{as.matrix}\NormalTok{(dat.fatalities[,}\KeywordTok{c}\NormalTok{(}\StringTok{'spirits'}\NormalTok{,}\StringTok{'unemp'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'beertax'}\NormalTok{,}\StringTok{'baptist'}\NormalTok{,}\StringTok{'mormon'}\NormalTok{,}\StringTok{'drinkage'}\NormalTok{,}\StringTok{'dry'}\NormalTok{,}\StringTok{'youngdrivers'}\NormalTok{,}\StringTok{'miles'}\NormalTok{,}\StringTok{'gsp'}\NormalTok{)]);}
+
+
+\NormalTok{fit.cv.glmnet=}\KeywordTok{cv.glmnet}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{x=}\NormalTok{X,}\DataTypeTok{nfold=}\DecValTok{10}\NormalTok{,}\DataTypeTok{family=}\StringTok{'gaussian'}\NormalTok{);}
+        
+\NormalTok{fit.cv.glmnet}\OperatorTok{$}\NormalTok{lambda.min }\CommentTok{# selected tuning parameter}
+
+\NormalTok{fit.glmnet=}\KeywordTok{glmnet}\NormalTok{(}\DataTypeTok{x=}\NormalTok{X,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{family=}\StringTok{'gaussian'}\NormalTok{,}\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{,}\DataTypeTok{lambda=}\NormalTok{fit.cv.glmnet}\OperatorTok{$}\NormalTok{lambda.min)}
+
+\NormalTok{fit.glmnet}\OperatorTok{$}\NormalTok{beta }\CommentTok{# One of the fitted coefficient is zero }
+\end{Highlighting}
+\end{Shaded}
+
+\appendix
+
+
+\chapter{R basics}\label{ch:RBasics}
+
+Reading materials: Sections 4, 6, and 8 in
+\href{https://r4ds.had.co.nz/index.html}{R for data science} by Garrett
+Grolemund and Hadley Wickham (optional).
+
+This section reviews some basic functions in \texttt{R} that will be
+useful in this class.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Generating a vector with seq()}
+
+\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{3.1}\NormalTok{, }\DataTypeTok{to =} \FloatTok{8.9}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.8}\NormalTok{)}
+\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{3.1}\NormalTok{, }\DataTypeTok{to =} \FloatTok{8.9}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{10}\NormalTok{)}
+\CommentTok{# seq(from = 3.1, to = 8.9, by=1, length.out = 10)}
+
+\NormalTok{### checking for equality of two vectors}
+\NormalTok{a=}\DecValTok{1}\OperatorTok{:}\DecValTok{3}
+\NormalTok{b=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{#b<-c(1,2,3)}
+\NormalTok{a }\OperatorTok{==}\StringTok{ }\NormalTok{b}
+
+\NormalTok{### How do we check if *all* entries are the same?}
+\KeywordTok{all}\NormalTok{(a}\OperatorTok{==}\NormalTok{b)}
+
+\NormalTok{### How about the identical function?}
+\KeywordTok{identical}\NormalTok{(a,b)}
+\KeywordTok{typeof}\NormalTok{(a)}
+\KeywordTok{typeof}\NormalTok{(b)}
+
+\NormalTok{### Logical and character vectors}
+\NormalTok{u =}\StringTok{ }\KeywordTok{c}\NormalTok{(T,F,T,F,F,T)}
+\KeywordTok{typeof}\NormalTok{(u)}
+
+\NormalTok{### Define character vectors}
+\NormalTok{w=}\KeywordTok{c}\NormalTok{(}\StringTok{'a'}\NormalTok{, }\StringTok{'b'}\NormalTok{,}\StringTok{'c'}\NormalTok{,}\StringTok{'e'}\NormalTok{);}
+
+\NormalTok{### What happens when merging character vectors with numbers?}
+\NormalTok{y=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{,w)}
+\KeywordTok{typeof}\NormalTok{(y[}\DecValTok{1}\NormalTok{])}
+\NormalTok{y=}\KeywordTok{c}\NormalTok{(pi,w)}
+
+\NormalTok{### What if we force them to be numeric?}
+\CommentTok{#?as.numeric}
+\KeywordTok{as.numeric}\NormalTok{(y[}\DecValTok{1}\NormalTok{])}
+\KeywordTok{as.numeric}\NormalTok{(y)}
+
+\NormalTok{### Searching for elements of a vector}
+\NormalTok{### Using > == < & |, and which}
+\NormalTok{x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{6.7}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\OperatorTok{-}\FloatTok{2.9}\NormalTok{)}
+
+\NormalTok{x}
+\NormalTok{x}\OperatorTok{==}\DecValTok{1}
+\NormalTok{x}\OperatorTok{>}\StringTok{ }\DecValTok{1}
+\NormalTok{x}\OperatorTok{<}\StringTok{ }\DecValTok{1}
+\NormalTok{x }\OperatorTok{>=}\StringTok{ }\DecValTok{1}
+\NormalTok{x}\OperatorTok{<=}\DecValTok{1}
+\NormalTok{x}\OperatorTok{<}\DecValTok{0}
+\NormalTok{x[}\DecValTok{5}\NormalTok{]}
+
+\NormalTok{x[}\KeywordTok{which}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)]}
+\NormalTok{x[x}\OperatorTok{<}\DecValTok{0}\NormalTok{]}
+
+
+\NormalTok{### Filtering of vectors}
+\CommentTok{# 0< x < 2}
+\NormalTok{x[(}\DecValTok{0} \OperatorTok{<}\StringTok{ }\NormalTok{x) }\OperatorTok{&}\StringTok{ }\NormalTok{(x }\OperatorTok{<}\StringTok{ }\DecValTok{2}\NormalTok{)]}
+\KeywordTok{which}\NormalTok{((}\DecValTok{0} \OperatorTok{<}\StringTok{ }\NormalTok{x) }\OperatorTok{&}\StringTok{ }\NormalTok{(x }\OperatorTok{<}\StringTok{ }\DecValTok{2}\NormalTok{))}
+
+\NormalTok{x[ }\OperatorTok{!}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)]}
+\OperatorTok{!}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)}
+\NormalTok{x[}\OperatorTok{-}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Summary statistics}\label{summary-statistics}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{6.7}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\OperatorTok{-}\FloatTok{2.9}\NormalTok{)}
+\NormalTok{x}
+
+\KeywordTok{length}\NormalTok{(x) }\CommentTok{# you have seen this already}
+\KeywordTok{sum}\NormalTok{(x) }\CommentTok{# summation of all elements of x}
+\KeywordTok{sd}\NormalTok{(x) }\CommentTok{# standard deviation}
+\NormalTok{### Why are they all NA?}
+
+\NormalTok{### working with NA (missing values), NULL, and NaN}
+\NormalTok{y=}\OtherTok{NULL}\NormalTok{;}
+\DecValTok{0}\OperatorTok{/}\DecValTok{0} \CommentTok{# NaN}
+
+\DecValTok{1}\OperatorTok{/}\DecValTok{0}
+\OperatorTok{-}\DecValTok{1}\OperatorTok{/}\DecValTok{0}
+\NormalTok{### How would you find the NAs in x?}
+\NormalTok{x}\OperatorTok{==}\OtherTok{NA}
+\KeywordTok{which}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x))}
+\KeywordTok{is.null}\NormalTok{(y)}
+\CommentTok{#is.nan()}
+\CommentTok{#is.infinite()}
+
+
+\KeywordTok{sum}\NormalTok{(x,}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\CommentTok{# ?sum}
+\KeywordTok{args}\NormalTok{(sum) }\CommentTok{# check the default argument(s) for sum()}
+\KeywordTok{example}\NormalTok{(sum)}
+\NormalTok{### Summarize  matrices using apply()}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Data structures}\label{data-structures}
+
+\subsection{String}\label{string}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wrd =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"new"}\NormalTok{,}\StringTok{"sentence"}\NormalTok{)}
+\NormalTok{u =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"_"}\NormalTok{,}\StringTok{"!"}\NormalTok{,}\StringTok{"?"}\NormalTok{)}
+\NormalTok{wrd}
+\KeywordTok{typeof}\NormalTok{(wrd)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{)}
+\KeywordTok{length}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{)}
+\KeywordTok{length}\NormalTok{(wrd)}
+
+\NormalTok{### Use paste() function to manipulate strings}
+\KeywordTok{paste}\NormalTok{(wrd,u,}\DataTypeTok{sep=}\StringTok{"/"}\NormalTok{)}
+
+\NormalTok{### Use strsplit() to split strings}
+\NormalTok{split.str=}\KeywordTok{strsplit}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{, }\DataTypeTok{split=}\StringTok{" "}\NormalTok{)}
+
+\KeywordTok{typeof}\NormalTok{(split.str)}
+\KeywordTok{length}\NormalTok{(split.str)}
+\NormalTok{split.str[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Data frame}\label{data-frame}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### manipulation of data frame with base R}
+\NormalTok{### No dplyr}
+\NormalTok{### creating and accessing data frame}
+\NormalTok{name =}\KeywordTok{c}\NormalTok{(}\StringTok{"Bob"}\NormalTok{,}\StringTok{"Jane"}\NormalTok{)}
+\NormalTok{age =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{19}\NormalTok{,}\DecValTok{21}\NormalTok{)}
+\NormalTok{GPA =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{3.2}\NormalTok{,}\FloatTok{3.6}\NormalTok{)}
+\NormalTok{students =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(name,age,GPA,}\DataTypeTok{stringsAsFactors=}\NormalTok{F)}
+\NormalTok{students}
+\KeywordTok{str}\NormalTok{(students)}
+
+
+\NormalTok{### Add new entry into the data frame}
+\NormalTok{students =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(students,}\KeywordTok{c}\NormalTok{(}\StringTok{"Ashley"}\NormalTok{,}\DecValTok{20}\NormalTok{,}\FloatTok{3.4}\NormalTok{))}
+
+\NormalTok{### Add new variable:}
+\NormalTok{students =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(students,}\DataTypeTok{resident=}\KeywordTok{c}\NormalTok{(T,F,T))}
+
+\NormalTok{students}
+\NormalTok{##-------------------------------------##}
+\end{Highlighting}
+\end{Shaded}
+
+\section{List}\label{list}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## List ####}
+\NormalTok{bob=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"bob"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{19}\NormalTok{,}\DataTypeTok{school=}\StringTok{"UCD"}\NormalTok{,}\DataTypeTok{GPA=}\FloatTok{3.2}\NormalTok{,}\DataTypeTok{resident=}\NormalTok{T)}
+
+\NormalTok{### Use lapply() with list}
+\NormalTok{newlist =}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{field_one=} \KeywordTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{), }\DataTypeTok{field_two=}\KeywordTok{runif}\NormalTok{(}\DecValTok{20}\NormalTok{),}\DataTypeTok{field_three=}\KeywordTok{runif}\NormalTok{(}\DecValTok{50}\NormalTok{) );}
+\KeywordTok{lapply}\NormalTok{(newlist,sum)}
+\NormalTok{##-------------------------------------##}
+\end{Highlighting}
+\end{Shaded}
+
+\section{\texorpdfstring{Functions in
+\texttt{R}}{Functions in R}}\label{functions-in-r}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Evaluating a function}
+\NormalTok{x =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.05}\NormalTok{)}
+\NormalTok{x}
+\NormalTok{y =}\StringTok{ }\KeywordTok{sin}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{x)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{### Writing a function}
+\NormalTok{sinexp =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(z)\{}
+\NormalTok{  y=}\KeywordTok{sin}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{z)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\OperatorTok{*}\NormalTok{z}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+  \KeywordTok{return}\NormalTok{(y)}
+\NormalTok{\}}
+
+\KeywordTok{sinexp}\NormalTok{(x)}
+\NormalTok{w=}\KeywordTok{sinexp}\NormalTok{(x)}
+
+\NormalTok{y}\OperatorTok{==}\NormalTok{w}
+\KeywordTok{all}\NormalTok{(y}\OperatorTok{==}\NormalTok{w)}
+\KeywordTok{identical}\NormalTok{(y,w)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Miscellaneous}\label{miscellaneous}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Checking the state of work session}
+\KeywordTok{objects}\NormalTok{()  }\CommentTok{# all the objects in the current R session}
+\KeywordTok{getwd}\NormalTok{()  }\CommentTok{# print the current working directory}
+\KeywordTok{remove}\NormalTok{()}
+\CommentTok{#setwd()}
+
+\CommentTok{#?persp}
+\KeywordTok{example}\NormalTok{(persp)}
+
+\CommentTok{#data()}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Linear algebra}\label{ch:algebra}
+
+Reading materials: STA108\_LinearAlgebra\_S20.pdf
+
+\section{Vector}\label{vector}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{2.5}\NormalTok{,}\OperatorTok{-}\FloatTok{1.7}\NormalTok{,}\DecValTok{1}\NormalTok{) }\CommentTok{# creates a vector (you can use "<-" instead of "=")}
+
+  \KeywordTok{length}\NormalTok{(x) }\CommentTok{# check the length of x}
+  \KeywordTok{class}\NormalTok{(x) }\CommentTok{# class of the object; you can also check typeof()}
+\NormalTok{  ### Try z=list(); class(z);}
+
+\NormalTok{  x[ }\DecValTok{3}\NormalTok{ ] }\CommentTok{# extract one element in x..}
+\NormalTok{  x[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+\NormalTok{  x[}\DecValTok{2}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
+
+\NormalTok{  z<-}\KeywordTok{numeric}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+
+\NormalTok{  y =}\StringTok{ }\NormalTok{x}\OperatorTok{^}\DecValTok{2}
+\NormalTok{  ### Q: what is the length of y?}
+  \KeywordTok{length}\NormalTok{(y)}
+
+\NormalTok{  ### The "default" operation in R is elementwise:}
+\NormalTok{  x}\OperatorTok{/}\NormalTok{y }\CommentTok{# elementwise division}
+\NormalTok{  y}\OperatorTok{-}\NormalTok{x}\OperatorTok{*}\NormalTok{x }\CommentTok{# all elementwise..}
+
+\NormalTok{  ### There are other operators..}
+\NormalTok{  x }\OperatorTok{%o%}\StringTok{ }\NormalTok{y }\CommentTok{# outer product of x and y}
+
+\NormalTok{  x }\OperatorTok{%*%}\StringTok{ }\NormalTok{y }\CommentTok{# Matrix product. Q: what is R doing here?}
+
+  \KeywordTok{sum}\NormalTok{(x}\OperatorTok{*}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Matrix}\label{matrix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# matrix with 2 rows and 3 columns with all entries 0}
+\CommentTok{# ?matrix}
+
+
+\NormalTok{Xmat1 =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(x,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# 2 x 3 matrix formed by elements of vector x,}
+\NormalTok{### ordered in *column-wise* manner}
+\NormalTok{Xmat2 =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(x,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DataTypeTok{byrow=}\NormalTok{T) }\CommentTok{# ordered row-wise}
+
+
+\NormalTok{M<-}\StringTok{ }\NormalTok{Xmat1;}
+\KeywordTok{dimnames}\NormalTok{(M)}
+\KeywordTok{rownames}\NormalTok{(M) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"first"}\NormalTok{,}\StringTok{"second"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(M) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"b"}\NormalTok{,}\StringTok{"c"}\NormalTok{)}
+
+\KeywordTok{dimnames}\NormalTok{(M)}
+\KeywordTok{typeof}\NormalTok{(}\KeywordTok{dimnames}\NormalTok{(M))}
+
+\NormalTok{### access elements through names of rows/columns}
+\NormalTok{M[,}\StringTok{"a"}\NormalTok{]}
+\NormalTok{M[,}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{M[,}\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"c"}\NormalTok{)]}
+\NormalTok{M[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+
+\NormalTok{M }\OperatorTok{%*%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\OperatorTok{-}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{)  }\CommentTok{# multiply matrix M to vector c(4,-3,1)}
+\NormalTok{M }\OperatorTok{+}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# add the column vector c(1,-2) to each column of M}
+
+\NormalTok{M2 =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(M,}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{))  }\CommentTok{# create matrix M2 by appending column c(4,5) to M}
+\NormalTok{### How to append row to M2?}
+\NormalTok{new_row =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{)}
+\CommentTok{#?cbind}
+\CommentTok{#?rbind}
+
+\NormalTok{### What if we call length() on a matrix?}
+\KeywordTok{length}\NormalTok{(M)}
+\KeywordTok{dim}\NormalTok{(M)}
+
+
+
+\NormalTok{### elementwise product of Xmat1 and Xmat2}
+\NormalTok{Xmat1}\OperatorTok{*}\NormalTok{Xmat2}
+
+\NormalTok{### Matrix multiplication}
+\NormalTok{Xmat1}\OperatorTok{%*%}\NormalTok{Xmat2}
+\KeywordTok{dim}\NormalTok{(Xmat1)}
+\KeywordTok{dim}\NormalTok{(Xmat2)}
+\NormalTok{Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2)}
+
+
+\NormalTok{### Inverse of a marix}
+\KeywordTok{solve}\NormalTok{(Xmat1) }\CommentTok{# what does the error message say?}
+
+
+\NormalTok{Xmat12=Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2);}
+
+\NormalTok{Xmat12.inv=}\KeywordTok{solve}\NormalTok{(Xmat12);}
+
+\NormalTok{Xmat12.inv}\OperatorTok{%*%}\NormalTok{Xmat12}
+\NormalTok{Xmat12}\OperatorTok{%*%}\NormalTok{Xmat12.inv}
+
+
+
+\KeywordTok{svd}\NormalTok{(Xmat1)  }\CommentTok{# singular value decomposition of Xmat1}
+\NormalTok{### Q: what is the SVD?}
+\NormalTok{### Try ?svd}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Other operations on vectors and
+matrices}\label{other-operations-on-vectors-and-matrices}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### How does R handle mathematically invalid operations?}
+\NormalTok{### Example 1:}
+\NormalTok{w =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)  }\CommentTok{# short-handed for c(1,2,3)}
+\NormalTok{### Q: What is the length of w?}
+
+\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{w  }\CommentTok{# no error displayed, but not quite a mathematically valid operation}
+\NormalTok{### Q: what did R just do???}
+\KeywordTok{c}\NormalTok{(x[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{+}\NormalTok{w, x[}\DecValTok{4}\OperatorTok{:}\DecValTok{6}\NormalTok{]}\OperatorTok{+}\NormalTok{w)}
+
+\NormalTok{### What if...}
+\CommentTok{# Create a vector of length 4 (from 1 to 4)}
+\NormalTok{n<-}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{;}
+\NormalTok{x}\OperatorTok{+}\NormalTok{n}
+
+\NormalTok{### Example 2:}
+
+\NormalTok{z =}\StringTok{ }\KeywordTok{sin}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\NormalTok{x}\OperatorTok{^}\NormalTok{\{}\FloatTok{1.5}\NormalTok{\}}\OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{x}\OperatorTok{^}\DecValTok{3}\NormalTok{)}
+\NormalTok{### What is (-1.7)^\{1.5\}???}
+\NormalTok{### How did R handle this?}
+\NormalTok{x[}\DecValTok{5}\NormalTok{]}
+\NormalTok{z[}\DecValTok{5}\NormalTok{]}
+
+\NormalTok{### Defining sequences}
+\FloatTok{3.1}\OperatorTok{:}\FloatTok{8.9}
+\CommentTok{# or use seq()}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Array}\label{array}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Arrays, a.k.a. tensors}
+\NormalTok{### A matrix is a two-way array}
+
+\NormalTok{?array }\CommentTok{# check for R documentation on array}
+
+\NormalTok{A =}\StringTok{ }\KeywordTok{array}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\DecValTok{3}\OperatorTok{*}\DecValTok{4}\NormalTok{),}\DataTypeTok{dim=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{))  }\CommentTok{# creates an array with entries that are i.i.d. N(0,1)}
+\NormalTok{?rnorm}
+\KeywordTok{dim}\NormalTok{(A) }\CommentTok{# checks the dimension of A}
+
+\NormalTok{A[,}\DecValTok{1}\NormalTok{,] }\CommentTok{# returns the 2 x 4 matrix formed by restricting the second dimension index to 1}
+
+\NormalTok{### What is the dimension of A[,1,]?}
+
+\NormalTok{A[}\DecValTok{2}\NormalTok{,,] }\CommentTok{# returns the 3 x 4 matrix formed by restricting the first dimension index to 2}
+
+\NormalTok{A[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]}
+\NormalTok{A[A}\OperatorTok{<}\DecValTok{0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{Simulation and visualization}\label{ch:sim}
+
+Reading materials: Chapters 3, 5, and 7 in
+\href{https://r4ds.had.co.nz/index.html}{R for data science} by Garrett
+Grolemund and Hadley Wickham (optional).
+
+\section{Simulation and visualization:
+univariate}\label{simulation-and-visualization-univariate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Simulate random variables }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{) }\CommentTok{# set random number generator seed for reproducibility}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{) }
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+
+\NormalTok{### Draw ten uniform random variables:}
+
+\KeywordTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\CommentTok{# use ?runif to see what other options are available }
+
+\NormalTok{### Draw ten normal random variables with mean 0 and variance 2}
+\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{))}
+
+\NormalTok{### There are many other distributions in R}
+\NormalTok{### try ?rchisq, ?rf, ?rt, ?rbeta, ?rpois, ...}
+
+\NormalTok{### Draw samples from any vectors using sample()}
+\NormalTok{wrd =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"yet"}\NormalTok{, }\StringTok{"a"}\NormalTok{,}\StringTok{"new"}\NormalTok{,}\StringTok{"sentence"}\NormalTok{)}
+\KeywordTok{sample}\NormalTok{(wrd,}\DataTypeTok{size=}\DecValTok{2}\NormalTok{)}
+\CommentTok{# use ?sample to see other options}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Visulize the simulated data}
+
+\NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
+\CommentTok{# We start with the very basic histogram }
+\KeywordTok{hist}\NormalTok{(y)}
+\CommentTok{# Use ?hist to modify the plot }
+
+\CommentTok{# And the boxplot:}
+\KeywordTok{boxplot}\NormalTok{(y)}
+
+\CommentTok{# We can also draw visualize the data using ggplot2}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
+\KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
+
+\CommentTok{# Read more about the violin plots in the post here:}
+\CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Simulation and visualization:
+multivariate}\label{simulation-and-visualization-multivariate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We can generate many independent univariate random variables using code in the previous section }
+
+\CommentTok{# Here we will generate dependent random variables, for instance, }
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}\CommentTok{# sample size}
+\NormalTok{x1=}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{x2=x1}\OperatorTok{*}\DecValTok{2}\OperatorTok{+}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{;}
+\NormalTok{x3=x1}\OperatorTok{*}\NormalTok{x2}\OperatorTok{*}\KeywordTok{rpois}\NormalTok{(n,}\DataTypeTok{lambda=}\DecValTok{3}\NormalTok{);}
+
+\CommentTok{# You can also generate a random variable using its probability density function using importance sampling}
+\CommentTok{# We will be fine with the simple data generating method in this class }
+
+\CommentTok{# We put the three random variables into one data.frame for ease of plotting }
+\NormalTok{dat.multi<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x1=}\NormalTok{x1,}\DataTypeTok{x2=}\NormalTok{x2,}\DataTypeTok{x3=}\NormalTok{x3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Visualization}
+
+\NormalTok{### Pairwise scatter plot}
+\KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
+
+
+\NormalTok{### Visualization in ggplot2}
+\KeywordTok{library}\NormalTok{(GGally)}
+\KeywordTok{ggpairs}\NormalTok{(dat.multi)}
+
+
+\NormalTok{### For the pair x1 and x3}
+
+\CommentTok{# A more informative scatterplot, using base R }
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+
+\CommentTok{# Or using ggplot2}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3))}
+\end{Highlighting}
+\end{Shaded}
+
+\bibliography{book.bib,packages.bib}
+
+
+\end{document}

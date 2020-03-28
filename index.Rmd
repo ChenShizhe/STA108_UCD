@@ -1,0 +1,29 @@
+---
+title: "Applied Statistical Methods: Regression Analysis"
+author: "Shizhe Chen"
+date: "`r Sys.Date()`"
+knit: "bookdown::render_book"
+bibliography: [book.bib, packages.bib]
+biblio-style: "apalike"
+documentclass: book
+link-citations: yes
+description: "This file contains code for in-class exercise for STA 108, Spring 2020"
+always_allow_html: yes
+site: bookdown::bookdown_site
+fontsize: 12pt
+output: 
+  bookdown::gitbook:
+    pdf_document: default
+    html_document: default
+---
+
+# Preface {-#pre}
+
+This Gitbook only contains code and some comments that will be filled up slowly throughout the quarter. Lecture notes are available in separate files that you can find on Canvas. 
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```

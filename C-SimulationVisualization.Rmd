@@ -1,0 +1,120 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+#  Simulation and visualization   {#ch:sim}
+
+<b>Reading materials</b>: Chapters 3, 5, and 7 in [R for data science](https://r4ds.had.co.nz/index.html) by Garrett Grolemund and Hadley Wickham (optional).
+
+## Simulation and visualization: univariate 
+
+```{r}
+### Simulate random variables 
+set.seed(1) # set random number generator seed for reproducibility
+runif(1)
+runif(1) 
+
+set.seed(2)
+runif(1)
+
+set.seed(1)
+runif(1)
+runif(1)
+
+
+### Draw ten uniform random variables:
+
+runif(10)
+# use ?runif to see what other options are available 
+
+### Draw ten normal random variables with mean 0 and variance 2
+rnorm(10,mean=0,sd=sqrt(2))
+
+### There are many other distributions in R
+### try ?rchisq, ?rf, ?rt, ?rbeta, ?rpois, ...
+
+### Draw samples from any vectors using sample()
+wrd = c("yet", "a","new","sentence")
+sample(wrd,size=2)
+# use ?sample to see other options
+
+```
+
+```{r} 
+### Visulize the simulated data
+
+y<-rnorm(100);
+# We start with the very basic histogram 
+hist(y)
+# Use ?hist to modify the plot 
+
+# And the boxplot:
+boxplot(y)
+
+# We can also draw visualize the data using ggplot2
+library(ggplot2)
+dat=data.frame(y=y)
+ggplot(dat, aes(x=1,y=y)) + 
+  geom_violin(trim=FALSE)
+
+# Read more about the violin plots in the post here:
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+```
+
+
+
+## Simulation and visualization: multivariate 
+
+
+```{r}
+# We can generate many independent univariate random variables using code in the previous section 
+
+# Here we will generate dependent random variables, for instance, 
+n=50;# sample size
+x1=rnorm(n);
+x2=x1*2+runif(n)*2;
+x3=x1*x2*rpois(n,lambda=3);
+
+# You can also generate a random variable using its probability density function using importance sampling
+# We will be fine with the simple data generating method in this class 
+
+# We put the three random variables into one data.frame for ease of plotting 
+dat.multi<-data.frame(x1=x1,x2=x2,x3=x3)
+
+```
+ 
+ 
+```{r}
+### Visualization
+
+### Pairwise scatter plot
+pairs(dat.multi,pch='.',cex=4)
+
+
+### Visualization in ggplot2
+library(GGally)
+ggpairs(dat.multi)
+
+
+### For the pair x1 and x3
+
+# A more informative scatterplot, using base R 
+plot(x=dat.multi$x1,y=dat.multi$x3,data=dat.multi,pch=16,cex=2)
+lines(lowess(dat.multi$x1, dat.multi$x3), col=2,lwd=3)
+
+
+# Or using ggplot2
+ggplot(data = dat.multi) + 
+  geom_point(mapping = aes(x = x1, y = x3)) +
+  geom_smooth(mapping = aes(x = x1, y = x3))
+
+```
+
+

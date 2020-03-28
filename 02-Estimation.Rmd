@@ -1,0 +1,127 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+# Estimation {#ch:est}
+
+
+<b>Reading materials</b>: Slides 13 - 23 in STA108_LinearRegression_S20.pdf
+
+- Fourth week:
+    Least squares estimation: optimization (Slides 22-27)
+    Sum of squares: (Slides 28 - 30) + add projection in this discussion
+
+
+
+```{r}
+# Consider the advertising dataset
+dat.advertising=read.csv('./data/advertising.csv');
+# obtain the residuals:
+x=dat.advertising$TV;
+y=dat.advertising$sales;
+beta1=1;beta0=0.2; # Just two arbitrary numbers 
+res=y-x*beta1-beta0;
+
+# What if we want to feed in different numbers? 
+
+# Write a function that can calculate x*beta1 + beta0
+
+linear.model<-function(beta,covariate){
+  # beta: a 2-vector, where the first entry is the intercept
+  yout=covariate*beta[2]+beta[1]
+  return(yout);
+  # Note: this function only works with simple linear regression model
+  # How would you generalize it?
+}
+
+res.new=dat.advertising$sales-linear.model(beta=c(0.2,1),covariate=dat.advertising$TV);
+
+identical(res.new,res)
+```
+
+```{r}
+# With the above function, we can reproduce the plot in Slide 14
+beta=c(4,0.03);
+plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
+abline(a=beta[1],b=beta[2],col='red',lwd=3)
+
+yout=linear.model(beta=beta,covariate=dat.advertising$TV);
+for(i in 1:dim(dat.advertising)[1]){
+  segments(x0=dat.advertising$TV[i], y0=yout[i],  y1 = dat.advertising$sales[i],col='blue') 
+}
+```
+
+```{r}
+# We can see that the line is less than ideal
+# We will move on to find the minimizer of the squared error loss 
+
+sum.of.squares<-function(beta,covariate,outcome){
+  yout=linear.model(beta=beta,covariate=covariate);
+  res=outcome-yout;
+  sos= sum(res^2);
+  return(sos)
+}
+
+# There are many ways to minimize the sum of squares
+
+# 1, Use generic optimizer in R
+fit.optim=optim(c(0,0),sum.of.squares,covariate=dat.advertising$TV,outcome=dat.advertising$sales)
+beta.hat.optim=fit.optim$par;
+# 2. Use analytic form of the optimizer
+
+fit.linear.model<-function(covariate,outcome){
+  # I will write down the function for (multiple) linear regression here
+  X=cbind(1,covariate);
+  beta.fit=solve( t(X)%*%X )%*%t(X)%*%outcome;
+  return(beta.fit)
+}
+
+beta.hat=fit.linear.model(covariate=dat.advertising$TV,outcome=dat.advertising$sales)
+
+# 3. Write your own version of Newton-Raphson method, or gradient descent 
+# Not required or taught in this class 
+
+# We might want to check if our solution matches that from lm()
+
+fit.advertising=lm(sales~TV+1,data=dat.advertising); 
+
+fit.advertising$coef
+beta.hat
+beta.hat.optim
+```
+
+
+```{r} 
+# Calculate the decomposition of sum of squares 
+residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=dat.advertising$TV,outcome=dat.advertising$sales)
+explained.sum.of.squares=sum((linear.model(beta=beta.hat,covariate=dat.advertising$TV)-mean(dat.advertising$sales))^2)
+total.sum.of.squares=sum((dat.advertising$sales-mean(dat.advertising$sales))^2)
+
+# Check if the equality holds..
+total.sum.of.squares
+explained.sum.of.squares+residual.sum.of.squares
+
+# But if we use identical()...
+identical(total.sum.of.squares,explained.sum.of.squares+residual.sum.of.squares) 
+
+
+# Calculate the coefficient of determination
+R.sq= explained.sum.of.squares/total.sum.of.squares;
+
+# Calculate the Pearson sample correlation 
+cor.hat=cor(dat.advertising$TV,dat.advertising$sales)
+
+# Verify the identity:
+R.sq
+cor.hat^2
+
+# Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?
+```
+

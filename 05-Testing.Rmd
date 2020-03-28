@@ -1,0 +1,263 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+# Statistical inference: Hypothesis testing {#ch:test}
+
+
+
+<b>Reading materials</b>: Slides 74 - 92 in STA108_LinearRegression_S20.pdf.
+
+We will continue working on synthetic data in this chapter. 
+
+```{r}
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+error.terms= rnorm(n)*2; # Normal errors, in order to verify the performance of the t-test 
+# You can change it to other distributions 
+y=Ey+error.terms;
+```
+
+## Hypothesit testing 
+
+```{r}
+# The lm() and summary() functions will automatically calculate the test statistics and p-values for you 
+fit.lm<-lm(y~x+1);fit.lm.summary<-summary(fit.lm)
+fit.lm.summary
+```
+
+```{r}
+# We will create our own function for calculating the "t value"
+source('sources.r') # load the functions we have written 
+
+beta.hat=fit.linear.model(covariate=x,outcome=y)
+beta.hat.sd=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+
+# The test statistics for H0: beta1=0, and H0: beta0=0 are 
+beta.hat.t = (beta.hat-0)/beta.hat.sd;
+
+calculate.t<-function(covariate,outcome){
+  beta.hat=fit.linear.model(covariate=covariate,outcome=outcome)
+  beta.hat.sd=estimate.coef.sd(beta=beta.hat,covariate=covariate,outcome=outcome)
+  beta.hat.t = (beta.hat-0)/beta.hat.sd;
+  return(beta.hat.t)
+}
+
+# The p-values using the Student t distribution are 
+2*apply(cbind(pt(-abs(beta.hat.t),df=n-2),(1-pt(abs(beta.hat.t),df=n-2))),1,min)
+
+# We can also calculate the p-values using CLT
+2*apply(cbind(pnorm(-abs(beta.hat.t)),(1-pnorm(abs(beta.hat.t)))),1,min)
+
+# Or to use the bootstrap 
+# This part is NOT required
+# It is recommended to read more about bootstrap if you want to use it for hypothesis testing
+# since the empirical bootstrap procedure is not the most efficient one for this purpose 
+
+beta.hat.boot=replicate(1e5,boot.fit(covariate=x,outcome=y));
+pval=numeric(length(beta.hat));
+for(i in 1:length(beta.hat)){
+  boot.est=beta.hat.boot[1,i,]
+  pval[i]=2*min( mean(0<boot.est), mean(0>boot.est) )
+}
+
+## Wrap up the above code into one function
+calculate.pvalue<-function(covariate,outcome,type){
+  beta.hat.t=calculate.t(covariate,outcome);
+  if (type=='t'){
+    n=length(outcome);
+    pval=2*apply(cbind(pt(beta.hat.t,df=n-2),(1-pt(beta.hat.t,df=n-2))),1,min);
+
+  }else if (type=='z'){
+    pval=2*apply(cbind(pnorm(-abs(beta.hat.t)),(1-pnorm(abs(beta.hat.t)))),1,min);
+    
+  }else if (type == 'bootstrap'){
+    
+    beta.hat=fit.linear.model(covariate=covariate,outcome=outcome)
+    beta.hat.boot=replicate(1e5,boot.fit(covariate=covariate,outcome=outcome));
+    pval=numeric(length(beta.hat));
+    for(i in 1:length(beta.hat)){
+      boot.est=beta.hat.boot[1,i,]
+      pval[i]=2*min( mean(0<boot.est), mean(0>boot.est) )
+    }
+  }
+  return(pval)
+}
+
+```
+
+```{r} 
+## Write a simulation to verify the equivalence between type I error rate and significance level, under the null H0: beta1=0 (slope is zero)
+alpha=0.03; # significance level 
+simulate.one.instance<-function(x,beta.null,alpha,type){
+  n=length(x);
+  Ey= x*beta.null[2]+beta.null[1];
+  error.terms= rnorm(n)*2;
+  y=Ey+error.terms;
+  pval=calculate.pvalue(covariate=x,outcome=y,type=type);
+  rej.flag= pval[2]<alpha
+  return(rej.flag)
+}
+
+N.sim=1e4;
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.null=c(beta.true[1],0)
+sim.typeI=replicate(N.sim,simulate.one.instance(x,beta.null,alpha,type='t'));
+mean(sim.typeI)
+
+```
+
+```{r} 
+## Assess the power 
+N.sim=1e4;
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+powers<-numeric(3)
+for(a in 1:3){
+  beta.alt=c(beta.true[1],a/10)
+  sim.rej=replicate(N.sim,simulate.one.instance(x,beta.alt,alpha,type='t'));
+  powers[a]<-mean(sim.rej)
+  
+}
+powers
+```
+```{r}
+## Permutation test for testing H0: beta1 = 0 (slope is zero)
+
+permutation.test<-function(covariate,outcome){
+  n=length(outcome);
+  sample_indices = sample(1:n,n,replace=FALSE) # sampling without replacement
+  covariate.perm= covariate[sample_indices]; outcome.perm= outcome[sample_indices];
+
+  beta.hat.t=calculate.t(covariate.perm,outcome.perm)
+
+  return(beta.hat.t[2])
+}
+
+
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+error.terms= rnorm(n)*2; # Normal errors, in order to verify the performance of the t-test 
+# You can change it to other distributions 
+y=Ey+error.terms;
+
+beta.hat.t.perm=replicate(1e5,permutation.test(covariate=x,outcome=y));
+beta.hat.t=calculate.t(x,y)
+2*min( mean(beta.hat.t[2]<beta.hat.t.perm),mean(beta.hat.t[2]>beta.hat.t.perm))
+
+```
+
+
+```{r}
+
+## F-test can be done using the anova() function in R
+## It will be left as an exercise for you to write your version of F test
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+error.terms= rnorm(n)*2; # Normal errors, in order to verify the performance of the t-test 
+# You can change it to other distributions 
+y=Ey+error.terms;
+
+full_model=lm(y~x+1);
+reduced_model=lm(y~1);
+anova(reduced_model,full_model)
+summary(lm(y~x+1))
+```
+
+
+## Multiple testing
+
+
+
+```{r}
+# To discuss multiple testing, we generate 1000 outcomes, among which 100 are truly associated with the covariate 
+
+set.seed(1)
+n=50;m=1000;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+Y=matrix(0,nrow=n,ncol=m)
+beta.true=c(20,0.6)
+for(i in 1:m){
+Ey= x*beta.true[2]*(i<101)+beta.true[1];
+error.terms= rnorm(n)*2;  
+Y[,i]=Ey+error.terms;
+}
+
+# Conduct the same test 
+pvalues=numeric(m)
+for (i in 1:m){
+  pval=calculate.pvalue(covariate=x,outcome=Y[,i],type='z');
+  pvalues[i]<-pval[2];
+}
+```
+
+
+```{r}
+## Bonferroni correction 
+alpha=0.05;
+alpha.Bonf=alpha/m; # devided by the number of hypotheses
+rej.flag=pvalues<alpha.Bonf;
+
+## True positive
+sum(rej.flag & ((1:m)<101))
+## False positive 
+sum(rej.flag & ((1:m)>100))
+## True negative
+sum(!rej.flag & ((1:m)>100))
+
+## False negative
+sum(!rej.flag & ((1:m)<101))
+
+```
+
+
+
+```{r} 
+## Benjamini–Hochberg procedure for FDR control 
+
+pvalues.sorted<-sort(pvalues,index.return=T)
+alpha.BH<- (1:m)*alpha/m;
+k.hat<-max(which(pvalues.sorted$x<alpha.BH))
+
+rej.flag.BH=numeric(m);
+rej.flag.BH[pvalues.sorted$ix[1:k.hat]]=1;
+
+
+
+## True positive
+sum(rej.flag.BH & ((1:m)<101))
+## False positive 
+sum(rej.flag.BH & ((1:m)>100))
+## True negative
+sum(!rej.flag.BH & ((1:m)>100))
+
+## False negative
+sum(!rej.flag.BH & ((1:m)<101))
+
+## False positive rate
+
+sum(rej.flag.BH & ((1:m)>100))/sum(rej.flag.BH)
+
+# Run a simulation to verify this
+```
+
+

@@ -1,0 +1,182 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+```
+# Model diagnostics {#ch:diagnostics}
+
+
+<b>Reading materials</b>:  Slides 93 - 101 in STA108_LinearRegression_S20.pdf.
+
+Note: we will use existing functions in `R` for model diagnostics in this chapter. However, in your midterm report, you are still required to implement your own tools for model diagnostics.
+
+
+## Residual plot
+
+```{r}
+## We can extract residual from an `lm()` object.
+
+fit.lm = lm(sales~TV+1,data=dat.advertising); # Fit the linear regression
+resid= fit.lm$residuals;
+
+plot(resid~dat.advertising$TV,pch=16,col='red',main='Residual plot')
+abline(h=0,lwd=3)
+```
+
+Why don't we draw the residual plot as residuals v.s. the response? This is because the two quantities are surely positively correlated, and thus is hard to extract any useful information from the plot.
+```{r}
+plot(resid~dat.advertising$sales,pch=16,col='red',main='Wrong plot')
+abline(h=0,lwd=3)
+```
+
+How about drawing residuals against the fitted values? This is a good choice to detect certain anomalies.
+
+```{r}
+
+par(mfrow=c(1,2))
+plot(resid~dat.advertising$TV,pch=16,col='red',main='Residual plot')
+abline(h=0,lwd=3)
+plot(resid~fit.lm$fitted.values,pch=16,col='red',main='Residual plot',xlab='Fitted values')
+abline(h=0,lwd=3)
+par(mfrow=c(1,1))
+```
+
+## Remedies for non-linearity
+
+From the residual plot, we see that there exist some non-linearity between the residuals and the covariate, especially when the TV is number is small. This could suggest that the relationship between TV and sales is nonlinear. Typical form of nonlinearity takes form as $\exp(x)$, $x^{1/2}$, $\log(x)$, $x^2$, etc. We may be able to guess the nonlinearity from the residual plot, or use model selection to pick the best nonlinear function, if there is not scientific knowledge on the relationship. In this example, we will fit two regression
+$y\sim \log(x)\beta_1 + \beta_0$ and $y \sim x^{1/2} \beta_1 + \beta_0$.  
+
+
+```{r}
+fit.log = lm(sales~log(TV)+1,data=dat.advertising); # Fit the linear regression
+dat.advertising$sqrtTV=dat.advertising$TV^{1/2};
+fit.sqrt = lm(sales~sqrtTV+1,data=dat.advertising); # Fit the linear regression
+
+#par(mfrow=c(3,1))
+plot(fit.log$residuals~log(dat.advertising$TV),pch=16,col='red',main='Residual plot (log TV)',xlab='log(TV)',ylab='Residuals')
+abline(h=0,lwd=3)
+
+plot(fit.lm$residuals~dat.advertising$TV,pch=16,col='red',main='Residual plot (TV)',xlab='TV',ylab='Residuals')
+abline(h=0,lwd=3)
+
+plot(fit.sqrt$residuals~dat.advertising$sqrtTV,pch=16,col='red',main='Residual plot (sq. rt. TV)',xlab='sqrt(TV)',ylab='Residuals')
+abline(h=0,lwd=3)
+#par(mfrow=c(1,1))
+
+```
+
+## Independence
+
+In the `advertising` data set, the residual plot does not tell us whether certain data points are correlated or not.
+```{r}
+plot(fit.lm$residuals~dat.advertising$TV,pch=16,col='red',main='Residual plot')
+abline(h=0,lwd=3)
+```
+
+We will consider a model where we know the errors are correlated, and show that they may still be hard to recognized in practice. We consider a model with  autoregressive error, AR(1), which is widely used in time-series data analysis (e.g., financial data). We consider a model where, for $i=1,2,\ldots, n$,
+$$ y_i = x_i \beta_1 + \beta_0 + \epsilon_i,$$
+where $\epsilon_i = 3\epsilon_{i-1}/4 + z_i/4$ and $z_i\sim \mathcal{N}(0,1)$. Here $i$ represents some unit of time (e.g., months, years, days).
+```{r}
+n=100;
+set.seed(1);
+z=rnorm(n);
+epsilon= numeric(n);
+for(i in 1:n){
+if (i==1){
+epsilon[i]=z[i];
+
+}else{
+epsilon[i]=3*epsilon[i-1]/4+z[i]/4;
+}
+}
+x=rnorm(n)*10+5;
+y=x*2+1+z;
+
+ARfits = lm(y~x+1);
+
+
+par(mfrow=c(1,2))
+plot(ARfits$residuals~x,pch=16,col='red',main='Residual plot 1')
+abline(h=0,lwd=3)
+
+plot(ARfits$residuals~c(1:n),pch=16,col='red',main='Residual plot 2',xlab="Index i")
+abline(h=0,lwd=3)
+
+par(mfrow=c(1,1))
+```
+
+## Normality
+
+It is also hard to see normality based on the residual plot. We can use a Quantile-Quantile plot to check if the errors are normally distributed. In the Q-Q plot, we draw the quantiles of residuals against the quantiles of the thoeretical quantiles from a normal distribution. The $100(i/n)\%$th quantile of the residuals is defined as the $i$th smallest residual.  
+
+Non-normal distributions in Q-Q plots.
+```{r}
+n=500;
+distributions=matrix(0,n,4)
+distributions[,1] =-exp(rnorm(n));
+distributions[,2] =exp(rnorm(n));
+distributions[,3]=rt(n,df=3);
+distributions[,4]=runif(n);
+
+titles = c('Left skewed', 'Right skewed', 'Heavy-tailed', 'Light-tailed' )
+par(mfrow=c(2,2))
+for ( i in 1:4){
+this_dist=sort(distributions[,i]);
+normal_mean =mean(this_dist);normal_sd = sd(this_dist);
+this_dist=(this_dist - normal_mean)/normal_sd;
+normal_quantiles = qnorm( (1:length(this_dist))/length(this_dist));
+
+plot(this_dist~normal_quantiles,pch=16,col='red',main=titles[i],xlab='Normal quantiles', ylab='Sample quantiles',xlim=c(-4,4),ylim=c(-4,4))
+abline(a=0,b=1,lwd=3)
+}
+
+
+```
+
+## Homoscedasticity
+
+
+We can see clearly that the residuals have wider spans when `TV` is larger, which suggested increasing variance. We can stablize the variance by transforming the response variable $y^{1/2}$, $\log(y)$, etc. You can also use the Box-Cox transformation to find the most appropriate function.
+
+```{r}
+fit.ylog=lm(log(sales)~TV+1,data=dat.advertising)
+fit.ysqrt=lm(sqrt(sales)~TV+1,data=dat.advertising)
+#par(mfrow=c(3,1))
+plot(fit.lm$residuals~dat.advertising$TV,pch=16,col='red',main='Residual plot (original)',xlab='TV')
+abline(h=0,lwd=3)
+
+plot(fit.ylog$residuals~dat.advertising$TV,pch=16,col='red',main='Residual plot (log)',ylab='residuals',xlab='TV')
+abline(h=0,lwd=3)
+
+
+plot(fit.ysqrt$residuals~dat.advertising$TV,pch=16,col='red',main='Residual plot (sqrt)',ylab="residuals",xlab='TV')
+abline(h=0,lwd=3)
+```
+
+## Influential Observations and Outliers
+
+The influential observations are samples that has a large leverage. You should search for a formal definition of leverage if you are interested. 
+In plain words, the inflential observations are data points that live far away from others in terms of their values of the covariates.
+
+Outliters are the observations whose responses are far away from observations with similar covariates. We can see these from the usual scatter plots. We will not cover formal testing or measures for influential observations and outliers in this class. 
+
+```{r}
+influential_cov=dat.advertising$TV;influential_cov[1]=500;
+outliers_resp=fit.lm$residuals;outliers_resp[1]=30;
+
+par(mfrow=c(1,2))
+plot(fit.lm$residuals~influential_cov,pch=16,col='red',main='Influential obs.',xlab='TV')
+abline(h=0,lwd=3)
+points(y=fit.lm$residuals[1],x=influential_cov[1],col='green',pch=16)
+
+
+plot(outliers_resp~dat.advertising$TV,pch=16,col='red',main='Outlier',xlab='TV')
+abline(h=0,lwd=3)
+points(y=outliers_resp[1],x=dat.advertising$TV[1],col='green',pch=16)
+```
+

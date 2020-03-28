@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Statistical inference: Hypothesis testing | Applied Statistical Methods: Regression Analysis</title>
+  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Statistical inference: Hypothesis testing | Applied Statistical Methods: Regression Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Statistical inference: Hypothesis testing | Applied Statistical Methods: Regression Analysis" />
+  
+  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+<meta name="author" content="Shizhe Chen" />
+
+
+<meta name="date" content="2020-03-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ch-CI.html"/>
+<link rel="next" href="ch-diagnostics.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STA 108, Spring 2020</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
+<li class="chapter" data-level="1.4" data-path="ch-lmR.html"><a href="ch-lmR.html#note"><i class="fa fa-check"></i><b>1.4</b> Note</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-est.html"><a href="ch-est.html"><i class="fa fa-check"></i><b>2</b> Estimation</a></li>
+<li class="chapter" data-level="3" data-path="ch-sampling.html"><a href="ch-sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-sampling.html"><a href="ch-sampling.html#understanding-sampling-distribution-via-simulation"><i class="fa fa-check"></i><b>3.1</b> Understanding sampling distribution via simulation</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-sampling.html"><a href="ch-sampling.html#shapes-of-sampling-distributions"><i class="fa fa-check"></i><b>3.2</b> Shapes of sampling distributions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-sampling.html"><a href="ch-sampling.html#asymptotic-distribution"><i class="fa fa-check"></i><b>3.2.1</b> Asymptotic distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="ch-CI.html"><a href="ch-CI.html#prediction-interval"><i class="fa fa-check"></i><b>4.2</b> Prediction interval</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-CI.html"><a href="ch-CI.html#simultaneous-confidence-intervalsbandsregions"><i class="fa fa-check"></i><b>4.3</b> Simultaneous confidence intervals/bands/regions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-test.html"><a href="ch-test.html"><i class="fa fa-check"></i><b>5</b> Statistical inference: Hypothesis testing</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-test.html"><a href="ch-test.html#hypothesit-testing"><i class="fa fa-check"></i><b>5.1</b> Hypothesit testing</a></li>
+<li class="chapter" data-level="5.2" data-path="ch-test.html"><a href="ch-test.html#multiple-testing"><i class="fa fa-check"></i><b>5.2</b> Multiple testing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Model diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#residual-plot"><i class="fa fa-check"></i><b>6.1</b> Residual plot</a></li>
+<li class="chapter" data-level="6.2" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#remedies-for-non-linearity"><i class="fa fa-check"></i><b>6.2</b> Remedies for non-linearity</a></li>
+<li class="chapter" data-level="6.3" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#independence"><i class="fa fa-check"></i><b>6.3</b> Independence</a></li>
+<li class="chapter" data-level="6.4" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#normality"><i class="fa fa-check"></i><b>6.4</b> Normality</a></li>
+<li class="chapter" data-level="6.5" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#homoscedasticity"><i class="fa fa-check"></i><b>6.5</b> Homoscedasticity</a></li>
+<li class="chapter" data-level="6.6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#influential-observations-and-outliers"><i class="fa fa-check"></i><b>6.6</b> Influential Observations and Outliers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-multiple.html"><a href="ch-multiple.html"><i class="fa fa-check"></i><b>7</b> Multiple covariates</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-multiple.html"><a href="ch-multiple.html#examples"><i class="fa fa-check"></i><b>7.1</b> Examples</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ch-multiple.html"><a href="ch-multiple.html#advertising-data-1"><i class="fa fa-check"></i><b>7.1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ch-multiple.html"><a href="ch-multiple.html#flu-shot-1"><i class="fa fa-check"></i><b>7.1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="7.1.3" data-path="ch-multiple.html"><a href="ch-multiple.html#project-star-1"><i class="fa fa-check"></i><b>7.1.3</b> Project STAR</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ch-multiple.html"><a href="ch-multiple.html#classification-of-variables"><i class="fa fa-check"></i><b>7.2</b> Classification of variables</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-multiple.html"><a href="ch-multiple.html#least-squares-estimation"><i class="fa fa-check"></i><b>7.3</b> Least squares estimation</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-multiple.html"><a href="ch-multiple.html#underfitting-and-overfitting"><i class="fa fa-check"></i><b>7.4</b> Underfitting and overfitting</a></li>
+<li class="chapter" data-level="7.5" data-path="ch-multiple.html"><a href="ch-multiple.html#sampling-distribution-and-inference"><i class="fa fa-check"></i><b>7.5</b> Sampling distribution and inference</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="ch-multiple.html"><a href="ch-multiple.html#anova"><i class="fa fa-check"></i><b>7.5.1</b> ANOVA</a></li>
+<li class="chapter" data-level="7.5.2" data-path="ch-multiple.html"><a href="ch-multiple.html#wald-test"><i class="fa fa-check"></i><b>7.5.2</b> Wald test</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-selection.html"><a href="ch-selection.html"><i class="fa fa-check"></i><b>8</b> Model selection</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-selection.html"><a href="ch-selection.html#criteria"><i class="fa fa-check"></i><b>8.1</b> Criteria</a></li>
+<li class="chapter" data-level="8.2" data-path="ch-selection.html"><a href="ch-selection.html#selection-procedure"><i class="fa fa-check"></i><b>8.2</b> Selection procedure</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
+<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
+<li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
+<li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
+<li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
+<li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
+<li class="chapter" data-level="C.1" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-univariate"><i class="fa fa-check"></i><b>C.1</b> Simulation and visualization: univariate</a></li>
+<li class="chapter" data-level="C.2" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-multivariate"><i class="fa fa-check"></i><b>C.2</b> Simulation and visualization: multivariate</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods: Regression Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch:test" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Statistical inference: Hypothesis testing</h1>
+<p><b>Reading materials</b>: Slides 74 - 92 in STA108_LinearRegression_S20.pdf.</p>
+<p>We will continue working on synthetic data in this chapter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.15</span>)
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>; <span class="co"># Normal errors, in order to verify the performance of the t-test </span>
+<span class="co"># You can change it to other distributions </span>
+y=Ey<span class="op">+</span>error.terms;</code></pre></div>
+<div id="hypothesit-testing" class="section level2">
+<h2><span class="header-section-number">5.1</span> Hypothesit testing</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The lm() and summary() functions will automatically calculate the test statistics and p-values for you </span>
+fit.lm&lt;-<span class="kw">lm</span>(y<span class="op">~</span>x<span class="op">+</span><span class="dv">1</span>);fit.lm.summary&lt;-<span class="kw">summary</span>(fit.lm)
+fit.lm.summary</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We will create our own function for calculating the &quot;t value&quot;</span>
+<span class="kw">source</span>(<span class="st">&#39;sources.r&#39;</span>) <span class="co"># load the functions we have written </span>
+
+beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+beta.hat.sd=<span class="kw">estimate.coef.sd</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+<span class="co"># The test statistics for H0: beta1=0, and H0: beta0=0 are </span>
+beta.hat.t =<span class="st"> </span>(beta.hat<span class="op">-</span><span class="dv">0</span>)<span class="op">/</span>beta.hat.sd;
+
+calculate.t&lt;-<span class="cf">function</span>(covariate,outcome){
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>covariate,<span class="dt">outcome=</span>outcome)
+  beta.hat.sd=<span class="kw">estimate.coef.sd</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>covariate,<span class="dt">outcome=</span>outcome)
+  beta.hat.t =<span class="st"> </span>(beta.hat<span class="op">-</span><span class="dv">0</span>)<span class="op">/</span>beta.hat.sd;
+  <span class="kw">return</span>(beta.hat.t)
+}
+
+<span class="co"># The p-values using the Student t distribution are </span>
+<span class="dv">2</span><span class="op">*</span><span class="kw">apply</span>(<span class="kw">cbind</span>(<span class="kw">pt</span>(<span class="op">-</span><span class="kw">abs</span>(beta.hat.t),<span class="dt">df=</span>n<span class="op">-</span><span class="dv">2</span>),(<span class="dv">1</span><span class="op">-</span><span class="kw">pt</span>(<span class="kw">abs</span>(beta.hat.t),<span class="dt">df=</span>n<span class="op">-</span><span class="dv">2</span>))),<span class="dv">1</span>,min)
+
+<span class="co"># We can also calculate the p-values using CLT</span>
+<span class="dv">2</span><span class="op">*</span><span class="kw">apply</span>(<span class="kw">cbind</span>(<span class="kw">pnorm</span>(<span class="op">-</span><span class="kw">abs</span>(beta.hat.t)),(<span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="kw">abs</span>(beta.hat.t)))),<span class="dv">1</span>,min)
+
+<span class="co"># Or to use the bootstrap </span>
+<span class="co"># This part is NOT required</span>
+<span class="co"># It is recommended to read more about bootstrap if you want to use it for hypothesis testing</span>
+<span class="co"># since the empirical bootstrap procedure is not the most efficient one for this purpose </span>
+
+beta.hat.boot=<span class="kw">replicate</span>(<span class="fl">1e5</span>,<span class="kw">boot.fit</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y));
+pval=<span class="kw">numeric</span>(<span class="kw">length</span>(beta.hat));
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(beta.hat)){
+  boot.est=beta.hat.boot[<span class="dv">1</span>,i,]
+  pval[i]=<span class="dv">2</span><span class="op">*</span><span class="kw">min</span>( <span class="kw">mean</span>(<span class="dv">0</span><span class="op">&lt;</span>boot.est), <span class="kw">mean</span>(<span class="dv">0</span><span class="op">&gt;</span>boot.est) )
+}
+
+## Wrap up the above code into one function
+calculate.pvalue&lt;-<span class="cf">function</span>(covariate,outcome,type){
+  beta.hat.t=<span class="kw">calculate.t</span>(covariate,outcome);
+  <span class="cf">if</span> (type<span class="op">==</span><span class="st">&#39;t&#39;</span>){
+    n=<span class="kw">length</span>(outcome);
+    pval=<span class="dv">2</span><span class="op">*</span><span class="kw">apply</span>(<span class="kw">cbind</span>(<span class="kw">pt</span>(beta.hat.t,<span class="dt">df=</span>n<span class="op">-</span><span class="dv">2</span>),(<span class="dv">1</span><span class="op">-</span><span class="kw">pt</span>(beta.hat.t,<span class="dt">df=</span>n<span class="op">-</span><span class="dv">2</span>))),<span class="dv">1</span>,min);
+
+  }<span class="cf">else</span> <span class="cf">if</span> (type<span class="op">==</span><span class="st">&#39;z&#39;</span>){
+    pval=<span class="dv">2</span><span class="op">*</span><span class="kw">apply</span>(<span class="kw">cbind</span>(<span class="kw">pnorm</span>(<span class="op">-</span><span class="kw">abs</span>(beta.hat.t)),(<span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="kw">abs</span>(beta.hat.t)))),<span class="dv">1</span>,min);
+    
+  }<span class="cf">else</span> <span class="cf">if</span> (type <span class="op">==</span><span class="st"> &#39;bootstrap&#39;</span>){
+    
+    beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>covariate,<span class="dt">outcome=</span>outcome)
+    beta.hat.boot=<span class="kw">replicate</span>(<span class="fl">1e5</span>,<span class="kw">boot.fit</span>(<span class="dt">covariate=</span>covariate,<span class="dt">outcome=</span>outcome));
+    pval=<span class="kw">numeric</span>(<span class="kw">length</span>(beta.hat));
+    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(beta.hat)){
+      boot.est=beta.hat.boot[<span class="dv">1</span>,i,]
+      pval[i]=<span class="dv">2</span><span class="op">*</span><span class="kw">min</span>( <span class="kw">mean</span>(<span class="dv">0</span><span class="op">&lt;</span>boot.est), <span class="kw">mean</span>(<span class="dv">0</span><span class="op">&gt;</span>boot.est) )
+    }
+  }
+  <span class="kw">return</span>(pval)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Write a simulation to verify the equivalence between type I error rate and significance level, under the null H0: beta1=0 (slope is zero)
+alpha=<span class="fl">0.03</span>; <span class="co"># significance level </span>
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.null,alpha,type){
+  n=<span class="kw">length</span>(x);
+  Ey=<span class="st"> </span>x<span class="op">*</span>beta.null[<span class="dv">2</span>]<span class="op">+</span>beta.null[<span class="dv">1</span>];
+  error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>;
+  y=Ey<span class="op">+</span>error.terms;
+  pval=<span class="kw">calculate.pvalue</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y,<span class="dt">type=</span>type);
+  rej.flag=<span class="st"> </span>pval[<span class="dv">2</span>]<span class="op">&lt;</span>alpha
+  <span class="kw">return</span>(rej.flag)
+}
+
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.null=<span class="kw">c</span>(beta.true[<span class="dv">1</span>],<span class="dv">0</span>)
+sim.typeI=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.null,alpha,<span class="dt">type=</span><span class="st">&#39;t&#39;</span>));
+<span class="kw">mean</span>(sim.typeI)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Assess the power 
+N.sim=<span class="fl">1e4</span>;
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+powers&lt;-<span class="kw">numeric</span>(<span class="dv">3</span>)
+<span class="cf">for</span>(a <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>){
+  beta.alt=<span class="kw">c</span>(beta.true[<span class="dv">1</span>],a<span class="op">/</span><span class="dv">10</span>)
+  sim.rej=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta.alt,alpha,<span class="dt">type=</span><span class="st">&#39;t&#39;</span>));
+  powers[a]&lt;-<span class="kw">mean</span>(sim.rej)
+  
+}
+powers</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Permutation test for testing H0: beta1 = 0 (slope is zero)
+
+permutation.test&lt;-<span class="cf">function</span>(covariate,outcome){
+  n=<span class="kw">length</span>(outcome);
+  sample_indices =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n,n,<span class="dt">replace=</span><span class="ot">FALSE</span>) <span class="co"># sampling without replacement</span>
+  covariate.perm=<span class="st"> </span>covariate[sample_indices]; outcome.perm=<span class="st"> </span>outcome[sample_indices];
+
+  beta.hat.t=<span class="kw">calculate.t</span>(covariate.perm,outcome.perm)
+
+  <span class="kw">return</span>(beta.hat.t[<span class="dv">2</span>])
+}
+
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.15</span>)
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>; <span class="co"># Normal errors, in order to verify the performance of the t-test </span>
+<span class="co"># You can change it to other distributions </span>
+y=Ey<span class="op">+</span>error.terms;
+
+beta.hat.t.perm=<span class="kw">replicate</span>(<span class="fl">1e5</span>,<span class="kw">permutation.test</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y));
+beta.hat.t=<span class="kw">calculate.t</span>(x,y)
+<span class="dv">2</span><span class="op">*</span><span class="kw">min</span>( <span class="kw">mean</span>(beta.hat.t[<span class="dv">2</span>]<span class="op">&lt;</span>beta.hat.t.perm),<span class="kw">mean</span>(beta.hat.t[<span class="dv">2</span>]<span class="op">&gt;</span>beta.hat.t.perm))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## F-test can be done using the anova() function in R
+## It will be left as an exercise for you to write your version of F test
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.15</span>)
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];
+error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>; <span class="co"># Normal errors, in order to verify the performance of the t-test </span>
+<span class="co"># You can change it to other distributions </span>
+y=Ey<span class="op">+</span>error.terms;
+
+full_model=<span class="kw">lm</span>(y<span class="op">~</span>x<span class="op">+</span><span class="dv">1</span>);
+reduced_model=<span class="kw">lm</span>(y<span class="op">~</span><span class="dv">1</span>);
+<span class="kw">anova</span>(reduced_model,full_model)
+<span class="kw">summary</span>(<span class="kw">lm</span>(y<span class="op">~</span>x<span class="op">+</span><span class="dv">1</span>))</code></pre></div>
+</div>
+<div id="multiple-testing" class="section level2">
+<h2><span class="header-section-number">5.2</span> Multiple testing</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To discuss multiple testing, we generate 1000 outcomes, among which 100 are truly associated with the covariate </span>
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+n=<span class="dv">50</span>;m=<span class="dv">1000</span>;
+x=<span class="kw">as.matrix</span>(<span class="kw">rnorm</span>(n,<span class="dt">mean=</span><span class="dv">10</span>,<span class="dt">sd=</span><span class="dv">2</span>),<span class="dt">ncol=</span>n);
+Y=<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dt">nrow=</span>n,<span class="dt">ncol=</span>m)
+beta.true=<span class="kw">c</span>(<span class="dv">20</span>,<span class="fl">0.6</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">*</span>(i<span class="op">&lt;</span><span class="dv">101</span>)<span class="op">+</span>beta.true[<span class="dv">1</span>];
+error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class="op">*</span><span class="dv">2</span>;  
+Y[,i]=Ey<span class="op">+</span>error.terms;
+}
+
+<span class="co"># Conduct the same test </span>
+pvalues=<span class="kw">numeric</span>(m)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  pval=<span class="kw">calculate.pvalue</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>Y[,i],<span class="dt">type=</span><span class="st">&#39;z&#39;</span>);
+  pvalues[i]&lt;-pval[<span class="dv">2</span>];
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Bonferroni correction 
+alpha=<span class="fl">0.05</span>;
+alpha.Bonf=alpha<span class="op">/</span>m; <span class="co"># devided by the number of hypotheses</span>
+rej.flag=pvalues<span class="op">&lt;</span>alpha.Bonf;
+
+## True positive
+<span class="kw">sum</span>(rej.flag <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&lt;</span><span class="dv">101</span>))
+## False positive 
+<span class="kw">sum</span>(rej.flag <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&gt;</span><span class="dv">100</span>))
+## True negative
+<span class="kw">sum</span>(<span class="op">!</span>rej.flag <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&gt;</span><span class="dv">100</span>))
+
+## False negative
+<span class="kw">sum</span>(<span class="op">!</span>rej.flag <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&lt;</span><span class="dv">101</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Benjamini–Hochberg procedure for FDR control 
+
+pvalues.sorted&lt;-<span class="kw">sort</span>(pvalues,<span class="dt">index.return=</span>T)
+alpha.BH&lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>m)<span class="op">*</span>alpha<span class="op">/</span>m;
+k.hat&lt;-<span class="kw">max</span>(<span class="kw">which</span>(pvalues.sorted<span class="op">$</span>x<span class="op">&lt;</span>alpha.BH))
+
+rej.flag.BH=<span class="kw">numeric</span>(m);
+rej.flag.BH[pvalues.sorted<span class="op">$</span>ix[<span class="dv">1</span><span class="op">:</span>k.hat]]=<span class="dv">1</span>;
+
+
+
+## True positive
+<span class="kw">sum</span>(rej.flag.BH <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&lt;</span><span class="dv">101</span>))
+## False positive 
+<span class="kw">sum</span>(rej.flag.BH <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&gt;</span><span class="dv">100</span>))
+## True negative
+<span class="kw">sum</span>(<span class="op">!</span>rej.flag.BH <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&gt;</span><span class="dv">100</span>))
+
+## False negative
+<span class="kw">sum</span>(<span class="op">!</span>rej.flag.BH <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&lt;</span><span class="dv">101</span>))
+
+## False positive rate
+
+<span class="kw">sum</span>(rej.flag.BH <span class="op">&amp;</span><span class="st"> </span>((<span class="dv">1</span><span class="op">:</span>m)<span class="op">&gt;</span><span class="dv">100</span>))<span class="op">/</span><span class="kw">sum</span>(rej.flag.BH)
+
+<span class="co"># Run a simulation to verify this</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch-CI.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-diagnostics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STA108_bookdown.pdf", "STA108_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

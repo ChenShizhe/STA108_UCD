@@ -1,0 +1,449 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+
+# Sampling distribution {#ch:sampling}
+
+
+## Understanding sampling distribution via simulation 
+
+<b>Reading materials</b>: Slides 24 - 33 in STA108_LinearRegression_S20.pdf.
+
+
+In this section, we assume a true data generating model in order to draw samples from the true popluation distribution.
+In particular, we assume that
+$$ y_i = x_i \beta_1 + \beta_0 + \epsilon_i, \ i=1,\ldots, 50$$
+where $\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)$. We set $\beta_1=0.15$ and $\beta_0=20$.
+
+```{r}
+### We will simulate synthetic data to understand the concept of sampling distribution
+
+### To match our setup, we will generate the covarates and keep them fixed in the remainder of the simulation. 
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+
+error.terms= (runif(n)-0.5)*5;
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+
+
+plot(x=x,y=y,pch=16,cex=2)
+abline(b=beta.hat[2],a=beta.hat[1],col='red',lwd=2)
+
+
+### We can run the simulation by putting the above lines into a large for-loop
+### We will wrap them up into one function
+
+simulate.one.instance<-function(x,beta.true){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  error.terms= (runif(n)-0.5)*5;
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y);
+  return(beta.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=1e4;
+set.seed(1)
+beta.sim=replicate(N.sim,simulate.one.instance(x,beta.true));
+
+
+# Draw the histogram for the estimated intercept 
+hist(beta.sim[1,1,],xlab='Fitted intercept',main='')
+abline(v=beta.true[1],lwd=3,col='red')
+```
+
+Recall from the lecture notes that the variance of $\hat{\beta}_1$ is
+$${\rm var}\big(\hat{\beta}_1\big)=\frac{1}{\sum_{i=1}^n (x_i-\bar{x})^2} \sigma^2.$$
+
+```{r}
+## Using the simulation results, we can verify the statement on Slide 26
+
+### Expectation 
+mean(beta.sim[1,1,])-beta.true[1] # intercept 
+mean(beta.sim[2,1,])-beta.true[2] # slope 
+
+### Variance 
+sigma.sq = 5^2/12; # variance of the error: (runif(n)-0.5)*5;
+
+# slope:
+sigma.sq/sum(  (x-mean(x))^2  ) # theoretical value 
+var(beta.sim[2,1,]) # variance from the simulation 
+
+
+# intercept:
+sigma.sq*sum(x^2)/sum(  (x-mean(x))^2  )/n # theoretical value 
+var(beta.sim[1,1,]) # variance from the simulation 
+```
+
+Q: How would you verify the Gauss-Markove theorem in this simulation?
+
+
+
+```{r }
+# A very simple simulation to compare the LSE with another linear unbiased estimator: 
+simulate.one.instance<-function(x,beta.true){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  error.terms= (runif(n)-0.5)*5;
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y);
+  slope.hat=beta.hat[2];
+  slope.dot= (y[n]-y[1])/(x[n]-x[1])
+  return(c(slope.hat,slope.dot))
+}
+
+### Set the number of replicates to be 10000
+N.sim=1e4;
+set.seed(1)
+slope.sim=replicate(N.sim,simulate.one.instance(x,beta.true));
+
+apply(slope.sim,1,mean) # both are unbiased
+apply(slope.sim,1,var) # variance of LSE is smaller
+
+```
+
+
+```{r}
+## Estimate the variance of errors using the residuals 
+set.seed(1)
+error.terms= (runif(n)-0.5)*5;
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+
+residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+
+sigma.sq.hat=residual.sum.of.squares/(n-2) # estimates from one instance
+
+## Run a simulation to verify the claim
+
+## NOTE: we will use the same function name
+simulate.one.instance<-function(x,beta.true){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  error.terms= (runif(n)-0.5)*5;
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y);
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+
+sigma.sq.hat=residual.sum.of.squares/(n-2) # estimates from one instance
+
+  return(sigma.sq.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=1e4;
+set.seed(1)
+sigma.sq.hat.sim=replicate(N.sim,simulate.one.instance(x,beta.true));
+
+mean(sigma.sq.hat.sim)
+sigma.sq
+```
+
+```{r}
+## To wrap this up
+## For any new fits, we can estiamte the variance and standad errors of the estimators 
+set.seed(1)
+error.terms= (runif(n)-0.5)*5;
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+
+estimate.sigma.sq<-function(beta,covariate,outcome){
+   residual.sum.of.squares=sum.of.squares(beta=beta,covariate=covariate,outcome=outcome)
+   n=length(outcome)
+   sigma.sq.hat=residual.sum.of.squares/(n-2) 
+   return(sigma.sq.hat)
+}
+
+estimate.coef.var<-function(beta,covariate,outcome){
+  sigma.sq.hat=estimate.sigma.sq(beta,covariate,outcome)
+  var.hat.beta=beta;
+  var.hat.beta[2]=sigma.sq.hat/sum(  (covariate-mean(covariate))^2  ) 
+  n=length(outcome)
+  var.hat.beta[1]=sigma.sq.hat*sum(covariate^2)/sum((covariate-mean(covariate))^2  )/n
+  return( var.hat.beta)
+}
+
+estimate.coef.sd<-function(beta,covariate,outcome){
+  var.hat.beta=estimate.coef.var(beta,covariate,outcome)
+ sd.hat.beta=sqrt(var.hat.beta);
+  return(sd.hat.beta)
+}
+estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+
+## Compare your numbers with the output from lm()
+summary(lm(y~x+1))
+```
+
+
+## Shapes of sampling distributions 
+
+<b>Reading materials</b>: Slide 34 in STA108_LinearRegression_S20.pdf.
+
+```{r}
+# There can be multiple distributions with the same mean and variance. Consider three distributions discussed in the lecture notes.
+
+xgrid = seq(from = -5, to = 5, by=0.01);
+norm_density=dnorm(xgrid,mean=0,sd=sqrt(2));
+unif_density=dunif(xgrid,min=-sqrt(6),max=sqrt(6));
+
+xbin=c(-sqrt(2),sqrt(2));
+ybin=c(0.5,0.5);
+
+
+plot(norm_density~xgrid,type="l",col='red',lwd=3,ylim=c(0,0.52),xlab="z",ylab="density")
+lines(unif_density~xgrid,col='black',lwd=3)
+
+segments(xbin[1],0,xbin[1],ybin[1],col='green',lwd=10)
+segments(xbin[2],0,xbin[2],ybin[2],col='green',lwd=10)
+legend(x=2.5,y=0.5,legend=c("Uniform","Normal","Binary"),lwd=2,col=c('black','red','green'))
+
+```
+
+
+
+
+### Asymptotic distribution
+
+
+<b>Reading materials</b>: Slides 35 - 49 in STA108_LinearRegression_S20.pdf.
+
+The L-F central limit theorem claims that the asymptotic distribution for $\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }$ is $\mathcal{N}(0,1)$.
+
+```{r}
+## Edit the simulation code 
+### This time with large n (n=500)
+### Three different versions of errors
+### Unequal variances  
+simulate.one.instance<-function(x,beta.true,error.type){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  vars=0.1+runif(n)*2; # unequal variance 
+  if(error.type=='uniform'){
+    error.terms= (runif(n)-0.5)*sqrt(vars);
+    
+  }else if(error.type=='Bernoulli'){
+    error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars);
+  }else{
+    error.terms= rnorm(n)*sqrt(vars);
+  }
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y);
+  
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+
+sigma.sq.hat=residual.sum.of.squares/(n-2) # estimates from one instance
+
+  beta.hat.std =(beta.hat[2]-beta.true[2])/sqrt(sigma.sq.hat)*sqrt( sum( (x-mean(x))^2 ) );  # standardized intercept
+  
+  return(beta.hat.std)
+}
+
+### Set the number of replicates to be 10000
+N.sim=1e4;
+set.seed(1)
+
+n=500;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.hat.std.uniform=replicate(N.sim,simulate.one.instance(x,beta.true,error.type='uniform'));
+beta.hat.std.Bernoulli=replicate(N.sim,simulate.one.instance(x,beta.true,error.type='Bernoulli'));
+beta.hat.std.normal=replicate(N.sim,simulate.one.instance(x,beta.true,error.type='normal'));
+
+
+```
+
+```{r}
+# Draw the density plot
+
+density.uniform=density( beta.hat.std.uniform);
+density.Bernoulli=density( beta.hat.std.Bernoulli);
+density.normal=density( beta.hat.std.normal);
+
+# Theoretical density:
+xgrid = seq(from=-4,to=4,length.out=100);
+normal.pdf= dnorm(xgrid)
+
+plot(density.uniform,xlab="Standardized intercept",col='red',lwd=3,ylim=c(0,0.5),main='',lty=2)
+lines(density.Bernoulli,col='green',lwd=3,lty=2)
+lines(density.normal,col='blue',lwd=3,lty=2)
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+legend(x=2,y=0.46,legend=c("Uniform errors","Bernoulli errors","Normal errors", "N(0,1)"),lwd=3,col=c('red','green','blue','black'),lty=c(2,2,2,3))
+
+
+```
+
+```{r}
+## The L-F CLT allows us to write down the asymptotic distribution in closed-form
+## The bootstrap method is an alternative when analytic solution is not available 
+## Note: Bootstrap is not that useful for linear regression, but has proven to be a powerful tool for other methods. 
+
+set.seed(1)
+# Generate one set of data: 
+n=500;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+Ey= x*beta.true[2]+beta.true[1];
+vars=0.1+runif(n)*2; # unequal variance 
+error.terms= (runif(n)-0.5)*sqrt(vars);
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+
+
+# Now write a function for bootstrap 
+boot.one.instance<-function(covariate,outcome){
+  n=length(outcome);
+  sample_indices = sample(1:n,n,replace=TRUE) # sampling with replacement
+  covariate.boot= covariate[sample_indices]; outcome.boot= outcome[sample_indices];
+   
+  beta.hat=fit.linear.model(covariate=covariate.boot,outcome=outcome.boot);
+  return(beta.hat[2]) 
+}
+
+set.seed(1)
+
+B=1e5;
+beta.hat.boot=replicate(B,boot.one.instance(covariate=x,outcome=y));
+```
+
+```{r}
+## Compare the bootstrap distribution of the standardized slope against that from the CLT 
+
+
+density.boot=density((beta.hat.boot-mean(beta.hat.boot))/sd(beta.hat.boot));
+# Theoretical density (from CLT)
+xgrid = seq(from=-4,to=4,length.out=100);
+normal.pdf= dnorm(xgrid)
+
+plot(density.boot,xlab="Standardized intercept",col='red',lwd=3,ylim=c(0,0.5),main='',lty=2)
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+legend(x=2,y=0.46,legend=c("Bootstrap", "N(0,1)"),lwd=3,col=c('red','green','blue','black'),lty=c(2,3))
+
+```
+
+```{r}
+## Compare the distributions using the raw bootstrap distribution, and the distribution using the moments only
+
+
+density.boot=density(beta.hat.boot);
+# Theoretical density (from CLT)
+xgrid = seq(from=min(beta.hat.boot),to=max(beta.hat.boot),length.out=100);
+normal.pdf= dnorm(xgrid,mean=mean(beta.hat.boot),sd=sd(beta.hat.boot))
+
+plot(density.boot,xlab="Standardized intercept",col='red',lwd=3,main='',lty=2)
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+legend(x=0.15,y=50,legend=c("Empirical", "Moment-based"),lwd=3,col=c('red','green','blue','black'),lty=c(2,3))
+
+```
+
+
+
+## Small sample size  
+
+
+<b>Reading materials</b>: Slides 50 - 57 in STA108_LinearRegression_S20.pdf.
+
+When the sample size is small, the asymptotic distribution is not close to the true sampling distribution. Neither the central limit theorem or the bootstrap distribution are good approximation of the asymptotic distribution. 
+```{r cache = TRUE}
+# Simulation with small sample size
+# We will demonstrate the case with 5 samples
+# You will find the code in this trunk almost identical with previous code
+
+# Generate one set of data:
+set.seed(1)
+n=10;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+
+error.terms= rnorm(n)*5; # Normal errors!
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+plot(x=x,y=y,pch=16,cex=2)
+abline(b=beta.hat[2],a=beta.hat[1],col='red',lwd=2)
+
+
+## Simulate the true sampling distribution:
+simulate.one.instance<-function(x,beta.true){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  error.terms= (runif(n)-0.5)*5;
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y);
+  return(beta.hat)
+}
+
+### Set the number of replicates to be 10000
+N.sim=1e4;
+true.beta.hat=replicate(N.sim,simulate.one.instance(x,beta.true));
+
+### Obtain the mean and standard deviation using CLT:
+residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+sigma.sq.hat=residual.sum.of.squares/(n-2) # estimates from one instance
+
+  
+### Obtain the bootstrap distribution 
+B=1e5;
+boot.beta.hat=replicate(B,boot.one.instance(covariate=x,outcome=y));
+```
+
+
+```{r}
+density.true=density( (true.beta.hat[2,1,]-mean(true.beta.hat[2,1,]))/sd(true.beta.hat[2,1,]) );
+
+density.boot=density((boot.beta.hat-mean(boot.beta.hat))/sd(boot.beta.hat));
+# Theoretical density (from CLT)
+xgrid = seq(from=-4,to=4,length.out=100);
+normal.pdf= dnorm(xgrid)
+
+
+plot(density.true,xlab="Estimated intercept",lwd=3,ylim=c(0,0.5),xlim=c(-4,4),main='',lty=3)
+lines(density.boot,col='green',lwd=3,lty=2)
+lines(normal.pdf~xgrid,col='red',,lwd=2,lty=2)
+legend(x=2,y=0.5,legend=c("True","Bootstrap","CLT"),lwd=3,col=c('black','green','red'),lty=c(3,2,2))
+
+```
+
+```{r}
+## With very few samples, we have to exploit the parametric assumption
+## In this case, we take advantage of the normality assumption on the errors
+
+
+t.pdf= dt(xgrid,df=n-2)
+
+plot(density.true,xlab="Estimated intercept",lwd=3,ylim=c(0,0.5),xlim=c(-4,4),main='',lty=3)
+lines(density.boot,col='green',lwd=3,lty=2)
+lines(normal.pdf~xgrid,col='red',,lwd=2,lty=2)
+
+lines(t.pdf~xgrid,col='blue',,lwd=2,lty=2)
+legend(x=2,y=0.5,legend=c("True","Bootstrap","CLT",'Student t'),lwd=3,col=c('black','green','red','blue'),lty=c(3,2,2))
+
+```
+
+```{r}
+## The Student t distribution grows more similar to the standard normal as its degrees of freedom increases 
+
+t_dist=dt(xgrid,df=1);
+plot(t_dist~xgrid,xlab="beta 1 hat",col=rgb(1,0,0,0.1),lwd=3,type="l",ylim=c(0,0.5),xlim=c(-5,5),main='')
+
+for(i in 2:10){
+t_dist=dt(xgrid,df=i);
+
+lines(t_dist~xgrid,col=rgb(1,0,0,i/10),lwd=3)
+
+}
+
+legend(x=2,y=0.46,legend=c("Student t", "N(0,1)"),lwd=3,col=c('red','green'))
+
+lines(normal.pdf~xgrid,col=rgb(0,1,0,0.4),lwd=5)
+```

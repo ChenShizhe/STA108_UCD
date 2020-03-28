@@ -1,0 +1,230 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+
+# Statistical inference: confidence Intervals {#ch:CI}
+
+
+<b>Reading materials</b>:  Slides 58 - 73 in STA108_LinearRegression_S20.pdf
+
+
+## Confidence interval
+```{r}
+## We will look at synthetic data here, because we have control over the truth 
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+error.terms= rnorm(n)*5;
+y=Ey+error.terms;
+
+```
+
+```{r}
+# For a given confidence level alpha, construct a 100(1-alpha)% confidence interval 
+
+alpha=0.023;
+# There is a function confint() in R
+fit.lm=lm(y~x+1);
+confint(fit.lm,level=1-alpha)
+
+```
+
+```{r}
+# We will implement our own version
+
+## We actually have most of the part ready
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+beta.sd=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y);
+
+## The only missing piece is the quantile
+conf.int.quantile<-function(alpha,type,...){
+  if(type=="t"){
+    out=qt(c(1-alpha/2,alpha/2), ... ) 
+  }else if (type=="normal"){
+    out=qnorm(c(1-alpha/2,alpha/2), ... ) 
+  }
+  return(out)
+}
+quants<-conf.int.quantile(alpha,type='t',df=n-2)
+
+beta.hat%*%c(1,1)-beta.sd%*%quants
+
+## Compare with the output from confint 
+confint(fit.lm,level=1-alpha)
+
+## How about using bootstrap to construct the CIs?
+boot.fit<-function(covariate,outcome){
+  n=length(outcome);
+  sample_indices = sample(1:n,n,replace=TRUE) # sampling with replacement
+  covariate.boot= covariate[sample_indices]; outcome.boot= outcome[sample_indices];
+   
+  beta.hat=fit.linear.model(covariate=covariate.boot,outcome=outcome.boot);
+  return(t(beta.hat ))
+}
+B=1e5;
+beta.hat.boot=replicate(B,boot.fit(covariate=x,outcome=y));
+
+dim(beta.hat.boot)
+apply(beta.hat.boot[1,,],1,quantile,probs=c(alpha/2,1-alpha/2))
+
+# We can wrap this up into a function
+conf.int<-function(alpha,type,covariate,outcome,B=1e5){
+  
+  beta.hat=fit.linear.model(covariate,outcome);
+  beta.sd=estimate.coef.sd(beta=beta.hat,covariate,outcome);
+  if(type=='bootstrap'){
+    beta.hat.boot=replicate(B,boot.fit(covariate,outcome));
+    out=t(apply(beta.hat.boot[1,,],1,quantile,probs=c(alpha/2,1-alpha/2)));
+  }else if(type=='t'){
+    quants<-conf.int.quantile(alpha,type='t',df=n-2)
+    out=beta.hat%*%c(1,1)-beta.sd%*%quants;
+  }else{
+    quants<-conf.int.quantile(alpha,type='normal')
+    out=beta.hat%*%c(1,1)-beta.sd%*%quants;
+  }
+  
+  colnames(out)=c( paste(round(alpha*50,digits=3),'%'), paste(100-round(alpha*50,digits=3),'%')  )
+  return(out)
+}
+conf.int(alpha=alpha,type='t',covariate=x,outcome=y)
+confint(fit.lm,level=1-alpha)
+```
+
+
+```{r }
+## Verify the coverage of the confidence invervals 
+simulate.one.instance<-function(x,beta.true,alpha){
+  n=length(x);
+  Ey= x*beta.true[2]+beta.true[1];
+  error.terms= rnorm(n)*5;
+  y=Ey+error.terms;
+  CIs=conf.int(alpha=alpha,type='t',covariate=x,outcome=y);
+  return(CIs)
+}
+
+N.sim=1e4;
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+sim.CIs=replicate(N.sim,simulate.one.instance(x,beta.true,alpha));
+```
+
+```{r}
+## Visualize and verify the coverage for the slope 
+coverage=sum(sim.CIs[2,1,]<beta.true[2] & sim.CIs[2,2,]>beta.true[2])/N.sim;
+1-alpha
+
+plot(0,0,col="white",xlim=c(min(sim.CIs[2,1,]),max(sim.CIs[2,2,])),ylim=c(0,20),xlab="Slope",ylab="Index",main=paste('Average Coverage:', signif(coverage,3)))
+abline(v=beta.true[2],lwd=3,col='red')
+for(i in 1:19){
+  segments(sim.CIs[2,1,i],i,sim.CIs[2,2,i],i,lwd=3)
+}
+
+```
+
+### Determine cutoffs
+
+
+We can definite multiple confidence intervals of the same confidence levels for on the same sampling distribution.
+```{r}
+alpha=0.05;
+
+cutoffs=c(0.01,0.025,0.049);
+
+colorlist=c('red','green','blue');
+leg_text=c("1","2","3");
+
+normal.pdf= dnorm(xgrid)
+plot(normal.pdf~xgrid,xlab="beta 1 hat",ylab="Density",col=rgb(0,0,0,1),lwd=3,type="l",ylim=c(0,0.5),xlim=c(-5,5),main='')
+
+for(i in 1:length(cutoffs)){
+lower_bound = qnorm(cutoffs[i]);
+upper_bound = qnorm(1-alpha+cutoffs[i]);
+segments(lower_bound,0,lower_bound,0.5,col=colorlist[i],lwd=3)
+segments(upper_bound,0,upper_bound,0.5,col=colorlist[i],lwd=3)
+segments(lower_bound,i*0.1,upper_bound,i*0.1,col=colorlist[i],lwd=3)
+leg_text[i] =paste(cutoffs[i],"to", 1-alpha+cutoffs[i], "(length:", signif(upper_bound-lower_bound,2), ")");
+}
+legend(x=-5,y=0.5,legend=leg_text,lwd=3,col=colorlist)
+
+
+```
+
+
+## Prediction interval 
+
+```{r}
+set.seed(1)
+n=50;
+x=as.matrix(rnorm(n,mean=10,sd=2),ncol=n);
+beta.true=c(20,0.15)
+Ey= x*beta.true[2]+beta.true[1];
+error.terms= rnorm(n)*5;
+y=Ey+error.terms;
+fit.lm=lm(y~as.vector(x)+1);
+
+alpha=0.05;
+dat.new = data.frame(x=c(10,20));
+
+# Prediction interval (assume normality)
+predict(fit.lm,newdata=dat.new,interval="prediction",level=1-alpha)
+
+# and confidence interval
+predict(fit.lm,newdata=dat.new,interval="confidence",level=1-alpha)
+
+```
+```{r}
+# Implementation is similar to our conf.int function, and is thus skipped.
+# You can verify the coverage by modifying the code above.
+```
+
+## Simultaneous confidence intervals/bands/regions
+
+
+```{r}
+## We will return to the advertising data 
+fit.lm=lm(sales~TV+1,data=dat.advertising)
+fit.lm.sum=summary(fit.lm)
+alpha=0.05;
+xgrid_pred=seq(from=5,to=50,by=2.5);
+dat.new = data.frame(TV=xgrid_pred);
+pointwise=predict(fit.lm,newdata=dat.new,interval="confidence",level=1-alpha)
+
+# Bonferroni corrected:
+Bonf=predict(fit.lm,newdata=dat.new,interval="confidence",level=1-alpha/length(xgrid_pred))
+
+
+# Working-Hotelling
+fstat= qf(1-alpha,2,length(dat.advertising$TV)-2);
+xdense=seq(from=0,to=50,by=0.1);
+Sxx= sum( (dat.advertising$TV-mean(dat.advertising$TV))^2);
+pivot=sqrt(2*fstat)*fit.lm.sum$sigma*sqrt(1/length(dat.advertising$TV)+(xdense-mean(dat.advertising$TV))^2/Sxx);
+ylb=fit.lm$coefficients[2]*xdense+fit.lm$coefficients[1]-pivot;
+yub=fit.lm$coefficients[2]*xdense+fit.lm$coefficients[1]+pivot;
+
+
+plot(dat.advertising$sales~dat.advertising$TV,pch=16,xlim=c(0,50),ylim=c(4,12),xlab='TV',ylab='Sales')
+abline(b=fit.lm$coefficients[2],a=fit.lm$coefficients[1],lwd=3)
+for(i in 1:length(xgrid_pred)){
+
+segments(xgrid_pred[i]-1,Bonf[i,2],xgrid_pred[i]-1,Bonf[i,3],lwd=3,col='green')
+segments(xgrid_pred[i]-1,pointwise[i,2],xgrid_pred[i]-1,pointwise[i,3],lwd=3,col='red')
+
+}
+lines(ylb~xdense,col='blue',lwd=3)
+
+lines(yub~xdense,col='blue',lwd=3)
+legend(x=32,y=6,legend=c("Pointwise", "Bonferroni", "W-H band"), lwd=3, col=c("red","green","blue"))
+```

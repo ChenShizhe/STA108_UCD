@@ -1,0 +1,100 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=FALSE,echo = FALSE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+```
+
+
+
+# Model selection {#ch:selection}
+
+
+```{r}
+library(AER)
+data("Fatalities")
+dat.fatalities = Fatalities[,c('fatal','spirits','unemp','income','beertax','baptist','mormon','drinkage','dry','youngdrivers','miles','gsp')]
+
+```
+## Criteria 
+
+<b>Reading materials</b>:  Slides 166 - 181 in STA108_LinearRegression_S20.pdf.
+
+```{r}
+# Information criteria
+
+
+BIC(fit.full)
+BIC(fit.six)
+
+
+AIC(fit.full)
+AIC(fit.six) 
+  
+```
+
+```{r}
+# cross-validation:
+# We will use a package for this:
+library(boot)
+
+fit.full.g=glm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities);
+fit.six.g=glm(fatal~spirits+unemp+income+beertax+baptist+mormon,data=dat.fatalities)
+
+set.seed(1)
+cv.full.10=cv.glm(dat.fatalities,fit.full.g,K=10)
+cv.full.10$delta
+
+cv.six.10=cv.glm(dat.fatalities,fit.six.g,K=10)
+cv.six.10$delta
+
+# From the helpfile, delta is:
+
+# A vector of length two. The first component is the raw cross-validation estimate of prediction error. The second component is the adjusted cross-validation estimate. The adjustment is designed to compensate for the bias introduced by not using leave-one-out cross-validation.
+
+```
+
+## Selection procedure 
+
+<b>Reading materials</b>:  Slides 182 - 189 in STA108_LinearRegression_S20.pdf.
+
+
+```{r}
+# Model selection procedure 
+
+# Forward selection & AIC
+step(lm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities),direction="forward",k=2) 
+
+
+# Backward selection & AIC
+step(lm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities),direction="backward", k=2)
+
+
+
+# Backward selection & BIC
+step(lm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities),direction="backward", k=log(dim(dat.fatalities)[1]))
+
+
+  
+```
+```{r}
+# Penalized regression: lasso
+library(glmnet)
+
+y=dat.fatalities$fatal; #Number of vehicle fatalities.
+X=as.matrix(dat.fatalities[,c('spirits','unemp','income','beertax','baptist','mormon','drinkage','dry','youngdrivers','miles','gsp')]);
+
+
+fit.cv.glmnet=cv.glmnet(y=y,x=X,nfold=10,family='gaussian');
+        
+fit.cv.glmnet$lambda.min # selected tuning parameter
+
+fit.glmnet=glmnet(x=X,y=y,family='gaussian',alpha=1,lambda=fit.cv.glmnet$lambda.min)
+
+fit.glmnet$beta # One of the fitted coefficient is zero 
+
+```

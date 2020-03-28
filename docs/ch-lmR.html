@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Linear regression with R | Applied Statistical Methods: Regression Analysis</title>
+  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Linear regression with R | Applied Statistical Methods: Regression Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Linear regression with R | Applied Statistical Methods: Regression Analysis" />
+  
+  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  
+
+<meta name="author" content="Shizhe Chen" />
+
+
+<meta name="date" content="2020-03-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="ch-est.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STA 108, Spring 2020</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
+<li class="chapter" data-level="1.4" data-path="ch-lmR.html"><a href="ch-lmR.html#note"><i class="fa fa-check"></i><b>1.4</b> Note</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-est.html"><a href="ch-est.html"><i class="fa fa-check"></i><b>2</b> Estimation</a></li>
+<li class="chapter" data-level="3" data-path="ch-sampling.html"><a href="ch-sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling distribution</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-sampling.html"><a href="ch-sampling.html#understanding-sampling-distribution-via-simulation"><i class="fa fa-check"></i><b>3.1</b> Understanding sampling distribution via simulation</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-sampling.html"><a href="ch-sampling.html#shapes-of-sampling-distributions"><i class="fa fa-check"></i><b>3.2</b> Shapes of sampling distributions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-sampling.html"><a href="ch-sampling.html#asymptotic-distribution"><i class="fa fa-check"></i><b>3.2.1</b> Asymptotic distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="ch-CI.html"><a href="ch-CI.html#prediction-interval"><i class="fa fa-check"></i><b>4.2</b> Prediction interval</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-CI.html"><a href="ch-CI.html#simultaneous-confidence-intervalsbandsregions"><i class="fa fa-check"></i><b>4.3</b> Simultaneous confidence intervals/bands/regions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-test.html"><a href="ch-test.html"><i class="fa fa-check"></i><b>5</b> Statistical inference: Hypothesis testing</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-test.html"><a href="ch-test.html#hypothesit-testing"><i class="fa fa-check"></i><b>5.1</b> Hypothesit testing</a></li>
+<li class="chapter" data-level="5.2" data-path="ch-test.html"><a href="ch-test.html#multiple-testing"><i class="fa fa-check"></i><b>5.2</b> Multiple testing</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Model diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#residual-plot"><i class="fa fa-check"></i><b>6.1</b> Residual plot</a></li>
+<li class="chapter" data-level="6.2" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#remedies-for-non-linearity"><i class="fa fa-check"></i><b>6.2</b> Remedies for non-linearity</a></li>
+<li class="chapter" data-level="6.3" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#independence"><i class="fa fa-check"></i><b>6.3</b> Independence</a></li>
+<li class="chapter" data-level="6.4" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#normality"><i class="fa fa-check"></i><b>6.4</b> Normality</a></li>
+<li class="chapter" data-level="6.5" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#homoscedasticity"><i class="fa fa-check"></i><b>6.5</b> Homoscedasticity</a></li>
+<li class="chapter" data-level="6.6" data-path="ch-diagnostics.html"><a href="ch-diagnostics.html#influential-observations-and-outliers"><i class="fa fa-check"></i><b>6.6</b> Influential Observations and Outliers</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-multiple.html"><a href="ch-multiple.html"><i class="fa fa-check"></i><b>7</b> Multiple covariates</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-multiple.html"><a href="ch-multiple.html#examples"><i class="fa fa-check"></i><b>7.1</b> Examples</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ch-multiple.html"><a href="ch-multiple.html#advertising-data-1"><i class="fa fa-check"></i><b>7.1.1</b> Advertising data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ch-multiple.html"><a href="ch-multiple.html#flu-shot-1"><i class="fa fa-check"></i><b>7.1.2</b> Flu shot</a></li>
+<li class="chapter" data-level="7.1.3" data-path="ch-multiple.html"><a href="ch-multiple.html#project-star-1"><i class="fa fa-check"></i><b>7.1.3</b> Project STAR</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ch-multiple.html"><a href="ch-multiple.html#classification-of-variables"><i class="fa fa-check"></i><b>7.2</b> Classification of variables</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-multiple.html"><a href="ch-multiple.html#least-squares-estimation"><i class="fa fa-check"></i><b>7.3</b> Least squares estimation</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-multiple.html"><a href="ch-multiple.html#underfitting-and-overfitting"><i class="fa fa-check"></i><b>7.4</b> Underfitting and overfitting</a></li>
+<li class="chapter" data-level="7.5" data-path="ch-multiple.html"><a href="ch-multiple.html#sampling-distribution-and-inference"><i class="fa fa-check"></i><b>7.5</b> Sampling distribution and inference</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="ch-multiple.html"><a href="ch-multiple.html#anova"><i class="fa fa-check"></i><b>7.5.1</b> ANOVA</a></li>
+<li class="chapter" data-level="7.5.2" data-path="ch-multiple.html"><a href="ch-multiple.html#wald-test"><i class="fa fa-check"></i><b>7.5.2</b> Wald test</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-selection.html"><a href="ch-selection.html"><i class="fa fa-check"></i><b>8</b> Model selection</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-selection.html"><a href="ch-selection.html#criteria"><i class="fa fa-check"></i><b>8.1</b> Criteria</a></li>
+<li class="chapter" data-level="8.2" data-path="ch-selection.html"><a href="ch-selection.html#selection-procedure"><i class="fa fa-check"></i><b>8.2</b> Selection procedure</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
+<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
+<li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
+<li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
+<li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
+<li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
+<li class="chapter" data-level="C.1" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-univariate"><i class="fa fa-check"></i><b>C.1</b> Simulation and visualization: univariate</a></li>
+<li class="chapter" data-level="C.2" data-path="ch-sim.html"><a href="ch-sim.html#simulation-and-visualization-multivariate"><i class="fa fa-check"></i><b>C.2</b> Simulation and visualization: multivariate</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Applied Statistical Methods: Regression Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch:lmR" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Linear regression with R</h1>
+<p><b>Reading materials</b>: Slides 4 - 12 in STA108_LinearRegression_S20.pdf</p>
+<p>Fitting a linear model is simple in <code>R</code>. The bare minimum requires you to know only two functions <code>lm()</code> and <code>summary()</code>. We will apply linear regression on three data set <code>advertising</code>, <code>flu shot</code>, and <code>Project STAR</code>.</p>
+<div id="advertising-data" class="section level2">
+<h2><span class="header-section-number">1.1</span> Advertising data</h2>
+<p>This data is taken from <a href="http://faculty.marshall.usc.edu/gareth-james/ISL/">An Introduction to Statistical Learning</a>, by James et al. A brief description from Section 2.1 in ISL is provided below. You may read more about the data set in the free e-book.</p>
+<blockquote>
+<p>The Advertising data set consists of the sales of that product in 200 different markets, along with advertising budgets for the product in each of those markets for three different media: TV, radio, and newspaper… It is not possible for our client to directly increase sales of the product. On the other hand, they can control the advertising expenditure in each of the three media. Therefore, if we determine that there is an association between advertising and sales, then we can instruct our client to adjust advertising budgets, thereby indirectly increasing sales. In other words, our goal is to develop an accurate model that can be used to predict sales on the basis of the three media budgets.</p>
+</blockquote>
+<p>It is important to note that we will avoid making any causal statements (i.e., increasing TV advertising budget will increase the sales by …) in our analysis. Causal inference on observational data is another major field in statistics. We will limit our discussion on <b>association</b>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat.advertising=<span class="kw">read.csv</span>(<span class="st">&#39;./data/advertising.csv&#39;</span>);
+<span class="co"># Use the code in Appendix C to visualize this data set</span>
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(GGally)
+<span class="kw">ggpairs</span>(dat.advertising)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># What is X in this data frame?</span>
+dat.advertising=dat.advertising[,<span class="op">-</span><span class="dv">1</span>]</code></pre></div>
+<p>We will consider a simple linear regression model in this chapter. The only covariate/predictor/independent variable that we use here is the TV advertising budget. Therefore, the model is <span class="math display">\[
+    y_i = x_i \beta_1  +\beta_0 +  \epsilon_i, i=1,\ldots, 200,
+    \]</span> where <span class="math inline">\(y_i\)</span> is the <code>sales</code> (1 unit = 1000 dollars) for the <span class="math inline">\(i\)</span>th entry, <span class="math inline">\(x_i\)</span> is the TV advertising budget for the <span class="math inline">\(i\)</span>th entry, <span class="math inline">\(\beta_0\)</span> is the intercept term, and <span class="math inline">\(\beta_1\)</span> is the regression slope. In addition, we assume that the errors <span class="math inline">\(\{\epsilon_i\}_{i=1}^{200}\)</span> satisfy that <span class="math inline">\(\epsilon_1,\ldots, \epsilon_200\)</span> are independently and identically distributed (i.i.d.), <span class="math inline">\(\mathbb{E}[\epsilon_i]= 0\)</span> for <span class="math inline">\(i=1,2,\ldots, 200\)</span> and <span class="math inline">\(\mathrm{var}(\epsilon_i)=\sigma^2\)</span> for <span class="math inline">\(i=1,2,\ldots, 200\)</span>. Recall that we consider fixed design (i.e., <span class="math inline">\(x_i\)</span> is not random) in this course for simplicity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit a simple linear regression</span>
+fit.advertising =<span class="st"> </span><span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.advertising) </code></pre></div>
+<p>We see that <span class="math inline">\(\hat{\beta}_1\)</span> equals 0.05 and <span class="math inline">\(\hat{\beta}_0\)</span> equals 7.03. We can draw the line in the scatter plot.</p>
+<p>How would you interpret the fitted slope and intercept?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Draw the fitted line using ggplot2 </span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> dat.advertising) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> TV, <span class="dt">y =</span> sales)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> <span class="kw">fortify</span>(fit.advertising ), <span class="kw">aes</span>(<span class="dt">x =</span> TV, <span class="dt">y =</span> .fitted),<span class="dt">color=</span><span class="st">&#39;red&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># In fact, you can use the following code without fitting the lm()</span>
+
+<span class="kw">ggplot</span>(<span class="dt">data =</span> dat.advertising，a<span class="kw">es</span>(<span class="dt">x =</span> TV, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The band is a confidence band </span></code></pre></div>
+</div>
+<div id="flu-shot" class="section level2">
+<h2><span class="header-section-number">1.2</span> Flu shot</h2>
+<p>The data come from the following paper: McDonald, C., Hiu, S., AND Tierney, W. (1992). Effects of computer reminders for influenza vaccination on morbidity during influenza epidemics. MD Computing 9, 304-312. (<a href="https://www.ncbi.nlm.nih.gov/pubmed/1522792">link</a>).</p>
+<p>Briefly, in this study, physicians were randomly selected to receive a letter encouraging them to inoculate patients at risk for flu. The treatment of interest is the actual flu shot, and the outcome is an indicator for flu-related hospital visits from the patients. In this data set, you can also find four important background covariates including gender, age, a chronic obstructive pulmonary disease (COPD) indicator, and a heart disease indicator. For further details, read the original publication or Hirano, Imbens, Rubin and Zhou (2000) (<a href="https://www.ncbi.nlm.nih.gov/pubmed/12933526">link</a>), or Chapter 25 in Imbens and Rubin (2015) (<a href="https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB">link</a>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat.flu =<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./data/flu240.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Take a look at size of the data before proceed:</span>
+<span class="kw">dim</span>(dat.flu)
+<span class="kw">colnames</span>(dat.flu)
+<span class="co"># Basic visulization:</span>
+<span class="kw">ggpairs</span>(dat.flu) <span class="co"># This might take a while..</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Do you think the plots are informative?</span>
+
+<span class="co"># One strategy: jittering</span>
+
+<span class="co"># Without jittering:</span>
+<span class="kw">ggplot</span>(dat.flu, <span class="kw">aes</span>(<span class="dt">x=</span>treatment.assigned, <span class="dt">y=</span>outcome)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># With jittering:</span>
+<span class="kw">ggplot</span>(dat.flu, <span class="kw">aes</span>(<span class="dt">x=</span>treatment.assigned, <span class="dt">y=</span>outcome)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.25</span>)</code></pre></div>
+<p>Again, we will consider a simple linear regression model for now. The only covariate/predictor/independent variable that we use here is the treatment assignment. Therefore, the model is <span class="math display">\[
+    y_i = x_i \beta_1  +\beta_0 +  \epsilon_i, i=1,\ldots, 2891,
+    \]</span> where <span class="math inline">\(y_i\)</span> is the <code>outcome</code> (0 or 1) for the <span class="math inline">\(i\)</span>th patient, <span class="math inline">\(x_i\)</span> is the treatment assignment (0 or 1) for the <span class="math inline">\(i\)</span>th patient’s physician, <span class="math inline">\(\beta_0\)</span> is the intercept term, and <span class="math inline">\(\beta_1\)</span> is the regression slope. In addition, we assume that the errors <span class="math inline">\(\{\epsilon_i\}_{i=1}^{2891}\)</span> satisfy that <span class="math inline">\(\epsilon_1,\ldots, \epsilon_2891\)</span> are independently and identically distributed (i.i.d.), <span class="math inline">\(\mathbb{E}[\epsilon_i]= 0\)</span> for <span class="math inline">\(i=1,2,\ldots, 2891\)</span> and <span class="math inline">\(\mathrm{var}(\epsilon_i)=\sigma^2\)</span> for <span class="math inline">\(i=1,2,\ldots, 2891\)</span>. The following code is almost identical to those in the previous section.</p>
+<p>How would you interpret the fitted slope and intercept?</p>
+<p>Are there any violations to the assumptions on <span class="math inline">\(\{\epsilon_i\}_{i=1}^2891\)</span>?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit a simple linear regression</span>
+fit.flu=<span class="st"> </span><span class="kw">lm</span>(outcome<span class="op">~</span>treatment.assigned<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.flu); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.flu) 
+
+<span class="co"># Draw the fitted line using ggplot2 </span>
+<span class="kw">ggplot</span>(dat.flu, <span class="kw">aes</span>(<span class="dt">x=</span>treatment.assigned, <span class="dt">y=</span>outcome)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.25</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+</div>
+<div id="project-star" class="section level2">
+<h2><span class="header-section-number">1.3</span> Project STAR</h2>
+<p>Tennesses Student/Teacher Achievement Ratio study (Project STAR) was conducted in the late 1980s to evaluate the effect of class size on test scores. This dataset has been used as a classic examples in many textbooks and research papers. Brieftly, the study randomly assigned students to small classes, regular classes, and regular classes with a teacher’s aide. In order to randomize properly, schools were enrolled only if they had enough studybody to have at least one class of each type. Once the schools were enrolled, students were randomly assigned to the three types of classes, and one teacher was randomly assigned to one class. You can read more about the study on the Harvard dataverse (<a href="https://dataverse.harvard.edu/dataverse/star">link</a>) or Chapter 9 in Imbens and Rubin (2015) (<a href="https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB">link</a>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(AER)
+<span class="kw">data</span>(<span class="st">&quot;STAR&quot;</span>)
+dat.STAR=STAR; <span class="co"># Just to be consistent</span>
+<span class="co"># Take a look at size of the data before proceed:</span>
+<span class="kw">dim</span>(dat.STAR)
+<span class="kw">colnames</span>(dat.STAR)
+<span class="co"># With 47 variables, you might want to read the help file to see what these variables are.</span>
+
+
+<span class="co"># Basic visulization:</span>
+<span class="co"># ggpairs(dat.flu) # This might take a really long time ...</span>
+
+<span class="co"># We will consider the math scores and the class assignments in the second grade</span>
+
+<span class="co"># With jittering:</span>
+<span class="kw">ggplot</span>(dat.STAR, <span class="kw">aes</span>(<span class="dt">x=</span>star2, <span class="dt">y=</span>math2)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.25</span>)</code></pre></div>
+<p>Again, we will consider a simple linear regression model for now. We will study the association between math scores and the class assignments in the second grade. Therefore, the model is <span class="math display">\[
+    y_i =\beta_0 + x_{i,1} \beta_1  +x_{i,2} \beta_2  +  \epsilon_i, i=1,\ldots, 2891,
+    \]</span> where <span class="math inline">\(y_i\)</span> is the math score for the <span class="math inline">\(i\)</span>th student, <span class="math inline">\(x_{i,1}\)</span> is an indicator (0 or 1) whether the <span class="math inline">\(i\)</span>th student is in the small class, and <span class="math inline">\(x_{i,1}\)</span> is an indicator (0 or 1) whether the <span class="math inline">\(i\)</span>th student is in the regular class with aide, <span class="math inline">\(\beta_0\)</span> is the intercept term, and <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> are the regression coefficients for <span class="math inline">\(x_{i,1}\)</span> and <span class="math inline">\(x_{i,2}\)</span> , respectively. In addition, we assume that the errors <span class="math inline">\(\{\epsilon_i\}_{i=1}^{2891}\)</span> satisfy that <span class="math inline">\(\epsilon_1,\ldots, \epsilon_2891\)</span> are independently and identically distributed (i.i.d.), <span class="math inline">\(\mathbb{E}[\epsilon_i]= 0\)</span> for <span class="math inline">\(i=1,2,\ldots, 2891\)</span> and <span class="math inline">\(\mathrm{var}(\epsilon_i)=\sigma^2\)</span> for <span class="math inline">\(i=1,2,\ldots, 2891\)</span>. The following code is almost identical to those in the previous section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit a simple linear regression</span>
+fit.STAR=<span class="st"> </span><span class="kw">lm</span>(math2<span class="op">~</span><span class="kw">as.factor</span>(star2)<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.STAR); 
+<span class="co"># Summarize the fitted results</span>
+<span class="kw">summary</span>(fit.STAR) 
+
+<span class="co"># We can no longer draw a fitted line here...</span></code></pre></div>
+</div>
+<div id="note" class="section level2">
+<h2><span class="header-section-number">1.4</span> Note</h2>
+<p>In the the midterm projects, you will be asked to reproduce the analysis on the <code>advertising</code> data using your own functions. The hope is that, by reinventing the wheels, you will have a thorough understanding of regression.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-est.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STA108_bookdown.pdf", "STA108_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

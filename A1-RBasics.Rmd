@@ -1,0 +1,216 @@
+---
+output:
+  bookdown::gitbook:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+# R basics  {#ch:RBasics}
+
+<b>Reading materials</b>: Sections 4, 6, and 8 in [R for data science](https://r4ds.had.co.nz/index.html) by Garrett Grolemund and Hadley Wickham (optional).
+
+This section reviews some basic functions in `R` that will be useful in this class.
+
+```{r}
+
+## Generating a vector with seq()
+
+seq(from = 3.1, to = 8.9, by = 0.8)
+seq(from = 3.1, to = 8.9, length.out = 10)
+# seq(from = 3.1, to = 8.9, by=1, length.out = 10)
+
+### checking for equality of two vectors
+a=1:3
+b=c(1,2,3) #b<-c(1,2,3)
+a == b
+
+### How do we check if *all* entries are the same?
+all(a==b)
+
+### How about the identical function?
+identical(a,b)
+typeof(a)
+typeof(b)
+
+### Logical and character vectors
+u = c(T,F,T,F,F,T)
+typeof(u)
+
+### Define character vectors
+w=c('a', 'b','c','e');
+
+### What happens when merging character vectors with numbers?
+y=c(1:3,w)
+typeof(y[1])
+y=c(pi,w)
+
+### What if we force them to be numeric?
+#?as.numeric
+as.numeric(y[1])
+as.numeric(y)
+
+### Searching for elements of a vector
+### Using > == < & |, and which
+x = c(1,3,4,6.7,-4,NA,-2.9)
+
+x
+x==1
+x> 1
+x< 1
+x >= 1
+x<=1
+x<0
+x[5]
+
+x[which(x<0)]
+x[x<0]
+
+
+### Filtering of vectors
+# 0< x < 2
+x[(0 < x) & (x < 2)]
+which((0 < x) & (x < 2))
+
+x[ !(x<0)]
+!(x<0)
+x[-5]
+
+
+```
+
+
+## Summary statistics
+
+```{r}
+x = c(1,3,4,6.7,-4,NA,-2.9)
+x
+
+length(x) # you have seen this already
+sum(x) # summation of all elements of x
+sd(x) # standard deviation
+### Why are they all NA?
+
+### working with NA (missing values), NULL, and NaN
+y=NULL;
+0/0 # NaN
+
+1/0
+-1/0
+### How would you find the NAs in x?
+x==NA
+which(is.na(x))
+is.null(y)
+#is.nan()
+#is.infinite()
+
+
+sum(x,na.rm=TRUE)
+# ?sum
+args(sum) # check the default argument(s) for sum()
+example(sum)
+### Summarize  matrices using apply()
+```
+
+## Data structures
+
+### String
+```{r}
+
+wrd = c("a","new","sentence")
+u = c("_","!","?")
+wrd
+typeof(wrd)
+
+print("this is a sentence")
+length("this is a sentence")
+length(wrd)
+
+### Use paste() function to manipulate strings
+paste(wrd,u,sep="/")
+
+### Use strsplit() to split strings
+split.str=strsplit("this is a sentence", split=" ")
+
+typeof(split.str)
+length(split.str)
+split.str[[1]]
+```
+
+### Data frame
+
+
+```{r}
+### manipulation of data frame with base R
+### No dplyr
+### creating and accessing data frame
+name =c("Bob","Jane")
+age = c(19,21)
+GPA = c(3.2,3.6)
+students = data.frame(name,age,GPA,stringsAsFactors=F)
+students
+str(students)
+
+
+### Add new entry into the data frame
+students = rbind(students,c("Ashley",20,3.4))
+
+### Add new variable:
+students = cbind(students,resident=c(T,F,T))
+
+students
+##-------------------------------------##
+```
+
+## List
+
+```{r}
+## List ####
+bob=list(name="bob",age=19,school="UCD",GPA=3.2,resident=T)
+
+### Use lapply() with list
+newlist = list(field_one= runif(10), field_two=runif(20),field_three=runif(50) );
+lapply(newlist,sum)
+##-------------------------------------##
+
+```
+
+## Functions in `R`
+
+```{r}
+### Evaluating a function
+x = seq(0,1,0.05)
+x
+y = sin(2*pi*x)*exp(-4*x^2)
+
+### Writing a function
+sinexp = function(z){
+  y=sin(2*pi*z)*exp(-4*z^2);
+  return(y)
+}
+
+sinexp(x)
+w=sinexp(x)
+
+y==w
+all(y==w)
+identical(y,w)
+```
+
+## Miscellaneous
+
+```{r}
+### Checking the state of work session
+objects()  # all the objects in the current R session
+getwd()  # print the current working directory
+remove()
+#setwd()
+
+#?persp
+example(persp)
+
+#data()
+```

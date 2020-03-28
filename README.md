@@ -1,9 +1,7 @@
 
 Copyright 2020 Shizhe Chen
 
-## STA 207: Statistical Methods for Research II
-
-This book intends to provide a summary of lectures for STA 207 in the winter quarter 2020. Files will be constantly updated, and might contain various typos and mistakes. 
+## STA 108
 
 #### License
 

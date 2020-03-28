@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-03-27" />
+<meta name="date" content="2020-03-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -203,18 +203,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="ch:est" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Estimation</h1>
 <p><b>Reading materials</b>: Slides 13 - 23 in STA108_LinearRegression_S20.pdf</p>
-<ul>
-<li>Fourth week: Least squares estimation: optimization (Slides 22-27) Sum of squares: (Slides 28 - 30) + add projection in this discussion</li>
-</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Consider the advertising dataset</span>
 dat.advertising=<span class="kw">read.csv</span>(<span class="st">&#39;./data/advertising.csv&#39;</span>);
 <span class="co"># obtain the residuals:</span>
 x=dat.advertising<span class="op">$</span>TV;
 y=dat.advertising<span class="op">$</span>sales;
-beta1=<span class="dv">1</span>;beta0=<span class="fl">0.2</span>; <span class="co"># Just two arbitrary numbers </span>
+beta1=<span class="dv">1</span>;beta0=<span class="fl">0.2</span>; <span class="co"># Just two arbitrary numbers</span>
 res=y<span class="op">-</span>x<span class="op">*</span>beta1<span class="op">-</span>beta0;
 
-<span class="co"># What if we want to feed in different numbers? </span>
+<span class="co"># What if we want to feed in different numbers?</span>
 
 <span class="co"># Write a function that can calculate x*beta1 + beta0</span>
 
@@ -236,10 +233,10 @@ beta=<span class="kw">c</span>(<span class="dv">4</span>,<span class="fl">0.03</
 
 yout=<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV);
 <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(dat.advertising)[<span class="dv">1</span>]){
-  <span class="kw">segments</span>(<span class="dt">x0=</span>dat.advertising<span class="op">$</span>TV[i], <span class="dt">y0=</span>yout[i],  <span class="dt">y1 =</span> dat.advertising<span class="op">$</span>sales[i],<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>) 
+  <span class="kw">segments</span>(<span class="dt">x0=</span>dat.advertising<span class="op">$</span>TV[i], <span class="dt">y0=</span>yout[i],  <span class="dt">y1 =</span> dat.advertising<span class="op">$</span>sales[i],<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)
 }</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We can see that the line is less than ideal</span>
-<span class="co"># We will move on to find the minimizer of the squared error loss </span>
+<span class="co"># We will move on to find the minimizer of the squared error loss</span>
 
 sum.of.squares&lt;-<span class="cf">function</span>(beta,covariate,outcome){
   yout=<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta,<span class="dt">covariate=</span>covariate);
@@ -264,17 +261,17 @@ fit.linear.model&lt;-<span class="cf">function</span>(covariate,outcome){
 
 beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV,<span class="dt">outcome=</span>dat.advertising<span class="op">$</span>sales)
 
-<span class="co"># 3. Write your own version of Newton-Raphson method, or gradient descent </span>
-<span class="co"># Not required or taught in this class </span>
+<span class="co"># 3. Write your own version of Newton-Raphson method, or gradient descent</span>
+<span class="co"># Not required or taught in this class</span>
 
 <span class="co"># We might want to check if our solution matches that from lm()</span>
 
-fit.advertising=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising); 
+fit.advertising=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising);
 
 fit.advertising<span class="op">$</span>coef
 beta.hat
 beta.hat.optim</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the decomposition of sum of squares </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the decomposition of sum of squares</span>
 residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV,<span class="dt">outcome=</span>dat.advertising<span class="op">$</span>sales)
 explained.sum.of.squares=<span class="kw">sum</span>((<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV)<span class="op">-</span><span class="kw">mean</span>(dat.advertising<span class="op">$</span>sales))<span class="op">^</span><span class="dv">2</span>)
 total.sum.of.squares=<span class="kw">sum</span>((dat.advertising<span class="op">$</span>sales<span class="op">-</span><span class="kw">mean</span>(dat.advertising<span class="op">$</span>sales))<span class="op">^</span><span class="dv">2</span>)
@@ -284,13 +281,13 @@ total.sum.of.squares
 explained.sum.of.squares<span class="op">+</span>residual.sum.of.squares
 
 <span class="co"># But if we use identical()...</span>
-<span class="kw">identical</span>(total.sum.of.squares,explained.sum.of.squares<span class="op">+</span>residual.sum.of.squares) 
+<span class="kw">identical</span>(total.sum.of.squares,explained.sum.of.squares<span class="op">+</span>residual.sum.of.squares)
 
 
 <span class="co"># Calculate the coefficient of determination</span>
 R.sq=<span class="st"> </span>explained.sum.of.squares<span class="op">/</span>total.sum.of.squares;
 
-<span class="co"># Calculate the Pearson sample correlation </span>
+<span class="co"># Calculate the Pearson sample correlation</span>
 cor.hat=<span class="kw">cor</span>(dat.advertising<span class="op">$</span>TV,dat.advertising<span class="op">$</span>sales)
 
 <span class="co"># Verify the identity:</span>

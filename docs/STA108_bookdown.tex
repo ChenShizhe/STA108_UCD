@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-03-28}
+    \date{2020-03-29}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -146,13 +146,14 @@
 \chapter*{Preface}\label{pre}
 \addcontentsline{toc}{chapter}{Preface}
 
-This Gitbook only contains code and some comments that will be filled up
-slowly throughout the quarter. Lecture notes are available in separate
-files that you can find on Canvas.
+This Gitbook contains code for STA 108. Lecture notes can be found in
+folder `notes' or on the course website on Canvas. The Githbook is a
+work-in-progress, and materials in this Gitbook are updated constantly.
 
-\chapter{Linear regression with R}\label{ch:lmR}
+\chapter{\texorpdfstring{Linear regression with
+\texttt{R}}{Linear regression with R}}\label{ch:lmR}
 
-Reading materials: Slides 4 - 12 in STA108\_LinearRegression\_S20.pdf
+Reading materials: Slides 3 - 11 in STA108\_LinearRegression\_S20.pdf.
 
 Fitting a linear model is simple in \texttt{R}. The bare minimum
 requires you to know only two functions \texttt{lm()} and
@@ -416,7 +417,7 @@ of regression.
 
 \chapter{Estimation}\label{ch:est}
 
-Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
+Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -425,10 +426,10 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 \CommentTok{# obtain the residuals:}
 \NormalTok{x=dat.advertising}\OperatorTok{$}\NormalTok{TV;}
 \NormalTok{y=dat.advertising}\OperatorTok{$}\NormalTok{sales;}
-\NormalTok{beta1=}\DecValTok{1}\NormalTok{;beta0=}\FloatTok{0.2}\NormalTok{; }\CommentTok{# Just two arbitrary numbers}
+\NormalTok{beta1=}\DecValTok{1}\NormalTok{;beta0=}\FloatTok{0.2}\NormalTok{; }\CommentTok{# Just two arbitrary numbers }
 \NormalTok{res=y}\OperatorTok{-}\NormalTok{x}\OperatorTok{*}\NormalTok{beta1}\OperatorTok{-}\NormalTok{beta0;}
 
-\CommentTok{# What if we want to feed in different numbers?}
+\CommentTok{# What if we want to feed in different numbers? }
 
 \CommentTok{# Write a function that can calculate x*beta1 + beta0}
 
@@ -455,7 +456,7 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 
 \NormalTok{yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{dim}\NormalTok{(dat.advertising)[}\DecValTok{1}\NormalTok{])\{}
-  \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ dat.advertising}\OperatorTok{$}\NormalTok{sales[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{)}
+  \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ dat.advertising}\OperatorTok{$}\NormalTok{sales[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{) }
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -463,7 +464,7 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# We can see that the line is less than ideal}
-\CommentTok{# We will move on to find the minimizer of the squared error loss}
+\CommentTok{# We will move on to find the minimizer of the squared error loss }
 
 \NormalTok{sum.of.squares<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
 \NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate);}
@@ -488,12 +489,12 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 
 \NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 
-\CommentTok{# 3. Write your own version of Newton-Raphson method, or gradient descent}
-\CommentTok{# Not required or taught in this class}
+\CommentTok{# 3. Write your own version of Newton-Raphson method, or gradient descent }
+\CommentTok{# Not required or taught in this class }
 
 \CommentTok{# We might want to check if our solution matches that from lm()}
 
-\NormalTok{fit.advertising=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising);}
+\NormalTok{fit.advertising=}\KeywordTok{lm}\NormalTok{(sales}\OperatorTok{~}\NormalTok{TV}\OperatorTok{+}\DecValTok{1}\NormalTok{,}\DataTypeTok{data=}\NormalTok{dat.advertising); }
 
 \NormalTok{fit.advertising}\OperatorTok{$}\NormalTok{coef}
 \NormalTok{beta.hat}
@@ -503,7 +504,7 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Calculate the decomposition of sum of squares}
+\CommentTok{# Calculate the decomposition of sum of squares }
 \NormalTok{residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 \NormalTok{explained.sum.of.squares=}\KeywordTok{sum}\NormalTok{((}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV)}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
 \NormalTok{total.sum.of.squares=}\KeywordTok{sum}\NormalTok{((dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
@@ -513,13 +514,13 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 \NormalTok{explained.sum.of.squares}\OperatorTok{+}\NormalTok{residual.sum.of.squares}
 
 \CommentTok{# But if we use identical()...}
-\KeywordTok{identical}\NormalTok{(total.sum.of.squares,explained.sum.of.squares}\OperatorTok{+}\NormalTok{residual.sum.of.squares)}
+\KeywordTok{identical}\NormalTok{(total.sum.of.squares,explained.sum.of.squares}\OperatorTok{+}\NormalTok{residual.sum.of.squares) }
 
 
 \CommentTok{# Calculate the coefficient of determination}
 \NormalTok{R.sq=}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
 
-\CommentTok{# Calculate the Pearson sample correlation}
+\CommentTok{# Calculate the Pearson sample correlation }
 \NormalTok{cor.hat=}\KeywordTok{cor}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV,dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 
 \CommentTok{# Verify the identity:}
@@ -535,7 +536,7 @@ Reading materials: Slides 13 - 23 in STA108\_LinearRegression\_S20.pdf
 \section{Understanding sampling distribution via
 simulation}\label{understanding-sampling-distribution-via-simulation}
 
-Reading materials: Slides 24 - 33 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slides 23 - 32 in STA108\_LinearRegression\_S20.pdf.
 
 In this section, we assume a true data generating model in order to draw
 samples from the true popluation distribution. In particular, we assume
@@ -719,7 +720,7 @@ Q: How would you verify the Gauss-Markove theorem in this simulation?
 \section{Shapes of sampling
 distributions}\label{shapes-of-sampling-distributions}
 
-Reading materials: Slide 34 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slide 33 in STA108\_LinearRegression\_S20.pdf.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -744,7 +745,7 @@ Reading materials: Slide 34 in STA108\_LinearRegression\_S20.pdf.
 
 \subsection{Asymptotic distribution}\label{asymptotic-distribution}
 
-Reading materials: Slides 35 - 49 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slides 34 - 48 in STA108\_LinearRegression\_S20.pdf.
 
 The L-F central limit theorem claims that the asymptotic distribution
 for \(\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }\) is
@@ -880,7 +881,7 @@ for \(\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }\) is
 
 \section{Small sample size}\label{small-sample-size}
 
-Reading materials: Slides 50 - 57 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slides 49 - 57 in STA108\_LinearRegression\_S20.pdf.
 
 When the sample size is small, the asymptotic distribution is not close
 to the true sampling distribution. Neither the central limit theorem or
@@ -989,9 +990,9 @@ distribution.
 \end{Highlighting}
 \end{Shaded}
 
-\chapter{Statistical inference: confidence Intervals}\label{ch:CI}
+\chapter{Statistical inference: Confidence Intervals}\label{ch:CI}
 
-Reading materials: Slides 58 - 73 in STA108\_LinearRegression\_S20.pdf
+Reading materials: Slides 57 - 72 in STA108\_LinearRegression\_S20.pdf.
 
 \section{Confidence interval}\label{confidence-interval}
 
@@ -1220,7 +1221,7 @@ intervals/bands/regions}\label{simultaneous-confidence-intervalsbandsregions}
 
 \chapter{Statistical inference: Hypothesis testing}\label{ch:test}
 
-Reading materials: Slides 74 - 92 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slides 73 - 91 in STA108\_LinearRegression\_S20.pdf.
 
 We will continue working on synthetic data in this chapter.
 
@@ -1478,7 +1479,7 @@ We will continue working on synthetic data in this chapter.
 
 \chapter{Model diagnostics}\label{ch:diagnostics}
 
-Reading materials: Slides 93 - 101 in STA108\_LinearRegression\_S20.pdf.
+Reading materials: Slides 92 - 100 in STA108\_LinearRegression\_S20.pdf.
 
 Note: we will use existing functions in \texttt{R} for model diagnostics
 in this chapter. However, in your midterm report, you are still required
@@ -1730,11 +1731,11 @@ influential observations and outliers in this class.
 
 \section{Examples}\label{examples}
 
-Reading materials: Slides 103 - 111 in
+Reading materials: Slides 101 - 110 in
 STA108\_LinearRegression\_S20.pdf.
 
 We will revisit the examples that have been studied in Chapter
-\ref{lmR}.
+\ref{ch:lmR}.
 
 \subsection{Advertising data}\label{advertising-data-1}
 
@@ -1820,7 +1821,7 @@ additional factor in the regression.
 
 \section{Classification of variables}\label{classification-of-variables}
 
-Reading materials: Slides 112 - 118 in
+Reading materials: Slides 111 - 118 in
 STA108\_LinearRegression\_S20.pdf.
 
 We will use simulation to examine the roles of the variables.
@@ -2185,15 +2186,101 @@ using \texttt{anova}.
 
 \chapter{Model selection}\label{ch:selection}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(AER)}
+\KeywordTok{data}\NormalTok{(}\StringTok{"Fatalities"}\NormalTok{)}
+\NormalTok{dat.fatalities =}\StringTok{ }\NormalTok{Fatalities[,}\KeywordTok{c}\NormalTok{(}\StringTok{'fatal'}\NormalTok{,}\StringTok{'spirits'}\NormalTok{,}\StringTok{'unemp'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'beertax'}\NormalTok{,}\StringTok{'baptist'}\NormalTok{,}\StringTok{'mormon'}\NormalTok{,}\StringTok{'drinkage'}\NormalTok{,}\StringTok{'dry'}\NormalTok{,}\StringTok{'youngdrivers'}\NormalTok{,}\StringTok{'miles'}\NormalTok{,}\StringTok{'gsp'}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Criteria}\label{criteria}
 
-Reading materials: Slides 166 - 181 in
+Reading materials: Slides 166 - 180 in
 STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Information criteria}
+
+
+\NormalTok{fit.full=}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities);}
+\NormalTok{fit.six=}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon,}\DataTypeTok{data=}\NormalTok{dat.fatalities)}
+
+\KeywordTok{BIC}\NormalTok{(fit.full)}
+\KeywordTok{BIC}\NormalTok{(fit.six)}
+
+
+\KeywordTok{AIC}\NormalTok{(fit.full)}
+\KeywordTok{AIC}\NormalTok{(fit.six) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# cross-validation:}
+\CommentTok{# We will use a package for this:}
+\KeywordTok{library}\NormalTok{(boot)}
+
+
+\NormalTok{fit.full.g=}\KeywordTok{glm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities);}
+\NormalTok{fit.six.g=}\KeywordTok{glm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon,}\DataTypeTok{data=}\NormalTok{dat.fatalities)}
+
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{cv.full.}\DecValTok{10}\NormalTok{=}\KeywordTok{cv.glm}\NormalTok{(dat.fatalities,fit.full.g,}\DataTypeTok{K=}\DecValTok{10}\NormalTok{)}
+\NormalTok{cv.full.}\DecValTok{10}\OperatorTok{$}\NormalTok{delta}
+
+\NormalTok{cv.six.}\DecValTok{10}\NormalTok{=}\KeywordTok{cv.glm}\NormalTok{(dat.fatalities,fit.six.g,}\DataTypeTok{K=}\DecValTok{10}\NormalTok{)}
+\NormalTok{cv.six.}\DecValTok{10}\OperatorTok{$}\NormalTok{delta}
+
+\CommentTok{# From the helpfile, delta is:}
+
+\CommentTok{# A vector of length two. The first component is the raw cross-validation estimate of prediction error. The second component is the adjusted cross-validation estimate. The adjustment is designed to compensate for the bias introduced by not using leave-one-out cross-validation.}
+\end{Highlighting}
+\end{Shaded}
 
 \section{Selection procedure}\label{selection-procedure}
 
-Reading materials: Slides 182 - 189 in
+Reading materials: Slides 181 - 190 in
 STA108\_LinearRegression\_S20.pdf.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Model selection procedure }
+
+\CommentTok{# Forward selection & AIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"forward"}\NormalTok{,}\DataTypeTok{k=}\DecValTok{2}\NormalTok{) }
+
+
+\CommentTok{# Backward selection & AIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"backward"}\NormalTok{, }\DataTypeTok{k=}\DecValTok{2}\NormalTok{)}
+
+
+
+\CommentTok{# Backward selection & BIC}
+\KeywordTok{step}\NormalTok{(}\KeywordTok{lm}\NormalTok{(fatal}\OperatorTok{~}\NormalTok{spirits}\OperatorTok{+}\NormalTok{unemp}\OperatorTok{+}\NormalTok{income}\OperatorTok{+}\NormalTok{beertax}\OperatorTok{+}\NormalTok{baptist}\OperatorTok{+}\NormalTok{mormon}\OperatorTok{+}\NormalTok{drinkage}\OperatorTok{+}\NormalTok{dry}\OperatorTok{+}\NormalTok{youngdrivers}\OperatorTok{+}\NormalTok{miles}\OperatorTok{+}\NormalTok{gsp,}\DataTypeTok{data=}\NormalTok{dat.fatalities),}\DataTypeTok{direction=}\StringTok{"backward"}\NormalTok{, }\DataTypeTok{k=}\KeywordTok{log}\NormalTok{(}\KeywordTok{dim}\NormalTok{(dat.fatalities)[}\DecValTok{1}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Penalized regression: lasso}
+\KeywordTok{library}\NormalTok{(glmnet)}
+
+\NormalTok{y=dat.fatalities}\OperatorTok{$}\NormalTok{fatal; }\CommentTok{#Number of vehicle fatalities.}
+\NormalTok{X=}\KeywordTok{as.matrix}\NormalTok{(dat.fatalities[,}\KeywordTok{c}\NormalTok{(}\StringTok{'spirits'}\NormalTok{,}\StringTok{'unemp'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'beertax'}\NormalTok{,}\StringTok{'baptist'}\NormalTok{,}\StringTok{'mormon'}\NormalTok{,}\StringTok{'drinkage'}\NormalTok{,}\StringTok{'dry'}\NormalTok{,}\StringTok{'youngdrivers'}\NormalTok{,}\StringTok{'miles'}\NormalTok{,}\StringTok{'gsp'}\NormalTok{)]);}
+
+
+\NormalTok{fit.cv.glmnet=}\KeywordTok{cv.glmnet}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{x=}\NormalTok{X,}\DataTypeTok{nfold=}\DecValTok{10}\NormalTok{,}\DataTypeTok{family=}\StringTok{'gaussian'}\NormalTok{);}
+        
+\NormalTok{fit.cv.glmnet}\OperatorTok{$}\NormalTok{lambda.min }\CommentTok{# selected tuning parameter}
+
+\NormalTok{fit.glmnet=}\KeywordTok{glmnet}\NormalTok{(}\DataTypeTok{x=}\NormalTok{X,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{family=}\StringTok{'gaussian'}\NormalTok{,}\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{,}\DataTypeTok{lambda=}\NormalTok{fit.cv.glmnet}\OperatorTok{$}\NormalTok{lambda.min)}
+
+\NormalTok{fit.glmnet}\OperatorTok{$}\NormalTok{beta }\CommentTok{# One of the fitted coefficient is zero }
+\end{Highlighting}
+\end{Shaded}
 
 \appendix
 
@@ -2207,33 +2294,388 @@ Grolemund and Hadley Wickham (optional).
 This section reviews some basic functions in \texttt{R} that will be
 useful in this class.
 
+\section{\texorpdfstring{Basic objects in
+\texttt{R}}{Basic objects in R}}\label{basic-objects-in-r}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Generating a vector with seq()}
+
+\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{3.1}\NormalTok{, }\DataTypeTok{to =} \FloatTok{8.9}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.8}\NormalTok{)}
+\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{3.1}\NormalTok{, }\DataTypeTok{to =} \FloatTok{8.9}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{10}\NormalTok{)}
+\CommentTok{# seq(from = 3.1, to = 8.9, by=1, length.out = 10)}
+
+\NormalTok{### checking for equality of two vectors}
+\NormalTok{a=}\DecValTok{1}\OperatorTok{:}\DecValTok{3}
+\NormalTok{b=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{#b<-c(1,2,3)}
+\NormalTok{a }\OperatorTok{==}\StringTok{ }\NormalTok{b}
+
+\NormalTok{### How do we check if *all* entries are the same?}
+\KeywordTok{all}\NormalTok{(a}\OperatorTok{==}\NormalTok{b)}
+
+\NormalTok{### How about the identical function?}
+\KeywordTok{identical}\NormalTok{(a,b)}
+\KeywordTok{typeof}\NormalTok{(a)}
+\KeywordTok{typeof}\NormalTok{(b)}
+
+\NormalTok{### Logical and character vectors}
+\NormalTok{u =}\StringTok{ }\KeywordTok{c}\NormalTok{(T,F,T,F,F,T)}
+\KeywordTok{typeof}\NormalTok{(u)}
+
+\NormalTok{### Define character vectors}
+\NormalTok{w=}\KeywordTok{c}\NormalTok{(}\StringTok{'a'}\NormalTok{, }\StringTok{'b'}\NormalTok{,}\StringTok{'c'}\NormalTok{,}\StringTok{'e'}\NormalTok{);}
+
+\NormalTok{### What happens when merging character vectors with numbers?}
+\NormalTok{y=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{,w)}
+\KeywordTok{typeof}\NormalTok{(y[}\DecValTok{1}\NormalTok{])}
+\NormalTok{y=}\KeywordTok{c}\NormalTok{(pi,w)}
+
+\NormalTok{### What if we force them to be numeric?}
+\CommentTok{#?as.numeric}
+\KeywordTok{as.numeric}\NormalTok{(y[}\DecValTok{1}\NormalTok{])}
+\KeywordTok{as.numeric}\NormalTok{(y)}
+
+\NormalTok{### Searching for elements of a vector}
+\NormalTok{### Using > == < & |, and which}
+\NormalTok{x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{6.7}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\OperatorTok{-}\FloatTok{2.9}\NormalTok{)}
+
+\NormalTok{x}
+\NormalTok{x}\OperatorTok{==}\DecValTok{1}
+\NormalTok{x}\OperatorTok{>}\StringTok{ }\DecValTok{1}
+\NormalTok{x}\OperatorTok{<}\StringTok{ }\DecValTok{1}
+\NormalTok{x }\OperatorTok{>=}\StringTok{ }\DecValTok{1}
+\NormalTok{x}\OperatorTok{<=}\DecValTok{1}
+\NormalTok{x}\OperatorTok{<}\DecValTok{0}
+\NormalTok{x[}\DecValTok{5}\NormalTok{]}
+
+\NormalTok{x[}\KeywordTok{which}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)]}
+\NormalTok{x[x}\OperatorTok{<}\DecValTok{0}\NormalTok{]}
+
+
+\NormalTok{### Filtering of vectors}
+\CommentTok{# 0< x < 2}
+\NormalTok{x[(}\DecValTok{0} \OperatorTok{<}\StringTok{ }\NormalTok{x) }\OperatorTok{&}\StringTok{ }\NormalTok{(x }\OperatorTok{<}\StringTok{ }\DecValTok{2}\NormalTok{)]}
+\KeywordTok{which}\NormalTok{((}\DecValTok{0} \OperatorTok{<}\StringTok{ }\NormalTok{x) }\OperatorTok{&}\StringTok{ }\NormalTok{(x }\OperatorTok{<}\StringTok{ }\DecValTok{2}\NormalTok{))}
+
+\NormalTok{x[ }\OperatorTok{!}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)]}
+\OperatorTok{!}\NormalTok{(x}\OperatorTok{<}\DecValTok{0}\NormalTok{)}
+\NormalTok{x[}\OperatorTok{-}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Summary statistics}\label{summary-statistics}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{6.7}\NormalTok{,}\OperatorTok{-}\DecValTok{4}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\OperatorTok{-}\FloatTok{2.9}\NormalTok{)}
+\NormalTok{x}
+
+\KeywordTok{length}\NormalTok{(x) }\CommentTok{# you have seen this already}
+\KeywordTok{sum}\NormalTok{(x) }\CommentTok{# summation of all elements of x}
+\KeywordTok{sd}\NormalTok{(x) }\CommentTok{# standard deviation}
+\NormalTok{### Why are they all NA?}
+
+\NormalTok{### working with NA (missing values), NULL, and NaN}
+\NormalTok{y=}\OtherTok{NULL}\NormalTok{;}
+\DecValTok{0}\OperatorTok{/}\DecValTok{0} \CommentTok{# NaN}
+
+\DecValTok{1}\OperatorTok{/}\DecValTok{0}
+\OperatorTok{-}\DecValTok{1}\OperatorTok{/}\DecValTok{0}
+\NormalTok{### How would you find the NAs in x?}
+\NormalTok{x}\OperatorTok{==}\OtherTok{NA}
+\KeywordTok{which}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x))}
+\KeywordTok{is.null}\NormalTok{(y)}
+\CommentTok{#is.nan()}
+\CommentTok{#is.infinite()}
+
+
+\KeywordTok{sum}\NormalTok{(x,}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\CommentTok{# ?sum}
+\KeywordTok{args}\NormalTok{(sum) }\CommentTok{# check the default argument(s) for sum()}
+\KeywordTok{example}\NormalTok{(sum)}
+\NormalTok{### Summarize  matrices using apply()}
+\end{Highlighting}
+\end{Shaded}
 
 \section{Data structures}\label{data-structures}
 
 \subsection{String}\label{string}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wrd =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"new"}\NormalTok{,}\StringTok{"sentence"}\NormalTok{)}
+\NormalTok{u =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"_"}\NormalTok{,}\StringTok{"!"}\NormalTok{,}\StringTok{"?"}\NormalTok{)}
+\NormalTok{wrd}
+\KeywordTok{typeof}\NormalTok{(wrd)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{)}
+\KeywordTok{length}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{)}
+\KeywordTok{length}\NormalTok{(wrd)}
+
+\NormalTok{### Use paste() function to manipulate strings}
+\KeywordTok{paste}\NormalTok{(wrd,u,}\DataTypeTok{sep=}\StringTok{"/"}\NormalTok{)}
+
+\NormalTok{### Use strsplit() to split strings}
+\NormalTok{split.str=}\KeywordTok{strsplit}\NormalTok{(}\StringTok{"this is a sentence"}\NormalTok{, }\DataTypeTok{split=}\StringTok{" "}\NormalTok{)}
+
+\KeywordTok{typeof}\NormalTok{(split.str)}
+\KeywordTok{length}\NormalTok{(split.str)}
+\NormalTok{split.str[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
 \subsection{Data frame}\label{data-frame}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### manipulation of data frame with base R}
+\NormalTok{### No dplyr}
+\NormalTok{### creating and accessing data frame}
+\NormalTok{name =}\KeywordTok{c}\NormalTok{(}\StringTok{"Bob"}\NormalTok{,}\StringTok{"Jane"}\NormalTok{)}
+\NormalTok{age =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{19}\NormalTok{,}\DecValTok{21}\NormalTok{)}
+\NormalTok{GPA =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{3.2}\NormalTok{,}\FloatTok{3.6}\NormalTok{)}
+\NormalTok{students =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(name,age,GPA,}\DataTypeTok{stringsAsFactors=}\NormalTok{F)}
+\NormalTok{students}
+\KeywordTok{str}\NormalTok{(students)}
+
+
+\NormalTok{### Add new entry into the data frame}
+\NormalTok{students =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(students,}\KeywordTok{c}\NormalTok{(}\StringTok{"Ashley"}\NormalTok{,}\DecValTok{20}\NormalTok{,}\FloatTok{3.4}\NormalTok{))}
+
+\NormalTok{### Add new variable:}
+\NormalTok{students =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(students,}\DataTypeTok{resident=}\KeywordTok{c}\NormalTok{(T,F,T))}
+
+\NormalTok{students}
+\NormalTok{##-------------------------------------##}
+\end{Highlighting}
+\end{Shaded}
+
 \section{List}\label{list}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## List ####}
+\NormalTok{bob=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"bob"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{19}\NormalTok{,}\DataTypeTok{school=}\StringTok{"UCD"}\NormalTok{,}\DataTypeTok{GPA=}\FloatTok{3.2}\NormalTok{,}\DataTypeTok{resident=}\NormalTok{T)}
+
+\NormalTok{### Use lapply() with list}
+\NormalTok{newlist =}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{field_one=} \KeywordTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{), }\DataTypeTok{field_two=}\KeywordTok{runif}\NormalTok{(}\DecValTok{20}\NormalTok{),}\DataTypeTok{field_three=}\KeywordTok{runif}\NormalTok{(}\DecValTok{50}\NormalTok{) );}
+\KeywordTok{lapply}\NormalTok{(newlist,sum)}
+\NormalTok{##-------------------------------------##}
+\end{Highlighting}
+\end{Shaded}
 
 \section{\texorpdfstring{Functions in
 \texttt{R}}{Functions in R}}\label{functions-in-r}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Evaluating a function}
+\NormalTok{x =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.05}\NormalTok{)}
+\NormalTok{x}
+\NormalTok{y =}\StringTok{ }\KeywordTok{sin}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{x)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\OperatorTok{*}\NormalTok{x}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{### Writing a function}
+\NormalTok{sinexp =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(z)\{}
+\NormalTok{  y=}\KeywordTok{sin}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{z)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\OperatorTok{*}\NormalTok{z}\OperatorTok{^}\DecValTok{2}\NormalTok{);}
+  \KeywordTok{return}\NormalTok{(y)}
+\NormalTok{\}}
+
+\KeywordTok{sinexp}\NormalTok{(x)}
+\NormalTok{w=}\KeywordTok{sinexp}\NormalTok{(x)}
+
+\NormalTok{y}\OperatorTok{==}\NormalTok{w}
+\KeywordTok{all}\NormalTok{(y}\OperatorTok{==}\NormalTok{w)}
+\KeywordTok{identical}\NormalTok{(y,w)}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Miscellaneous}\label{miscellaneous}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Checking the state of work session}
+\KeywordTok{objects}\NormalTok{()  }\CommentTok{# all the objects in the current R session}
+\KeywordTok{getwd}\NormalTok{()  }\CommentTok{# print the current working directory}
+\KeywordTok{remove}\NormalTok{()}
+\CommentTok{#setwd()}
+
+\CommentTok{#?persp}
+\KeywordTok{example}\NormalTok{(persp)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#data()}
+\end{Highlighting}
+\end{Shaded}
 
 \chapter{Linear algebra}\label{ch:algebra}
 
-Reading materials: STA108\_LinearAlgebra\_S20.pdf
+Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 
 \section{Vector}\label{vector}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{2.5}\NormalTok{,}\OperatorTok{-}\FloatTok{1.7}\NormalTok{,}\DecValTok{1}\NormalTok{) }\CommentTok{# creates a vector (you can use "<-" instead of "=")}
+
+  \KeywordTok{length}\NormalTok{(x) }\CommentTok{# check the length of x}
+  \KeywordTok{class}\NormalTok{(x) }\CommentTok{# class of the object; you can also check typeof()}
+\NormalTok{  ### Try z=list(); class(z);}
+
+\NormalTok{  x[ }\DecValTok{3}\NormalTok{ ] }\CommentTok{# extract one element in x..}
+\NormalTok{  x[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+\NormalTok{  x[}\DecValTok{2}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
+
+\NormalTok{  z<-}\KeywordTok{numeric}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+
+\NormalTok{  y =}\StringTok{ }\NormalTok{x}\OperatorTok{^}\DecValTok{2}
+\NormalTok{  ### Q: what is the length of y?}
+  \KeywordTok{length}\NormalTok{(y)}
+
+\NormalTok{  ### The "default" operation in R is elementwise:}
+\NormalTok{  x}\OperatorTok{/}\NormalTok{y }\CommentTok{# elementwise division}
+\NormalTok{  y}\OperatorTok{-}\NormalTok{x}\OperatorTok{*}\NormalTok{x }\CommentTok{# all elementwise..}
+
+\NormalTok{  ### There are other operators..}
+\NormalTok{  x }\OperatorTok{%o%}\StringTok{ }\NormalTok{y }\CommentTok{# outer product of x and y}
+
+\NormalTok{  x }\OperatorTok{%*%}\StringTok{ }\NormalTok{y }\CommentTok{# Matrix product. Q: what is R doing here?}
+
+  \KeywordTok{sum}\NormalTok{(x}\OperatorTok{*}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Matrix}\label{matrix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# matrix with 2 rows and 3 columns with all entries 0}
+\CommentTok{# ?matrix}
+
+
+\NormalTok{Xmat1 =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(x,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# 2 x 3 matrix formed by elements of vector x,}
+\NormalTok{### ordered in *column-wise* manner}
+\NormalTok{Xmat2 =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(x,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DataTypeTok{byrow=}\NormalTok{T) }\CommentTok{# ordered row-wise}
+
+
+\NormalTok{M<-}\StringTok{ }\NormalTok{Xmat1;}
+\KeywordTok{dimnames}\NormalTok{(M)}
+\KeywordTok{rownames}\NormalTok{(M) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"first"}\NormalTok{,}\StringTok{"second"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(M) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"b"}\NormalTok{,}\StringTok{"c"}\NormalTok{)}
+
+\KeywordTok{dimnames}\NormalTok{(M)}
+\KeywordTok{typeof}\NormalTok{(}\KeywordTok{dimnames}\NormalTok{(M))}
+
+\NormalTok{### access elements through names of rows/columns}
+\NormalTok{M[,}\StringTok{"a"}\NormalTok{]}
+\NormalTok{M[,}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{M[,}\KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\StringTok{"c"}\NormalTok{)]}
+\NormalTok{M[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+
+\NormalTok{M }\OperatorTok{%*%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\OperatorTok{-}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{)  }\CommentTok{# multiply matrix M to vector c(4,-3,1)}
+\NormalTok{M }\OperatorTok{+}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\OperatorTok{-}\DecValTok{2}\NormalTok{) }\CommentTok{# add the column vector c(1,-2) to each column of M}
+
+\NormalTok{M2 =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(M,}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{))  }\CommentTok{# create matrix M2 by appending column c(4,5) to M}
+\NormalTok{### How to append row to M2?}
+\NormalTok{new_row =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{)}
+\CommentTok{#?cbind}
+\CommentTok{#?rbind}
+
+\NormalTok{### What if we call length() on a matrix?}
+\KeywordTok{length}\NormalTok{(M)}
+\KeywordTok{dim}\NormalTok{(M)}
+
+
+
+\NormalTok{### elementwise product of Xmat1 and Xmat2}
+\NormalTok{Xmat1}\OperatorTok{*}\NormalTok{Xmat2}
+
+\NormalTok{### Matrix multiplication}
+\NormalTok{Xmat1}\OperatorTok{%*%}\NormalTok{Xmat2}
+\KeywordTok{dim}\NormalTok{(Xmat1)}
+\KeywordTok{dim}\NormalTok{(Xmat2)}
+\NormalTok{Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2)}
+
+
+\NormalTok{### Inverse of a marix}
+\KeywordTok{solve}\NormalTok{(Xmat1) }\CommentTok{# what does the error message say?}
+
+
+\NormalTok{Xmat12=Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2);}
+
+\NormalTok{Xmat12.inv=}\KeywordTok{solve}\NormalTok{(Xmat12);}
+
+\NormalTok{Xmat12.inv}\OperatorTok{%*%}\NormalTok{Xmat12}
+\NormalTok{Xmat12}\OperatorTok{%*%}\NormalTok{Xmat12.inv}
+
+
+
+\KeywordTok{svd}\NormalTok{(Xmat1)  }\CommentTok{# singular value decomposition of Xmat1}
+\NormalTok{### Q: what is the SVD?}
+\NormalTok{### Try ?svd}
+\end{Highlighting}
+\end{Shaded}
 
 \section{Other operations on vectors and
 matrices}\label{other-operations-on-vectors-and-matrices}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### How does R handle mathematically invalid operations?}
+\NormalTok{### Example 1:}
+\NormalTok{w =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)  }\CommentTok{# short-handed for c(1,2,3)}
+\NormalTok{### Q: What is the length of w?}
+
+\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{w  }\CommentTok{# no error displayed, but not quite a mathematically valid operation}
+\NormalTok{### Q: what did R just do???}
+\KeywordTok{c}\NormalTok{(x[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]}\OperatorTok{+}\NormalTok{w, x[}\DecValTok{4}\OperatorTok{:}\DecValTok{6}\NormalTok{]}\OperatorTok{+}\NormalTok{w)}
+
+\NormalTok{### What if...}
+\CommentTok{# Create a vector of length 4 (from 1 to 4)}
+\NormalTok{n<-}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{;}
+\NormalTok{x}\OperatorTok{+}\NormalTok{n}
+
+\NormalTok{### Example 2:}
+
+\NormalTok{z =}\StringTok{ }\KeywordTok{sin}\NormalTok{(x) }\OperatorTok{+}\StringTok{ }\NormalTok{x}\OperatorTok{^}\NormalTok{\{}\FloatTok{1.5}\NormalTok{\}}\OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{x}\OperatorTok{^}\DecValTok{3}\NormalTok{)}
+\NormalTok{### What is (-1.7)^\{1.5\}???}
+\NormalTok{### How did R handle this?}
+\NormalTok{x[}\DecValTok{5}\NormalTok{]}
+\NormalTok{z[}\DecValTok{5}\NormalTok{]}
+
+\NormalTok{### Defining sequences}
+\FloatTok{3.1}\OperatorTok{:}\FloatTok{8.9}
+\CommentTok{# or use seq()}
+\end{Highlighting}
+\end{Shaded}
+
 \subsection{Array}\label{array}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Arrays, a.k.a. tensors}
+\NormalTok{### A matrix is a two-way array}
+
+\NormalTok{?array }\CommentTok{# check for R documentation on array}
+
+\NormalTok{A =}\StringTok{ }\KeywordTok{array}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\DecValTok{3}\OperatorTok{*}\DecValTok{4}\NormalTok{),}\DataTypeTok{dim=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{))  }\CommentTok{# creates an array with entries that are i.i.d. N(0,1)}
+\NormalTok{?rnorm}
+\KeywordTok{dim}\NormalTok{(A) }\CommentTok{# checks the dimension of A}
+
+\NormalTok{A[,}\DecValTok{1}\NormalTok{,] }\CommentTok{# returns the 2 x 4 matrix formed by restricting the second dimension index to 1}
+
+\NormalTok{### What is the dimension of A[,1,]?}
+
+\NormalTok{A[}\DecValTok{2}\NormalTok{,,] }\CommentTok{# returns the 3 x 4 matrix formed by restricting the first dimension index to 2}
+
+\NormalTok{A[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]}
+\NormalTok{A[A}\OperatorTok{<}\DecValTok{0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
 
 \chapter{Simulation and visualization}\label{ch:sim}
 
@@ -2244,8 +2686,109 @@ Grolemund and Hadley Wickham (optional).
 \section{Simulation and visualization:
 univariate}\label{simulation-and-visualization-univariate}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Simulate random variables }
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{) }\CommentTok{# set random number generator seed for reproducibility}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{) }
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+
+\NormalTok{### Draw ten uniform random variables:}
+
+\KeywordTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\CommentTok{# use ?runif to see what other options are available }
+
+\NormalTok{### Draw ten normal random variables with mean 0 and variance 2}
+\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{))}
+
+\NormalTok{### There are many other distributions in R}
+\NormalTok{### try ?rchisq, ?rf, ?rt, ?rbeta, ?rpois, ...}
+
+\NormalTok{### Draw samples from any vectors using sample()}
+\NormalTok{wrd =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"yet"}\NormalTok{, }\StringTok{"a"}\NormalTok{,}\StringTok{"new"}\NormalTok{,}\StringTok{"sentence"}\NormalTok{)}
+\KeywordTok{sample}\NormalTok{(wrd,}\DataTypeTok{size=}\DecValTok{2}\NormalTok{)}
+\CommentTok{# use ?sample to see other options}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Visulize the simulated data}
+
+\NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
+\CommentTok{# We start with the very basic histogram }
+\KeywordTok{hist}\NormalTok{(y)}
+\CommentTok{# Use ?hist to modify the plot }
+
+\CommentTok{# And the boxplot:}
+\KeywordTok{boxplot}\NormalTok{(y)}
+
+\CommentTok{# We can also draw visualize the data using ggplot2}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
+\KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
+
+\CommentTok{# Read more about the violin plots in the post here:}
+\CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Simulation and visualization:
 multivariate}\label{simulation-and-visualization-multivariate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We can generate many independent univariate random variables using code in the previous section }
+
+\CommentTok{# Here we will generate dependent random variables, for instance, }
+\NormalTok{n=}\DecValTok{50}\NormalTok{;}\CommentTok{# sample size}
+\NormalTok{x1=}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{x2=x1}\OperatorTok{*}\DecValTok{2}\OperatorTok{+}\KeywordTok{runif}\NormalTok{(n)}\OperatorTok{*}\DecValTok{2}\NormalTok{;}
+\NormalTok{x3=x1}\OperatorTok{*}\NormalTok{x2}\OperatorTok{*}\KeywordTok{rpois}\NormalTok{(n,}\DataTypeTok{lambda=}\DecValTok{3}\NormalTok{);}
+
+\CommentTok{# You can also generate a random variable using its probability density function using importance sampling}
+\CommentTok{# We will be fine with the simple data generating method in this class }
+
+\CommentTok{# We put the three random variables into one data.frame for ease of plotting }
+\NormalTok{dat.multi<-}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x1=}\NormalTok{x1,}\DataTypeTok{x2=}\NormalTok{x2,}\DataTypeTok{x3=}\NormalTok{x3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Visualization}
+
+\NormalTok{### Pairwise scatter plot}
+\KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
+
+
+\NormalTok{### Visualization in ggplot2}
+\KeywordTok{library}\NormalTok{(GGally)}
+\KeywordTok{ggpairs}\NormalTok{(dat.multi)}
+
+
+\NormalTok{### For the pair x1 and x3}
+
+\CommentTok{# A more informative scatterplot, using base R }
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+
+
+\CommentTok{# Or using ggplot2}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3))}
+\end{Highlighting}
+\end{Shaded}
 
 \bibliography{book.bib,packages.bib}
 

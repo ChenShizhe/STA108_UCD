@@ -6,7 +6,7 @@ output:
 ---
 
 ```{r, include=FALSE}
-knitr::opts_chunk$set(include=FALSE,echo = FALSE, eval=FALSE, message=FALSE,warning=FALSE,cache=TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",message=FALSE,warning=FALSE,cache=TRUE)
 ```
 
 
@@ -22,11 +22,14 @@ dat.fatalities = Fatalities[,c('fatal','spirits','unemp','income','beertax','bap
 ```
 ## Criteria 
 
-<b>Reading materials</b>:  Slides 166 - 181 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>:  Slides 166 - 180 in STA108_LinearRegression_S20.pdf.
 
 ```{r}
 # Information criteria
 
+
+fit.full=lm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities);
+fit.six=lm(fatal~spirits+unemp+income+beertax+baptist+mormon,data=dat.fatalities)
 
 BIC(fit.full)
 BIC(fit.six)
@@ -42,8 +45,10 @@ AIC(fit.six)
 # We will use a package for this:
 library(boot)
 
+
 fit.full.g=glm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdrivers+miles+gsp,data=dat.fatalities);
 fit.six.g=glm(fatal~spirits+unemp+income+beertax+baptist+mormon,data=dat.fatalities)
+
 
 set.seed(1)
 cv.full.10=cv.glm(dat.fatalities,fit.full.g,K=10)
@@ -60,7 +65,7 @@ cv.six.10$delta
 
 ## Selection procedure 
 
-<b>Reading materials</b>:  Slides 182 - 189 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>:  Slides 181 - 190 in STA108_LinearRegression_S20.pdf.
 
 
 ```{r}
@@ -81,6 +86,7 @@ step(lm(fatal~spirits+unemp+income+beertax+baptist+mormon+drinkage+dry+youngdriv
 
   
 ```
+
 ```{r}
 # Penalized regression: lasso
 library(glmnet)

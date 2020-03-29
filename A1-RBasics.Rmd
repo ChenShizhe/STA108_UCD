@@ -15,6 +15,8 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 
 This section reviews some basic functions in `R` that will be useful in this class.
 
+## Basic objects in `R`
+
 ```{r}
 
 ## Generating a vector with seq()

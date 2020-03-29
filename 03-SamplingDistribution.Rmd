@@ -15,7 +15,7 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 
 ## Understanding sampling distribution via simulation 
 
-<b>Reading materials</b>: Slides 24 - 33 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>: Slides 23 - 32 in STA108_LinearRegression_S20.pdf.
 
 
 In this section, we assume a true data generating model in order to draw samples from the true popluation distribution.
@@ -190,7 +190,7 @@ summary(lm(y~x+1))
 
 ## Shapes of sampling distributions 
 
-<b>Reading materials</b>: Slide 34 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>: Slide 33 in STA108_LinearRegression_S20.pdf.
 
 ```{r}
 # There can be multiple distributions with the same mean and variance. Consider three distributions discussed in the lecture notes.
@@ -218,7 +218,7 @@ legend(x=2.5,y=0.5,legend=c("Uniform","Normal","Binary"),lwd=2,col=c('black','re
 ### Asymptotic distribution
 
 
-<b>Reading materials</b>: Slides 35 - 49 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>: Slides 34 - 48 in STA108_LinearRegression_S20.pdf.
 
 The L-F central limit theorem claims that the asymptotic distribution for $\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }$ is $\mathcal{N}(0,1)$.
 
@@ -351,7 +351,7 @@ legend(x=0.15,y=50,legend=c("Empirical", "Moment-based"),lwd=3,col=c('red','gree
 ## Small sample size  
 
 
-<b>Reading materials</b>: Slides 50 - 57 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>: Slides 49 - 57 in STA108_LinearRegression_S20.pdf.
 
 When the sample size is small, the asymptotic distribution is not close to the true sampling distribution. Neither the central limit theorem or the bootstrap distribution are good approximation of the asymptotic distribution. 
 ```{r cache = TRUE}

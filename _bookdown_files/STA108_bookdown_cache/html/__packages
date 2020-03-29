@@ -11,3 +11,7 @@ AER
 tidyr
 dplyr
 qwraps2
+boot
+Matrix
+foreach
+glmnet

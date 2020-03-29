@@ -13,7 +13,7 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 
 
 
-<b>Reading materials</b>: Slides 74 - 92 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>: Slides 73 - 91 in STA108_LinearRegression_S20.pdf.
 
 We will continue working on synthetic data in this chapter. 
 

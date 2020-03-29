@@ -11,10 +11,10 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 ```
 
 
-# Statistical inference: confidence Intervals {#ch:CI}
+# Statistical inference: Confidence Intervals {#ch:CI}
 
 
-<b>Reading materials</b>:  Slides 58 - 73 in STA108_LinearRegression_S20.pdf
+<b>Reading materials</b>:  Slides 57 - 72 in STA108_LinearRegression_S20.pdf.
 
 
 ## Confidence interval

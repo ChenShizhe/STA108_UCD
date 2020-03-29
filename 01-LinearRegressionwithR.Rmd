@@ -9,9 +9,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",message=FALSE,warning=FALSE,cache=TRUE)
 ```
 
-# Linear regression with R {#ch:lmR}
+# Linear regression with `R` {#ch:lmR}
 
-<b>Reading materials</b>: Slides 4 - 12 in STA108_LinearRegression_S20.pdf
+<b>Reading materials</b>: Slides 3 - 11 in STA108_LinearRegression_S20.pdf.
 
 Fitting a linear model is simple in `R`. The bare minimum requires you to know only two functions `lm()` and `summary()`. We will apply linear regression on three data set `advertising`, `flu shot`, and `Project STAR`. 
 

@@ -11,7 +11,7 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 # Model diagnostics {#ch:diagnostics}
 
 
-<b>Reading materials</b>:  Slides 93 - 101 in STA108_LinearRegression_S20.pdf.
+<b>Reading materials</b>:  Slides 92 - 100 in STA108_LinearRegression_S20.pdf.
 
 Note: we will use existing functions in `R` for model diagnostics in this chapter. However, in your midterm report, you are still required to implement your own tools for model diagnostics.
 

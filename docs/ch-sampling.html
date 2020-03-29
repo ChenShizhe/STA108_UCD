@@ -5,26 +5,26 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis</title>
-  <meta name="description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="description" content="This file contains code for STA 108B, Spring 2020" />
   <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta property="og:description" content="This file contains code for STA 108B, Spring 2020" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 3 Sampling distribution | Applied Statistical Methods: Regression Analysis" />
   
-  <meta name="twitter:description" content="This file contains code for in-class exercise for STA 108, Spring 2020" />
+  <meta name="twitter:description" content="This file contains code for STA 108B, Spring 2020" />
   
 
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-03-28" />
+<meta name="date" content="2020-03-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -107,7 +107,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with R</a><ul>
+<li class="chapter" data-level="1" data-path="ch-lmR.html"><a href="ch-lmR.html"><i class="fa fa-check"></i><b>1</b> Linear regression with <code>R</code></a><ul>
 <li class="chapter" data-level="1.1" data-path="ch-lmR.html"><a href="ch-lmR.html#advertising-data"><i class="fa fa-check"></i><b>1.1</b> Advertising data</a></li>
 <li class="chapter" data-level="1.2" data-path="ch-lmR.html"><a href="ch-lmR.html#flu-shot"><i class="fa fa-check"></i><b>1.2</b> Flu shot</a></li>
 <li class="chapter" data-level="1.3" data-path="ch-lmR.html"><a href="ch-lmR.html#project-star"><i class="fa fa-check"></i><b>1.3</b> Project STAR</a></li>
@@ -121,7 +121,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="ch-sampling.html"><a href="ch-sampling.html#small-sample-size"><i class="fa fa-check"></i><b>3.3</b> Small sample size</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: confidence Intervals</a><ul>
+<li class="chapter" data-level="4" data-path="ch-CI.html"><a href="ch-CI.html"><i class="fa fa-check"></i><b>4</b> Statistical inference: Confidence Intervals</a><ul>
 <li class="chapter" data-level="4.1" data-path="ch-CI.html"><a href="ch-CI.html#confidence-interval"><i class="fa fa-check"></i><b>4.1</b> Confidence interval</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="ch-CI.html"><a href="ch-CI.html#determine-cutoffs"><i class="fa fa-check"></i><b>4.1.1</b> Determine cutoffs</a></li>
 </ul></li>
@@ -160,14 +160,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="ch-RBasics.html"><a href="ch-RBasics.html"><i class="fa fa-check"></i><b>A</b> R basics</a><ul>
-<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.1</b> Summary statistics</a></li>
-<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.2</b> Data structures</a><ul>
-<li class="chapter" data-level="A.2.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.2.1</b> String</a></li>
-<li class="chapter" data-level="A.2.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.2.2</b> Data frame</a></li>
+<li class="chapter" data-level="A.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#basic-objects-in-r"><i class="fa fa-check"></i><b>A.1</b> Basic objects in <code>R</code></a></li>
+<li class="chapter" data-level="A.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#summary-statistics"><i class="fa fa-check"></i><b>A.2</b> Summary statistics</a></li>
+<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-structures"><i class="fa fa-check"></i><b>A.3</b> Data structures</a><ul>
+<li class="chapter" data-level="A.3.1" data-path="ch-RBasics.html"><a href="ch-RBasics.html#string"><i class="fa fa-check"></i><b>A.3.1</b> String</a></li>
+<li class="chapter" data-level="A.3.2" data-path="ch-RBasics.html"><a href="ch-RBasics.html#data-frame"><i class="fa fa-check"></i><b>A.3.2</b> Data frame</a></li>
 </ul></li>
-<li class="chapter" data-level="A.3" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.3</b> List</a></li>
-<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.4</b> Functions in <code>R</code></a></li>
-<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.5</b> Miscellaneous</a></li>
+<li class="chapter" data-level="A.4" data-path="ch-RBasics.html"><a href="ch-RBasics.html#list"><i class="fa fa-check"></i><b>A.4</b> List</a></li>
+<li class="chapter" data-level="A.5" data-path="ch-RBasics.html"><a href="ch-RBasics.html#functions-in-r"><i class="fa fa-check"></i><b>A.5</b> Functions in <code>R</code></a></li>
+<li class="chapter" data-level="A.6" data-path="ch-RBasics.html"><a href="ch-RBasics.html#miscellaneous"><i class="fa fa-check"></i><b>A.6</b> Miscellaneous</a></li>
 </ul></li>
 <li class="chapter" data-level="B" data-path="ch-algebra.html"><a href="ch-algebra.html"><i class="fa fa-check"></i><b>B</b> Linear algebra</a><ul>
 <li class="chapter" data-level="B.1" data-path="ch-algebra.html"><a href="ch-algebra.html#vector"><i class="fa fa-check"></i><b>B.1</b> Vector</a></li>
@@ -204,7 +205,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">Chapter 3</span> Sampling distribution</h1>
 <div id="understanding-sampling-distribution-via-simulation" class="section level2">
 <h2><span class="header-section-number">3.1</span> Understanding sampling distribution via simulation</h2>
-<p><b>Reading materials</b>: Slides 24 - 33 in STA108_LinearRegression_S20.pdf.</p>
+<p><b>Reading materials</b>: Slides 23 - 32 in STA108_LinearRegression_S20.pdf.</p>
 <p>In this section, we assume a true data generating model in order to draw samples from the true popluation distribution. In particular, we assume that <span class="math display">\[ y_i = x_i \beta_1 + \beta_0 + \epsilon_i, \ i=1,\ldots, 50\]</span> where <span class="math inline">\(\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)\)</span>. We set <span class="math inline">\(\beta_1=0.15\)</span> and <span class="math inline">\(\beta_0=20\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### We will simulate synthetic data to understand the concept of sampling distribution
 
@@ -349,7 +350,7 @@ estimate.coef.sd&lt;-<span class="cf">function</span>(beta,covariate,outcome){
 </div>
 <div id="shapes-of-sampling-distributions" class="section level2">
 <h2><span class="header-section-number">3.2</span> Shapes of sampling distributions</h2>
-<p><b>Reading materials</b>: Slide 34 in STA108_LinearRegression_S20.pdf.</p>
+<p><b>Reading materials</b>: Slide 33 in STA108_LinearRegression_S20.pdf.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># There can be multiple distributions with the same mean and variance. Consider three distributions discussed in the lecture notes.</span>
 
 xgrid =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">5</span>, <span class="dt">by=</span><span class="fl">0.01</span>);
@@ -368,7 +369,7 @@ ybin=<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5<
 <span class="kw">legend</span>(<span class="dt">x=</span><span class="fl">2.5</span>,<span class="dt">y=</span><span class="fl">0.5</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Uniform&quot;</span>,<span class="st">&quot;Normal&quot;</span>,<span class="st">&quot;Binary&quot;</span>),<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;black&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;green&#39;</span>))</code></pre></div>
 <div id="asymptotic-distribution" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Asymptotic distribution</h3>
-<p><b>Reading materials</b>: Slides 35 - 49 in STA108_LinearRegression_S20.pdf.</p>
+<p><b>Reading materials</b>: Slides 34 - 48 in STA108_LinearRegression_S20.pdf.</p>
 <p>The L-F central limit theorem claims that the asymptotic distribution for <span class="math inline">\(\frac{\hat{\beta}_1 - \beta_1}{\hat{\sigma} / S_{xx}^{1/2} }\)</span> is <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Edit the simulation code 
 ### This time with large n (n=500)
@@ -477,7 +478,7 @@ normal.pdf=<span class="st"> </span><span class="kw">dnorm</span>(xgrid,<span cl
 </div>
 <div id="small-sample-size" class="section level2">
 <h2><span class="header-section-number">3.3</span> Small sample size</h2>
-<p><b>Reading materials</b>: Slides 50 - 57 in STA108_LinearRegression_S20.pdf.</p>
+<p><b>Reading materials</b>: Slides 49 - 57 in STA108_LinearRegression_S20.pdf.</p>
 <p>When the sample size is small, the asymptotic distribution is not close to the true sampling distribution. Neither the central limit theorem or the bootstrap distribution are good approximation of the asymptotic distribution.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulation with small sample size</span>
 <span class="co"># We will demonstrate the case with 5 samples</span>

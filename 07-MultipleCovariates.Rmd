@@ -16,9 +16,9 @@ knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",
 
 ## Examples 
 
-<b>Reading materials</b>:  Slides 103 - 111 in STA108_LinearRegression_S20.pdf. 
+<b>Reading materials</b>:  Slides 101 - 110 in STA108_LinearRegression_S20.pdf. 
 
-We will revisit the examples that have been studied in Chapter \@ref(lmR).
+We will revisit the examples that have been studied in Chapter \@ref(ch:lmR).
 
 ### Advertising data 
 
@@ -89,7 +89,7 @@ summary(fit.STAR)$coef[1:3,]
 ## Classification of variables 
 
 
-<b>Reading materials</b>:  Slides 112 - 118 in STA108_LinearRegression_S20.pdf. 
+<b>Reading materials</b>:  Slides 111 - 118 in STA108_LinearRegression_S20.pdf. 
 
 We will use simulation to examine the roles of the variables. 
 

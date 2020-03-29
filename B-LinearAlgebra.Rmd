@@ -12,7 +12,7 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 
 #  Linear algebra   {#ch:algebra}
 
-<b>Reading materials</b>:  STA108_LinearAlgebra_S20.pdf
+<b>Reading materials</b>:  STA108_LinearAlgebra_S20.pdf.
 
 
 

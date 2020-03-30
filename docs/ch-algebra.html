@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-03-29" />
+<meta name="date" content="2020-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -279,14 +279,14 @@ new_row =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</
 Xmat1<span class="op">*</span>Xmat2
 
 ### Matrix multiplication
-Xmat1<span class="op">%*%</span>Xmat2
+<span class="co"># Xmat1%*%Xmat2</span>
 <span class="kw">dim</span>(Xmat1)
 <span class="kw">dim</span>(Xmat2)
 Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2)
 
 
 ### Inverse of a marix
-<span class="kw">solve</span>(Xmat1) <span class="co"># what does the error message say?</span>
+<span class="co"># solve(Xmat1) # what does the error message say?</span>
 
 
 Xmat12=Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2);
@@ -334,10 +334,10 @@ z[<span class="dv">5</span>]
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Arrays, a.k.a. tensors
 ### A matrix is a two-way array
 
-?array <span class="co"># check for R documentation on array</span>
+<span class="co"># ?array # check for R documentation on array</span>
 
 A =<span class="st"> </span><span class="kw">array</span>(<span class="kw">rnorm</span>(<span class="dv">2</span><span class="op">*</span><span class="dv">3</span><span class="op">*</span><span class="dv">4</span>),<span class="dt">dim=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))  <span class="co"># creates an array with entries that are i.i.d. N(0,1)</span>
-?rnorm
+<span class="co">#?rnorm</span>
 <span class="kw">dim</span>(A) <span class="co"># checks the dimension of A</span>
 
 A[,<span class="dv">1</span>,] <span class="co"># returns the 2 x 4 matrix formed by restricting the second dimension index to 1</span>

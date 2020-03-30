@@ -96,14 +96,14 @@ dim(M)
 Xmat1*Xmat2
 
 ### Matrix multiplication
-Xmat1%*%Xmat2
+# Xmat1%*%Xmat2
 dim(Xmat1)
 dim(Xmat2)
 Xmat1%*%t(Xmat2)
 
 
 ### Inverse of a marix
-solve(Xmat1) # what does the error message say?
+# solve(Xmat1) # what does the error message say?
 
 
 Xmat12=Xmat1%*%t(Xmat2);
@@ -157,10 +157,10 @@ z[5]
 ### Arrays, a.k.a. tensors
 ### A matrix is a two-way array
 
-?array # check for R documentation on array
+# ?array # check for R documentation on array
 
 A = array(rnorm(2*3*4),dim=c(2,3,4))  # creates an array with entries that are i.i.d. N(0,1)
-?rnorm
+#?rnorm
 dim(A) # checks the dimension of A
 
 A[,1,] # returns the 2 x 4 matrix formed by restricting the second dimension index to 1

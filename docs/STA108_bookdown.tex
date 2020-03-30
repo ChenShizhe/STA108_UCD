@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-03-29}
+    \date{2020-03-30}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -410,10 +410,10 @@ in the previous section.
 
 \section{Note}\label{note}
 
-In the the midterm projects, you will be asked to reproduce the analysis
-on the \texttt{advertising} data using your own functions. The hope is
-that, by reinventing the wheels, you will have a thorough understanding
-of regression.
+In the homework assignments and the midterm project, you will be asked
+to reproduce the analysis on the real and sythenetic data using your own
+functions. The hope is that, by reinventing the wheels, you will have a
+thorough understanding of linear regression.
 
 \chapter{Estimation}\label{ch:est}
 
@@ -2595,14 +2595,14 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 \NormalTok{Xmat1}\OperatorTok{*}\NormalTok{Xmat2}
 
 \NormalTok{### Matrix multiplication}
-\NormalTok{Xmat1}\OperatorTok{%*%}\NormalTok{Xmat2}
+\CommentTok{# Xmat1%*%Xmat2}
 \KeywordTok{dim}\NormalTok{(Xmat1)}
 \KeywordTok{dim}\NormalTok{(Xmat2)}
 \NormalTok{Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2)}
 
 
 \NormalTok{### Inverse of a marix}
-\KeywordTok{solve}\NormalTok{(Xmat1) }\CommentTok{# what does the error message say?}
+\CommentTok{# solve(Xmat1) # what does the error message say?}
 
 
 \NormalTok{Xmat12=Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2);}
@@ -2660,10 +2660,10 @@ matrices}\label{other-operations-on-vectors-and-matrices}
 \NormalTok{### Arrays, a.k.a. tensors}
 \NormalTok{### A matrix is a two-way array}
 
-\NormalTok{?array }\CommentTok{# check for R documentation on array}
+\CommentTok{# ?array # check for R documentation on array}
 
 \NormalTok{A =}\StringTok{ }\KeywordTok{array}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\DecValTok{3}\OperatorTok{*}\DecValTok{4}\NormalTok{),}\DataTypeTok{dim=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{))  }\CommentTok{# creates an array with entries that are i.i.d. N(0,1)}
-\NormalTok{?rnorm}
+\CommentTok{#?rnorm}
 \KeywordTok{dim}\NormalTok{(A) }\CommentTok{# checks the dimension of A}
 
 \NormalTok{A[,}\DecValTok{1}\NormalTok{,] }\CommentTok{# returns the 2 x 4 matrix formed by restricting the second dimension index to 1}
@@ -2726,17 +2726,30 @@ univariate}\label{simulation-and-visualization-univariate}
 \NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
 \CommentTok{# We start with the very basic histogram }
 \KeywordTok{hist}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Use ?hist to modify the plot }
 
 \CommentTok{# And the boxplot:}
 \KeywordTok{boxplot}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# We can also draw visualize the data using ggplot2}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
 \KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Read more about the violin plots in the post here:}
 \CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
 \end{Highlighting}
@@ -2769,20 +2782,29 @@ multivariate}\label{simulation-and-visualization-multivariate}
 
 \NormalTok{### Pairwise scatter plot}
 \KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### Visualization in ggplot2}
 \KeywordTok{library}\NormalTok{(GGally)}
 \KeywordTok{ggpairs}\NormalTok{(dat.multi)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### For the pair x1 and x3}
 
 \CommentTok{# A more informative scatterplot, using base R }
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Or using ggplot2}
 \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}

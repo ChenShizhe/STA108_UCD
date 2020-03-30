@@ -174,8 +174,7 @@ summary(fit.STAR)
 
 ```
 
-
 ## Note
 
-In the the midterm projects, you will be asked to reproduce the analysis on the `advertising` data using your own functions. The hope is that, by reinventing the wheels, you will have a thorough understanding of regression. 
+In the homework assignments and the midterm project, you will be asked to reproduce the analysis on the real and sythenetic data using your own functions. The hope is that, by reinventing the wheels, you will have a thorough understanding of linear regression. 
 

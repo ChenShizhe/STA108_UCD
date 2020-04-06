@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-03-30}
+    \date{2020-04-06}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2530,7 +2530,12 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 
 \NormalTok{  z<-}\KeywordTok{numeric}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 
-
+\NormalTok{  ### Transpose:}
+\NormalTok{  x.t=}\KeywordTok{t}\NormalTok{(x);}
+  \KeywordTok{length}\NormalTok{(x.t)}
+\NormalTok{  x.t}
+\NormalTok{  x}
+  
 \NormalTok{  y =}\StringTok{ }\NormalTok{x}\OperatorTok{^}\DecValTok{2}
 \NormalTok{  ### Q: what is the length of y?}
   \KeywordTok{length}\NormalTok{(y)}
@@ -2591,16 +2596,70 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 
 
 
+
+\NormalTok{### Transpose of the matrix}
+\NormalTok{M.t=}\KeywordTok{t}\NormalTok{(M);}
+\KeywordTok{identical}\NormalTok{(}\KeywordTok{t}\NormalTok{(M.t),M)}
+
+\NormalTok{### Diagonal and identity matrix}
+
+\NormalTok{## Identity matrix}
+\KeywordTok{diag}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\NormalTok{## Diagonal matrix}
+\KeywordTok{diag}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{))}
+\NormalTok{## Symmatric matrix}
+\NormalTok{A=}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{9}\NormalTok{),}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{);}
+\NormalTok{A=A}\OperatorTok{+}\KeywordTok{t}\NormalTok{(A); }\CommentTok{# To make sure it is symmetric }
+\KeywordTok{identical}\NormalTok{(A,}\KeywordTok{t}\NormalTok{(A))}
+
+
+\NormalTok{### Trace of a matrix:}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{diag}\NormalTok{(A))}
+\NormalTok{## Define a tr() function to match the common convention}
+\NormalTok{tr<-}\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  out=}\KeywordTok{sum}\NormalTok{(}\KeywordTok{diag}\NormalTok{(x));}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\KeywordTok{tr}\NormalTok{(A)}
+
+\NormalTok{## Verify some properties of the trace }
+\NormalTok{B=}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{9}\NormalTok{),}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{);}
+\KeywordTok{tr}\NormalTok{(A)}
+\KeywordTok{tr}\NormalTok{(}\KeywordTok{t}\NormalTok{(A))}
+
+\KeywordTok{tr}\NormalTok{(A}\OperatorTok{+}\NormalTok{B)}
+\KeywordTok{tr}\NormalTok{(A)}\OperatorTok{+}\KeywordTok{tr}\NormalTok{(B)}
+
+\KeywordTok{tr}\NormalTok{(A}\OperatorTok{%*%}\NormalTok{B)}
+\KeywordTok{tr}\NormalTok{(B}\OperatorTok{%*%}\NormalTok{A) }\CommentTok{# if the dimensions check out..}
+
+\KeywordTok{tr}\NormalTok{(A)}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{eigen}\NormalTok{(A)}\OperatorTok{$}\NormalTok{values)}
+
+\NormalTok{### Matrix-vector product:}
+
+\NormalTok{Xmat1 =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{6}\NormalTok{),}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }
+\NormalTok{xvec1=}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{Xmat1}\OperatorTok{%*%}\NormalTok{xvec1}
+
 \NormalTok{### elementwise product of Xmat1 and Xmat2}
 \NormalTok{Xmat1}\OperatorTok{*}\NormalTok{Xmat2}
+
+
 
 \NormalTok{### Matrix multiplication}
 \CommentTok{# Xmat1%*%Xmat2}
 \KeywordTok{dim}\NormalTok{(Xmat1)}
 \KeywordTok{dim}\NormalTok{(Xmat2)}
 \NormalTok{Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2)}
+\NormalTok{### Verify another property of transpose:}
+\KeywordTok{t}\NormalTok{( Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2) ) }
+\NormalTok{Xmat2}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat1)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### Inverse of a marix}
 \CommentTok{# solve(Xmat1) # what does the error message say?}
 
@@ -2612,6 +2671,34 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 \NormalTok{Xmat12.inv}\OperatorTok{%*%}\NormalTok{Xmat12}
 \NormalTok{Xmat12}\OperatorTok{%*%}\NormalTok{Xmat12.inv}
 
+\NormalTok{### Projection matrix}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+\NormalTok{X =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{6}\NormalTok{),}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{) }
+\NormalTok{P=X}\OperatorTok{%*%}\KeywordTok{solve}\NormalTok{(}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X)}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X)}
+
+\NormalTok{P}\OperatorTok{%*%}\NormalTok{X}
+\NormalTok{X}
+\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{3}\NormalTok{)}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{X}
+
+\NormalTok{### Rank of a matrix:}
+\KeywordTok{qr}\NormalTok{(X)}\OperatorTok{$}\NormalTok{rank}
+\CommentTok{# Example }
+
+\NormalTok{### Determinants}
+\KeywordTok{det}\NormalTok{(P)}
+
+
+\NormalTok{### Eigenvalue and eigenvector}
+
+
+\NormalTok{### Matrix definiteness}
+
+\NormalTok{### Eigenvalue decomposition }
+
+
+
+\NormalTok{### Singular value decomposition }
 
 
 \KeywordTok{svd}\NormalTok{(Xmat1)  }\CommentTok{# singular value decomposition of Xmat1}
@@ -2726,30 +2813,17 @@ univariate}\label{simulation-and-visualization-univariate}
 \NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
 \CommentTok{# We start with the very basic histogram }
 \KeywordTok{hist}\NormalTok{(y)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Use ?hist to modify the plot }
 
 \CommentTok{# And the boxplot:}
 \KeywordTok{boxplot}\NormalTok{(y)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# We can also draw visualize the data using ggplot2}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
 \KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Read more about the violin plots in the post here:}
 \CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
 \end{Highlighting}
@@ -2782,29 +2856,20 @@ multivariate}\label{simulation-and-visualization-multivariate}
 
 \NormalTok{### Pairwise scatter plot}
 \KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{### Visualization in ggplot2}
 \KeywordTok{library}\NormalTok{(GGally)}
 \KeywordTok{ggpairs}\NormalTok{(dat.multi)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{### For the pair x1 and x3}
 
 \CommentTok{# A more informative scatterplot, using base R }
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \CommentTok{# Or using ggplot2}
 \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}

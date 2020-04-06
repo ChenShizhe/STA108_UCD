@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  30 MAR 2020 14:04
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  6 APR 2020 14:04
 entering extended mode
 **./STA108_bookdown.tex
 (STA108_bookdown.tex
@@ -1158,24 +1158,39 @@ Appendix B.
 Underfull \vbox (badness 1286) has occurred while \output is active []
 
 [64]
-Underfull \vbox (badness 1688) has occurred while \output is active []
-
-[65] [66]
-Appendix C.
-[67
-
-]
-Underfull \vbox (badness 1776) detected at line 2786
+Underfull \vbox (badness 10000) detected at line 2659
  []
 
-[68]
+
+Underfull \vbox (badness 10000) detected at line 2659
+ []
+
+[65]
+Underfull \vbox (badness 10000) detected at line 2708
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[66] [67] [68]
+Appendix C.
+[69
+
+]
+Underfull \vbox (badness 2600) detected at line 2878
+ []
+
+
+Underfull \vbox (badness 1264) has occurred while \output is active []
+
+[70]
 No file STA108_bookdown.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2818.
-[69]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2818.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2883.
+[71]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2883.
 (STA108_bookdown.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 2818.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2818.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 2883.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2883.
 
 Package rerunfilecheck Info: File `STA108_bookdown.out' has not changed.
 (rerunfilecheck)             Checksum: BAD24BDB4766C31738063A6FCE737653.
@@ -1192,4 +1207,4 @@ Here is how much of TeX's memory you used:
  1328 hyphenation exceptions out of 8191
  45i,6n,68p,814b,443s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on STA108_bookdown.pdf (69 pages).
+Output written on STA108_bookdown.pdf (71 pages).

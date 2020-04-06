@@ -31,7 +31,12 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 
   z<-numeric(10)
 
-
+  ### Transpose:
+  x.t=t(x);
+  length(x.t)
+  x.t
+  x
+  
   y = x^2
   ### Q: what is the length of y?
   length(y)
@@ -46,6 +51,8 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
   x %*% y # Matrix product. Q: what is R doing here?
 
   sum(x*y)
+  
+
 ```
 
 
@@ -92,16 +99,69 @@ dim(M)
 
 
 
+
+### Transpose of the matrix
+M.t=t(M);
+identical(t(M.t),M)
+
+### Diagonal and identity matrix
+
+## Identity matrix
+diag(5)
+## Diagonal matrix
+diag(c(1,2,3,4,5))
+## Symmatric matrix
+A= matrix(rnorm(9),3,3);
+A=A+t(A); # To make sure it is symmetric 
+identical(A,t(A))
+
+
+### Trace of a matrix:
+sum(diag(A))
+## Define a tr() function to match the common convention
+tr<-function(x){
+  out=sum(diag(x));
+  return(out)
+}
+tr(A)
+
+## Verify some properties of the trace 
+B= matrix(rnorm(9),3,3);
+tr(A)
+tr(t(A))
+
+tr(A+B)
+tr(A)+tr(B)
+
+tr(A%*%B)
+tr(B%*%A) # if the dimensions check out..
+
+tr(A)
+sum(eigen(A)$values)
+
+### Matrix-vector product:
+
+Xmat1 = matrix(rnorm(6),2,3) 
+xvec1=rnorm(3)
+Xmat1%*%xvec1
+
 ### elementwise product of Xmat1 and Xmat2
 Xmat1*Xmat2
+
+
 
 ### Matrix multiplication
 # Xmat1%*%Xmat2
 dim(Xmat1)
 dim(Xmat2)
 Xmat1%*%t(Xmat2)
+### Verify another property of transpose:
+t( Xmat1%*%t(Xmat2) ) 
+Xmat2%*%t(Xmat1)
+```
 
 
+```{r}
 ### Inverse of a marix
 # solve(Xmat1) # what does the error message say?
 
@@ -113,6 +173,34 @@ Xmat12.inv=solve(Xmat12);
 Xmat12.inv%*%Xmat12
 Xmat12%*%Xmat12.inv
 
+### Projection matrix
+
+set.seed(12)
+X = matrix(rnorm(6),3,2) 
+P=X%*%solve(t(X)%*%X)%*%t(X)
+
+P%*%X
+X
+(diag(3)-P)%*%X
+
+### Rank of a matrix:
+qr(X)$rank
+# Example 
+
+### Determinants
+det(P)
+
+
+### Eigenvalue and eigenvector
+
+
+### Matrix definiteness
+
+### Eigenvalue decomposition 
+
+
+
+### Singular value decomposition 
 
 
 svd(Xmat1)  # singular value decomposition of Xmat1

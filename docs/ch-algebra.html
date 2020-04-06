@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-03-30" />
+<meta name="date" content="2020-04-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -218,7 +218,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
   z&lt;-<span class="kw">numeric</span>(<span class="dv">10</span>)
 
-
+  ### Transpose:
+  x.t=<span class="kw">t</span>(x);
+  <span class="kw">length</span>(x.t)
+  x.t
+  x
+  
   y =<span class="st"> </span>x<span class="op">^</span><span class="dv">2</span>
   ### Q: what is the length of y?
   <span class="kw">length</span>(y)
@@ -275,17 +280,66 @@ new_row =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</
 
 
 
+
+### Transpose of the matrix
+M.t=<span class="kw">t</span>(M);
+<span class="kw">identical</span>(<span class="kw">t</span>(M.t),M)
+
+### Diagonal and identity matrix
+
+## Identity matrix
+<span class="kw">diag</span>(<span class="dv">5</span>)
+## Diagonal matrix
+<span class="kw">diag</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>))
+## Symmatric matrix
+A=<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">9</span>),<span class="dv">3</span>,<span class="dv">3</span>);
+A=A<span class="op">+</span><span class="kw">t</span>(A); <span class="co"># To make sure it is symmetric </span>
+<span class="kw">identical</span>(A,<span class="kw">t</span>(A))
+
+
+### Trace of a matrix:
+<span class="kw">sum</span>(<span class="kw">diag</span>(A))
+## Define a tr() function to match the common convention
+tr&lt;-<span class="cf">function</span>(x){
+  out=<span class="kw">sum</span>(<span class="kw">diag</span>(x));
+  <span class="kw">return</span>(out)
+}
+<span class="kw">tr</span>(A)
+
+## Verify some properties of the trace 
+B=<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">9</span>),<span class="dv">3</span>,<span class="dv">3</span>);
+<span class="kw">tr</span>(A)
+<span class="kw">tr</span>(<span class="kw">t</span>(A))
+
+<span class="kw">tr</span>(A<span class="op">+</span>B)
+<span class="kw">tr</span>(A)<span class="op">+</span><span class="kw">tr</span>(B)
+
+<span class="kw">tr</span>(A<span class="op">%*%</span>B)
+<span class="kw">tr</span>(B<span class="op">%*%</span>A) <span class="co"># if the dimensions check out..</span>
+
+<span class="kw">tr</span>(A)
+<span class="kw">sum</span>(<span class="kw">eigen</span>(A)<span class="op">$</span>values)
+
+### Matrix-vector product:
+
+Xmat1 =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">6</span>),<span class="dv">2</span>,<span class="dv">3</span>) 
+xvec1=<span class="kw">rnorm</span>(<span class="dv">3</span>)
+Xmat1<span class="op">%*%</span>xvec1
+
 ### elementwise product of Xmat1 and Xmat2
 Xmat1<span class="op">*</span>Xmat2
+
+
 
 ### Matrix multiplication
 <span class="co"># Xmat1%*%Xmat2</span>
 <span class="kw">dim</span>(Xmat1)
 <span class="kw">dim</span>(Xmat2)
 Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2)
-
-
-### Inverse of a marix
+### Verify another property of transpose:
+<span class="kw">t</span>( Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2) ) 
+Xmat2<span class="op">%*%</span><span class="kw">t</span>(Xmat1)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Inverse of a marix
 <span class="co"># solve(Xmat1) # what does the error message say?</span>
 
 
@@ -296,6 +350,34 @@ Xmat12.inv=<span class="kw">solve</span>(Xmat12);
 Xmat12.inv<span class="op">%*%</span>Xmat12
 Xmat12<span class="op">%*%</span>Xmat12.inv
 
+### Projection matrix
+
+<span class="kw">set.seed</span>(<span class="dv">12</span>)
+X =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">6</span>),<span class="dv">3</span>,<span class="dv">2</span>) 
+P=X<span class="op">%*%</span><span class="kw">solve</span>(<span class="kw">t</span>(X)<span class="op">%*%</span>X)<span class="op">%*%</span><span class="kw">t</span>(X)
+
+P<span class="op">%*%</span>X
+X
+(<span class="kw">diag</span>(<span class="dv">3</span>)<span class="op">-</span>P)<span class="op">%*%</span>X
+
+### Rank of a matrix:
+<span class="kw">qr</span>(X)<span class="op">$</span>rank
+<span class="co"># Example </span>
+
+### Determinants
+<span class="kw">det</span>(P)
+
+
+### Eigenvalue and eigenvector
+
+
+### Matrix definiteness
+
+### Eigenvalue decomposition 
+
+
+
+### Singular value decomposition 
 
 
 <span class="kw">svd</span>(Xmat1)  <span class="co"># singular value decomposition of Xmat1</span>

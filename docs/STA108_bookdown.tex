@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-06}
+    \date{2020-04-08}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2655,21 +2655,45 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 \NormalTok{### Verify another property of transpose:}
 \KeywordTok{t}\NormalTok{( Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2) ) }
 \NormalTok{Xmat2}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat1)}
+\CommentTok{# solve(Xmat1) # what does the error message say?}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{### Inverse of a marix}
-\CommentTok{# solve(Xmat1) # what does the error message say?}
+\CommentTok{# set.seed(1)}
+\CommentTok{# A= matrix(rnorm(9),3,3);}
+\CommentTok{# set.seed(): specify the random seed for generating random numbers }
+\CommentTok{# Because a computer (if not a quantum one) can only generate pseudorandomness }
+\CommentTok{# set.seed(1)}
+\CommentTok{# B=matrix(rnorm(9),3,3);}
+\CommentTok{# identical(A,B)}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{A=}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{9}\NormalTok{),}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{);}
+\NormalTok{A.inv=}\KeywordTok{solve}\NormalTok{(A);}
+
+\NormalTok{A.inv}\OperatorTok{%*%}\NormalTok{A }
+\NormalTok{A}\OperatorTok{%*%}\NormalTok{A.inv}
 
 
-\NormalTok{Xmat12=Xmat1}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(Xmat2);}
+\NormalTok{B=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{9}\NormalTok{),}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{);}
+\KeywordTok{identical}\NormalTok{(A,B)}
+\NormalTok{B.inv=}\KeywordTok{solve}\NormalTok{(B);}
 
-\NormalTok{Xmat12.inv=}\KeywordTok{solve}\NormalTok{(Xmat12);}
+\NormalTok{AB.inv=}\KeywordTok{solve}\NormalTok{(A}\OperatorTok{%*%}\NormalTok{B)}
 
-\NormalTok{Xmat12.inv}\OperatorTok{%*%}\NormalTok{Xmat12}
-\NormalTok{Xmat12}\OperatorTok{%*%}\NormalTok{Xmat12.inv}
+\NormalTok{B.inv}\OperatorTok{%*%}\NormalTok{A.inv}
+\NormalTok{AB.inv}
+
+\KeywordTok{max}\NormalTok{(}\KeywordTok{abs}\NormalTok{(B.inv}\OperatorTok{%*%}\NormalTok{A.inv}\OperatorTok{-}\NormalTok{AB.inv))}
+
+\CommentTok{# Why?}
+\CommentTok{# This is because }
+\CommentTok{# (A%*%B)%*%AB.int= I if AB.inv is the inverse of AB=A%*%B}
+\CommentTok{# and that }
+\CommentTok{# A%*%B %*%B.inv%*%A.inv=A%*%(B%*%B.inv)%*%A.inv =A%*%A.inv=I}
 
 \NormalTok{### Projection matrix}
 
@@ -2682,28 +2706,67 @@ Reading materials: STA108\_LinearAlgebra\_S20.pdf.
 \NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{3}\NormalTok{)}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{X}
 
 \NormalTok{### Rank of a matrix:}
-\KeywordTok{qr}\NormalTok{(X)}\OperatorTok{$}\NormalTok{rank}
-\CommentTok{# Example }
+\KeywordTok{qr}\NormalTok{(X)}\OperatorTok{$}\NormalTok{rank }\CommentTok{# Check out the qr() function yourself!}
+\CommentTok{# The rank of X is 2 when the dimension of X is 3 by 2}
+\CommentTok{# This means that the matrix X is full rank }
+
+
+\NormalTok{## How about x.transpose times X?}
+\NormalTok{XtX=}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X}
+\KeywordTok{dim}\NormalTok{(XtX)}
+\KeywordTok{qr}\NormalTok{(XtX)}\OperatorTok{$}\NormalTok{rank}
+\CommentTok{# This is a full rank matrix}
+
+\NormalTok{## How about X times X.transpose?}
+\NormalTok{XXt=X}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X)}
+\KeywordTok{dim}\NormalTok{(XXt)}
+\KeywordTok{qr}\NormalTok{(XXt)}\OperatorTok{$}\NormalTok{rank}
+\CommentTok{# This is NOT a full rank matrix }
+
+\CommentTok{# Rank and inverse}
+\KeywordTok{solve}\NormalTok{(XtX)}
+\CommentTok{# solve(XXt)}
 
 \NormalTok{### Determinants}
-\KeywordTok{det}\NormalTok{(P)}
+\KeywordTok{det}\NormalTok{(A)}
+\DecValTok{1}\OperatorTok{/}\KeywordTok{det}\NormalTok{(}\KeywordTok{solve}\NormalTok{(A)) }
+\KeywordTok{det}\NormalTok{(A}\OperatorTok{%*%}\NormalTok{B)}
+\KeywordTok{det}\NormalTok{(A)}\OperatorTok{%*%}\KeywordTok{det}\NormalTok{(B)}
+\KeywordTok{det}\NormalTok{(}\DecValTok{3}\OperatorTok{*}\NormalTok{A)}
+
+\NormalTok{A.symm =}\StringTok{ }\NormalTok{(A}\OperatorTok{+}\KeywordTok{t}\NormalTok{(A))}\OperatorTok{/}\DecValTok{2}\NormalTok{;}
+\KeywordTok{det}\NormalTok{(A.symm)}
+\NormalTok{A.symm.eigenvalues=}\KeywordTok{eigen}\NormalTok{(A.symm)}\OperatorTok{$}\NormalTok{values}
+\KeywordTok{prod}\NormalTok{(A.symm.eigenvalues)}
+\CommentTok{# Trace: summation of eigenvalues}
+\CommentTok{# Determinant: product of eigenvalues (for symmetric matrix only!)}
 
 
 \NormalTok{### Eigenvalue and eigenvector}
+\NormalTok{A.symm.eigenvectors=}\KeywordTok{eigen}\NormalTok{(A.symm)}\OperatorTok{$}\NormalTok{vectors}
+
+\NormalTok{A.symm}\OperatorTok{%*%}\NormalTok{A.symm.eigenvectors[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{A.symm.eigenvalues[}\DecValTok{1}\NormalTok{]}\OperatorTok{*}\NormalTok{A.symm.eigenvectors[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{A.symm.eigenvalues}
+\KeywordTok{qr}\NormalTok{(A.symm)}\OperatorTok{$}\NormalTok{rank}
+
+\KeywordTok{qr}\NormalTok{(XXt)}\OperatorTok{$}\NormalTok{rank}
+\KeywordTok{eigen}\NormalTok{(XXt) }\CommentTok{# the last eigenvalue equals zero, with some numerical error }
+
 
 
 \NormalTok{### Matrix definiteness}
+\KeywordTok{eigen}\NormalTok{(XtX)}
+\KeywordTok{eigen}\NormalTok{(P)}
+
 
 \NormalTok{### Eigenvalue decomposition }
+\NormalTok{A.symm.eigenvectors}\OperatorTok{%*%}\KeywordTok{diag}\NormalTok{(A.symm.eigenvalues)}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(A.symm.eigenvectors)}
+\NormalTok{A.symm}
 
 
-
-\NormalTok{### Singular value decomposition }
-
-
-\KeywordTok{svd}\NormalTok{(Xmat1)  }\CommentTok{# singular value decomposition of Xmat1}
-\NormalTok{### Q: what is the SVD?}
-\NormalTok{### Try ?svd}
+\NormalTok{### Singular value decomposition}
+\KeywordTok{svd}\NormalTok{(X)  }\CommentTok{# singular value decomposition of X}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2714,7 +2777,8 @@ matrices}\label{other-operations-on-vectors-and-matrices}
 \begin{Highlighting}[]
 \NormalTok{### How does R handle mathematically invalid operations?}
 \NormalTok{### Example 1:}
-\NormalTok{w =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)  }\CommentTok{# short-handed for c(1,2,3)}
+\NormalTok{ x =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{2.5}\NormalTok{,}\OperatorTok{-}\FloatTok{1.7}\NormalTok{,}\DecValTok{1}\NormalTok{) }
+\NormalTok{w =}\DecValTok{1}\OperatorTok{:}\DecValTok{3}  \CommentTok{# short-handed for c(1,2,3)}
 \NormalTok{### Q: What is the length of w?}
 
 \NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{w  }\CommentTok{# no error displayed, but not quite a mathematically valid operation}
@@ -2733,10 +2797,6 @@ matrices}\label{other-operations-on-vectors-and-matrices}
 \NormalTok{### How did R handle this?}
 \NormalTok{x[}\DecValTok{5}\NormalTok{]}
 \NormalTok{z[}\DecValTok{5}\NormalTok{]}
-
-\NormalTok{### Defining sequences}
-\FloatTok{3.1}\OperatorTok{:}\FloatTok{8.9}
-\CommentTok{# or use seq()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2761,6 +2821,45 @@ matrices}\label{other-operations-on-vectors-and-matrices}
 
 \NormalTok{A[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]}
 \NormalTok{A[A}\OperatorTok{<}\DecValTok{0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Datasets as matrices}\label{datasets-as-matrices}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(AER) }\CommentTok{# install.packages('AER')}
+\KeywordTok{data}\NormalTok{(}\StringTok{"Fatalities"}\NormalTok{)}
+\NormalTok{?Fatalities}
+
+\KeywordTok{data}\NormalTok{(}\StringTok{"CreditCard"}\NormalTok{)}
+\NormalTok{dat.CC=CreditCard}
+\NormalTok{?CreditCard}
+\KeywordTok{dim}\NormalTok{(dat.CC)}
+\KeywordTok{head}\NormalTok{(dat.CC)}
+
+\NormalTok{Y.CC=dat.CC[,}\DecValTok{1}\NormalTok{]}\OperatorTok{==}\StringTok{'yes'}\NormalTok{;}
+\NormalTok{X.CC=}\KeywordTok{as.matrix}\NormalTok{(dat.CC[,}\KeywordTok{c}\NormalTok{(}\StringTok{'reports'}\NormalTok{,}\StringTok{'age'}\NormalTok{,}\StringTok{'income'}\NormalTok{,}\StringTok{'share'}\NormalTok{,}\StringTok{'expenditure'}\NormalTok{,}\StringTok{'dependents'}\NormalTok{,}\StringTok{'months'}\NormalTok{,}\StringTok{'majorcards'}\NormalTok{,}\StringTok{'active'}\NormalTok{)])}
+
+\CommentTok{# Check the rank of the covariates:                 }
+\KeywordTok{qr}\NormalTok{(X.CC)}\OperatorTok{$}\NormalTok{rank                }
+\KeywordTok{dim}\NormalTok{(X.CC) }\CommentTok{# full rank, i.e., no multicolinearity}
+
+
+\CommentTok{# Linear regression:}
+\NormalTok{fit.CC=}\KeywordTok{lm}\NormalTok{(Y.CC}\OperatorTok{~}\NormalTok{X.CC}\OperatorTok{-}\DecValTok{1}\NormalTok{);}
+\KeywordTok{summary}\NormalTok{(fit.CC)}
+
+\CommentTok{# Fitted coefficients:}
+\NormalTok{beta.hat=}\KeywordTok{solve}\NormalTok{(}\KeywordTok{t}\NormalTok{(X.CC)}\OperatorTok{%*%}\NormalTok{X.CC)}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X.CC)}\OperatorTok{%*%}\NormalTok{Y.CC;}
+\NormalTok{fit.CC}\OperatorTok{$}\NormalTok{coefficients}\OperatorTok{-}\NormalTok{beta.hat}
+
+\CommentTok{# Hat matrix: }
+\NormalTok{P.CC=X.CC}\OperatorTok{%*%}\KeywordTok{solve}\NormalTok{(}\KeywordTok{t}\NormalTok{(X.CC)}\OperatorTok{%*%}\NormalTok{X.CC)}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(X.CC)}
+\CommentTok{# Fitted Y}
+\NormalTok{Yhat.CC=P.CC}\OperatorTok{%*%}\NormalTok{Y.CC }
+\CommentTok{# Compare with the fits from lm()}
+\KeywordTok{max}\NormalTok{(}\KeywordTok{abs}\NormalTok{(fit.CC}\OperatorTok{$}\NormalTok{fitted.values}\OperatorTok{-}\NormalTok{Yhat.CC))}
 \end{Highlighting}
 \end{Shaded}
 

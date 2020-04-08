@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-06" />
+<meta name="date" content="2020-04-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -175,6 +175,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="B.2" data-path="ch-algebra.html"><a href="ch-algebra.html#matrix"><i class="fa fa-check"></i><b>B.2</b> Matrix</a></li>
 <li class="chapter" data-level="B.3" data-path="ch-algebra.html"><a href="ch-algebra.html#other-operations-on-vectors-and-matrices"><i class="fa fa-check"></i><b>B.3</b> Other operations on vectors and matrices</a><ul>
 <li class="chapter" data-level="B.3.1" data-path="ch-algebra.html"><a href="ch-algebra.html#array"><i class="fa fa-check"></i><b>B.3.1</b> Array</a></li>
+<li class="chapter" data-level="B.3.2" data-path="ch-algebra.html"><a href="ch-algebra.html#datasets-as-matrices"><i class="fa fa-check"></i><b>B.3.2</b> Datasets as matrices</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="C" data-path="ch-sim.html"><a href="ch-sim.html"><i class="fa fa-check"></i><b>C</b> Simulation and visualization</a><ul>
@@ -338,17 +339,41 @@ Xmat1<span class="op">*</span>Xmat2
 Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2)
 ### Verify another property of transpose:
 <span class="kw">t</span>( Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2) ) 
-Xmat2<span class="op">%*%</span><span class="kw">t</span>(Xmat1)</code></pre></div>
+Xmat2<span class="op">%*%</span><span class="kw">t</span>(Xmat1)
+<span class="co"># solve(Xmat1) # what does the error message say?</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Inverse of a marix
-<span class="co"># solve(Xmat1) # what does the error message say?</span>
+<span class="co"># set.seed(1)</span>
+<span class="co"># A= matrix(rnorm(9),3,3);</span>
+<span class="co"># set.seed(): specify the random seed for generating random numbers </span>
+<span class="co"># Because a computer (if not a quantum one) can only generate pseudorandomness </span>
+<span class="co"># set.seed(1)</span>
+<span class="co"># B=matrix(rnorm(9),3,3);</span>
+<span class="co"># identical(A,B)</span>
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+A=<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">9</span>),<span class="dv">3</span>,<span class="dv">3</span>);
+A.inv=<span class="kw">solve</span>(A);
+
+A.inv<span class="op">%*%</span>A 
+A<span class="op">%*%</span>A.inv
 
 
-Xmat12=Xmat1<span class="op">%*%</span><span class="kw">t</span>(Xmat2);
+B=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">9</span>),<span class="dv">3</span>,<span class="dv">3</span>);
+<span class="kw">identical</span>(A,B)
+B.inv=<span class="kw">solve</span>(B);
 
-Xmat12.inv=<span class="kw">solve</span>(Xmat12);
+AB.inv=<span class="kw">solve</span>(A<span class="op">%*%</span>B)
 
-Xmat12.inv<span class="op">%*%</span>Xmat12
-Xmat12<span class="op">%*%</span>Xmat12.inv
+B.inv<span class="op">%*%</span>A.inv
+AB.inv
+
+<span class="kw">max</span>(<span class="kw">abs</span>(B.inv<span class="op">%*%</span>A.inv<span class="op">-</span>AB.inv))
+
+<span class="co"># Why?</span>
+<span class="co"># This is because </span>
+<span class="co"># (A%*%B)%*%AB.int= I if AB.inv is the inverse of AB=A%*%B</span>
+<span class="co"># and that </span>
+<span class="co"># A%*%B %*%B.inv%*%A.inv=A%*%(B%*%B.inv)%*%A.inv =A%*%A.inv=I</span>
 
 ### Projection matrix
 
@@ -361,34 +386,74 @@ X
 (<span class="kw">diag</span>(<span class="dv">3</span>)<span class="op">-</span>P)<span class="op">%*%</span>X
 
 ### Rank of a matrix:
-<span class="kw">qr</span>(X)<span class="op">$</span>rank
-<span class="co"># Example </span>
+<span class="kw">qr</span>(X)<span class="op">$</span>rank <span class="co"># Check out the qr() function yourself!</span>
+<span class="co"># The rank of X is 2 when the dimension of X is 3 by 2</span>
+<span class="co"># This means that the matrix X is full rank </span>
+
+
+## How about x.transpose times X?
+XtX=<span class="kw">t</span>(X)<span class="op">%*%</span>X
+<span class="kw">dim</span>(XtX)
+<span class="kw">qr</span>(XtX)<span class="op">$</span>rank
+<span class="co"># This is a full rank matrix</span>
+
+## How about X times X.transpose?
+XXt=X<span class="op">%*%</span><span class="kw">t</span>(X)
+<span class="kw">dim</span>(XXt)
+<span class="kw">qr</span>(XXt)<span class="op">$</span>rank
+<span class="co"># This is NOT a full rank matrix </span>
+
+<span class="co"># Rank and inverse</span>
+<span class="kw">solve</span>(XtX)
+<span class="co"># solve(XXt)</span>
 
 ### Determinants
-<span class="kw">det</span>(P)
+<span class="kw">det</span>(A)
+<span class="dv">1</span><span class="op">/</span><span class="kw">det</span>(<span class="kw">solve</span>(A)) 
+<span class="kw">det</span>(A<span class="op">%*%</span>B)
+<span class="kw">det</span>(A)<span class="op">%*%</span><span class="kw">det</span>(B)
+<span class="kw">det</span>(<span class="dv">3</span><span class="op">*</span>A)
+
+A.symm =<span class="st"> </span>(A<span class="op">+</span><span class="kw">t</span>(A))<span class="op">/</span><span class="dv">2</span>;
+<span class="kw">det</span>(A.symm)
+A.symm.eigenvalues=<span class="kw">eigen</span>(A.symm)<span class="op">$</span>values
+<span class="kw">prod</span>(A.symm.eigenvalues)
+<span class="co"># Trace: summation of eigenvalues</span>
+<span class="co"># Determinant: product of eigenvalues (for symmetric matrix only!)</span>
 
 
 ### Eigenvalue and eigenvector
+A.symm.eigenvectors=<span class="kw">eigen</span>(A.symm)<span class="op">$</span>vectors
+
+A.symm<span class="op">%*%</span>A.symm.eigenvectors[,<span class="dv">1</span>]
+A.symm.eigenvalues[<span class="dv">1</span>]<span class="op">*</span>A.symm.eigenvectors[,<span class="dv">1</span>]
+A.symm.eigenvalues
+<span class="kw">qr</span>(A.symm)<span class="op">$</span>rank
+
+<span class="kw">qr</span>(XXt)<span class="op">$</span>rank
+<span class="kw">eigen</span>(XXt) <span class="co"># the last eigenvalue equals zero, with some numerical error </span>
+
 
 
 ### Matrix definiteness
+<span class="kw">eigen</span>(XtX)
+<span class="kw">eigen</span>(P)
+
 
 ### Eigenvalue decomposition 
+A.symm.eigenvectors<span class="op">%*%</span><span class="kw">diag</span>(A.symm.eigenvalues)<span class="op">%*%</span><span class="kw">t</span>(A.symm.eigenvectors)
+A.symm
 
 
-
-### Singular value decomposition 
-
-
-<span class="kw">svd</span>(Xmat1)  <span class="co"># singular value decomposition of Xmat1</span>
-### Q: what is the SVD?
-### Try ?svd</code></pre></div>
+### Singular value decomposition
+<span class="kw">svd</span>(X)  <span class="co"># singular value decomposition of X</span></code></pre></div>
 </div>
 <div id="other-operations-on-vectors-and-matrices" class="section level2">
 <h2><span class="header-section-number">B.3</span> Other operations on vectors and matrices</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### How does R handle mathematically invalid operations?
 ### Example 1:
-w =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)  <span class="co"># short-handed for c(1,2,3)</span>
+ x =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="fl">2.5</span>,<span class="op">-</span><span class="fl">1.7</span>,<span class="dv">1</span>) 
+w =<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>  <span class="co"># short-handed for c(1,2,3)</span>
 ### Q: What is the length of w?
 
 x <span class="op">+</span><span class="st"> </span>w  <span class="co"># no error displayed, but not quite a mathematically valid operation</span>
@@ -406,11 +471,7 @@ z =<span class="st"> </span><span class="kw">sin</span>(x) <span class="op">+</s
 ### What is (-1.7)^{1.5}???
 ### How did R handle this?
 x[<span class="dv">5</span>]
-z[<span class="dv">5</span>]
-
-### Defining sequences
-<span class="fl">3.1</span><span class="op">:</span><span class="fl">8.9</span>
-<span class="co"># or use seq()</span></code></pre></div>
+z[<span class="dv">5</span>]</code></pre></div>
 <div id="array" class="section level3">
 <h3><span class="header-section-number">B.3.1</span> Array</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Arrays, a.k.a. tensors
@@ -430,6 +491,41 @@ A[<span class="dv">2</span>,,] <span class="co"># returns the 3 x 4 matrix forme
 
 A[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>]
 A[A<span class="op">&lt;</span><span class="dv">0</span>]</code></pre></div>
+</div>
+<div id="datasets-as-matrices" class="section level3">
+<h3><span class="header-section-number">B.3.2</span> Datasets as matrices</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(AER) <span class="co"># install.packages(&#39;AER&#39;)</span>
+<span class="kw">data</span>(<span class="st">&quot;Fatalities&quot;</span>)
+?Fatalities
+
+<span class="kw">data</span>(<span class="st">&quot;CreditCard&quot;</span>)
+dat.CC=CreditCard
+?CreditCard
+<span class="kw">dim</span>(dat.CC)
+<span class="kw">head</span>(dat.CC)
+
+Y.CC=dat.CC[,<span class="dv">1</span>]<span class="op">==</span><span class="st">&#39;yes&#39;</span>;
+X.CC=<span class="kw">as.matrix</span>(dat.CC[,<span class="kw">c</span>(<span class="st">&#39;reports&#39;</span>,<span class="st">&#39;age&#39;</span>,<span class="st">&#39;income&#39;</span>,<span class="st">&#39;share&#39;</span>,<span class="st">&#39;expenditure&#39;</span>,<span class="st">&#39;dependents&#39;</span>,<span class="st">&#39;months&#39;</span>,<span class="st">&#39;majorcards&#39;</span>,<span class="st">&#39;active&#39;</span>)])
+
+<span class="co"># Check the rank of the covariates:                 </span>
+<span class="kw">qr</span>(X.CC)<span class="op">$</span>rank                
+<span class="kw">dim</span>(X.CC) <span class="co"># full rank, i.e., no multicolinearity</span>
+
+
+<span class="co"># Linear regression:</span>
+fit.CC=<span class="kw">lm</span>(Y.CC<span class="op">~</span>X.CC<span class="op">-</span><span class="dv">1</span>);
+<span class="kw">summary</span>(fit.CC)
+
+<span class="co"># Fitted coefficients:</span>
+beta.hat=<span class="kw">solve</span>(<span class="kw">t</span>(X.CC)<span class="op">%*%</span>X.CC)<span class="op">%*%</span><span class="kw">t</span>(X.CC)<span class="op">%*%</span>Y.CC;
+fit.CC<span class="op">$</span>coefficients<span class="op">-</span>beta.hat
+
+<span class="co"># Hat matrix: </span>
+P.CC=X.CC<span class="op">%*%</span><span class="kw">solve</span>(<span class="kw">t</span>(X.CC)<span class="op">%*%</span>X.CC)<span class="op">%*%</span><span class="kw">t</span>(X.CC)
+<span class="co"># Fitted Y</span>
+Yhat.CC=P.CC<span class="op">%*%</span>Y.CC 
+<span class="co"># Compare with the fits from lm()</span>
+<span class="kw">max</span>(<span class="kw">abs</span>(fit.CC<span class="op">$</span>fitted.values<span class="op">-</span>Yhat.CC))</code></pre></div>
 
 </div>
 </div>

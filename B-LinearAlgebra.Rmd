@@ -158,20 +158,45 @@ Xmat1%*%t(Xmat2)
 ### Verify another property of transpose:
 t( Xmat1%*%t(Xmat2) ) 
 Xmat2%*%t(Xmat1)
+# solve(Xmat1) # what does the error message say?
+
 ```
 
 
 ```{r}
 ### Inverse of a marix
-# solve(Xmat1) # what does the error message say?
+# set.seed(1)
+# A= matrix(rnorm(9),3,3);
+# set.seed(): specify the random seed for generating random numbers 
+# Because a computer (if not a quantum one) can only generate pseudorandomness 
+# set.seed(1)
+# B=matrix(rnorm(9),3,3);
+# identical(A,B)
+
+set.seed(1)
+A= matrix(rnorm(9),3,3);
+A.inv=solve(A);
+
+A.inv%*%A 
+A%*%A.inv
 
 
-Xmat12=Xmat1%*%t(Xmat2);
+B=matrix(rnorm(9),3,3);
+identical(A,B)
+B.inv=solve(B);
 
-Xmat12.inv=solve(Xmat12);
+AB.inv=solve(A%*%B)
 
-Xmat12.inv%*%Xmat12
-Xmat12%*%Xmat12.inv
+B.inv%*%A.inv
+AB.inv
+
+max(abs(B.inv%*%A.inv-AB.inv))
+
+# Why?
+# This is because 
+# (A%*%B)%*%AB.int= I if AB.inv is the inverse of AB=A%*%B
+# and that 
+# A%*%B %*%B.inv%*%A.inv=A%*%(B%*%B.inv)%*%A.inv =A%*%A.inv=I
 
 ### Projection matrix
 
@@ -184,28 +209,67 @@ X
 (diag(3)-P)%*%X
 
 ### Rank of a matrix:
-qr(X)$rank
-# Example 
+qr(X)$rank # Check out the qr() function yourself!
+# The rank of X is 2 when the dimension of X is 3 by 2
+# This means that the matrix X is full rank 
+
+
+## How about x.transpose times X?
+XtX=t(X)%*%X
+dim(XtX)
+qr(XtX)$rank
+# This is a full rank matrix
+
+## How about X times X.transpose?
+XXt=X%*%t(X)
+dim(XXt)
+qr(XXt)$rank
+# This is NOT a full rank matrix 
+
+# Rank and inverse
+solve(XtX)
+# solve(XXt)
 
 ### Determinants
-det(P)
+det(A)
+1/det(solve(A)) 
+det(A%*%B)
+det(A)%*%det(B)
+det(3*A)
+
+A.symm = (A+t(A))/2;
+det(A.symm)
+A.symm.eigenvalues=eigen(A.symm)$values
+prod(A.symm.eigenvalues)
+# Trace: summation of eigenvalues
+# Determinant: product of eigenvalues (for symmetric matrix only!)
 
 
 ### Eigenvalue and eigenvector
+A.symm.eigenvectors=eigen(A.symm)$vectors
+
+A.symm%*%A.symm.eigenvectors[,1]
+A.symm.eigenvalues[1]*A.symm.eigenvectors[,1]
+A.symm.eigenvalues
+qr(A.symm)$rank
+
+qr(XXt)$rank
+eigen(XXt) # the last eigenvalue equals zero, with some numerical error 
+
 
 
 ### Matrix definiteness
+eigen(XtX)
+eigen(P)
+
 
 ### Eigenvalue decomposition 
+A.symm.eigenvectors%*%diag(A.symm.eigenvalues)%*%t(A.symm.eigenvectors)
+A.symm
 
 
-
-### Singular value decomposition 
-
-
-svd(Xmat1)  # singular value decomposition of Xmat1
-### Q: what is the SVD?
-### Try ?svd
+### Singular value decomposition
+svd(X)  # singular value decomposition of X
         
 ```
 
@@ -214,7 +278,8 @@ svd(Xmat1)  # singular value decomposition of Xmat1
 ```{r}
 ### How does R handle mathematically invalid operations?
 ### Example 1:
-w = c(1:3)  # short-handed for c(1,2,3)
+ x = c(1,2,4,2.5,-1.7,1) 
+w =1:3  # short-handed for c(1,2,3)
 ### Q: What is the length of w?
 
 x + w  # no error displayed, but not quite a mathematically valid operation
@@ -234,9 +299,6 @@ z = sin(x) + x^{1.5}* exp(-x^3)
 x[5]
 z[5]
 
-### Defining sequences
-3.1:8.9
-# or use seq()
 ```
 
 ### Array
@@ -259,4 +321,43 @@ A[2,,] # returns the 3 x 4 matrix formed by restricting the first dimension inde
 
 A[2,1,2]
 A[A<0]
+```
+
+### Datasets as matrices
+
+```{r}
+library(AER) # install.packages('AER')
+data("Fatalities")
+#?Fatalities
+
+data("CreditCard")
+dat.CC=CreditCard
+#?CreditCard
+dim(dat.CC)
+head(dat.CC)
+
+Y.CC=dat.CC[,1]=='yes';
+X.CC=as.matrix(dat.CC[,c('reports','age','income','share','expenditure','dependents','months','majorcards','active')])
+
+# Check the rank of the covariates:                 
+qr(X.CC)$rank                
+dim(X.CC) # full rank, i.e., no multicolinearity
+
+
+# Linear regression:
+fit.CC=lm(Y.CC~X.CC-1);
+summary(fit.CC)
+
+# Fitted coefficients:
+beta.hat=solve(t(X.CC)%*%X.CC)%*%t(X.CC)%*%Y.CC;
+fit.CC$coefficients-beta.hat
+
+# Hat matrix: 
+P.CC=X.CC%*%solve(t(X.CC)%*%X.CC)%*%t(X.CC)
+# Fitted Y
+Yhat.CC=P.CC%*%Y.CC 
+# Compare with the fits from lm()
+max(abs(fit.CC$fitted.values-Yhat.CC))
+
+
 ```

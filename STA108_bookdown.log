@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  8 APR 2020 14:02
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  10 APR 2020 14:03
 entering extended mode
 **./STA108_bookdown.tex
 (STA108_bookdown.tex
@@ -1187,21 +1187,17 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Appendix C.
 [71
 
-]
-Underfull \vbox (badness 2600) detected at line 2977
- []
+] [72]
+Underfull \vbox (badness 1033) has occurred while \output is active []
 
-
-Underfull \vbox (badness 1264) has occurred while \output is active []
-
-[72]
-No file STA108_bookdown.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2982.
 [73]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2982.
+No file STA108_bookdown.bbl.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3070.
+[74]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 3070.
 (STA108_bookdown.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 2982.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2982.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 3070.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3070.
 
 Package rerunfilecheck Info: File `STA108_bookdown.out' has not changed.
 (rerunfilecheck)             Checksum: BAD24BDB4766C31738063A6FCE737653.
@@ -1218,4 +1214,4 @@ Here is how much of TeX's memory you used:
  1328 hyphenation exceptions out of 8191
  45i,6n,68p,814b,443s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on STA108_bookdown.pdf (73 pages).
+Output written on STA108_bookdown.pdf (74 pages).

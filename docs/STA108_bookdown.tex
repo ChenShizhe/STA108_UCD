@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-08}
+    \date{2020-04-10}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2830,11 +2830,11 @@ matrices}\label{other-operations-on-vectors-and-matrices}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(AER) }\CommentTok{# install.packages('AER')}
 \KeywordTok{data}\NormalTok{(}\StringTok{"Fatalities"}\NormalTok{)}
-\NormalTok{?Fatalities}
+\CommentTok{#?Fatalities}
 
 \KeywordTok{data}\NormalTok{(}\StringTok{"CreditCard"}\NormalTok{)}
 \NormalTok{dat.CC=CreditCard}
-\NormalTok{?CreditCard}
+\CommentTok{#?CreditCard}
 \KeywordTok{dim}\NormalTok{(dat.CC)}
 \KeywordTok{head}\NormalTok{(dat.CC)}
 
@@ -2874,7 +2874,7 @@ univariate}\label{simulation-and-visualization-univariate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{### Simulate random variables }
+\NormalTok{## Random seed}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{) }\CommentTok{# set random number generator seed for reproducibility}
 \KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
 \KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{) }
@@ -2885,18 +2885,84 @@ univariate}\label{simulation-and-visualization-univariate}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
 \KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
 \KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Uniform distribution}
 \NormalTok{### Draw ten uniform random variables:}
-
 \KeywordTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \CommentTok{# use ?runif to see what other options are available }
 
+\CommentTok{# To help understand this function, we can draw the density plot for this distribution}
+\NormalTok{x.grid=}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\DecValTok{0}\NormalTok{,}\DataTypeTok{to=}\DecValTok{1}\NormalTok{,}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{)}
+\NormalTok{unif.pdf=}\KeywordTok{dunif}\NormalTok{(x.grid,}\DataTypeTok{min=}\DecValTok{0}\NormalTok{,}\DataTypeTok{max=}\DecValTok{1}\NormalTok{);}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{y=}\NormalTok{unif.pdf,}\DataTypeTok{x=}\NormalTok{x.grid,}\DataTypeTok{type=}\StringTok{'l'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Compare this with a histogram from a set of random variables from runif:}
+
+\NormalTok{unif.rv.}\DecValTok{100}\NormalTok{=}\KeywordTok{runif}\NormalTok{(}\DecValTok{100}\NormalTok{);}
+\KeywordTok{hist}\NormalTok{(unif.rv.}\DecValTok{100}\NormalTok{,}\DataTypeTok{freq=}\OtherTok{FALSE}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Uniform'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'X'}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{y=}\NormalTok{unif.pdf,}\DataTypeTok{x=}\NormalTok{x.grid,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\CommentTok{# Further compare it with a smooth density estimation based on the samples:}
+\NormalTok{unif.pdf.est=}\KeywordTok{density}\NormalTok{(unif.rv.}\DecValTok{100}\NormalTok{);}
+\KeywordTok{lines}\NormalTok{(unif.pdf.est,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Wrap up the above plotting code as a function }
+
+\NormalTok{plot.density.empirical<-}\ControlFlowTok{function}\NormalTok{(rvs,pdf.true,pdf.grid,main)\{}
+\KeywordTok{hist}\NormalTok{(rvs,}\DataTypeTok{freq=}\OtherTok{FALSE}\NormalTok{,}\DataTypeTok{main=}\NormalTok{main,}\DataTypeTok{xlab=}\StringTok{'X'}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{y=}\NormalTok{pdf.true,}\DataTypeTok{x=}\NormalTok{pdf.grid,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\CommentTok{# Further compare it with a smooth density estimation based on the samples:}
+\NormalTok{pdf.est=}\KeywordTok{density}\NormalTok{(rvs);}
+\KeywordTok{lines}\NormalTok{(pdf.est,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\NormalTok{\}}
+
+
+\KeywordTok{plot.density.empirical}\NormalTok{(unif.rv.}\DecValTok{100}\NormalTok{,unif.pdf,x.grid,}\DataTypeTok{main=}\StringTok{'Uniform'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{### Normal}
 \NormalTok{### Draw ten normal random variables with mean 0 and variance 2}
 \KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{2}\NormalTok{))}
 
 \NormalTok{### There are many other distributions in R}
 \NormalTok{### try ?rchisq, ?rf, ?rt, ?rbeta, ?rpois, ...}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Other distributions}
+\NormalTok{### Poisson  ?rpois}
+
+\NormalTok{### Exponential ?rexp}
+
+\NormalTok{### t ?rt}
+
+
+\NormalTok{### Chisq ?rchisq}
+
+
+\NormalTok{### F ?rf}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Sampling from a user-specified vector }
 
 \NormalTok{### Draw samples from any vectors using sample()}
 \NormalTok{wrd =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"yet"}\NormalTok{, }\StringTok{"a"}\NormalTok{,}\StringTok{"new"}\NormalTok{,}\StringTok{"sentence"}\NormalTok{)}
@@ -2912,17 +2978,30 @@ univariate}\label{simulation-and-visualization-univariate}
 \NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
 \CommentTok{# We start with the very basic histogram }
 \KeywordTok{hist}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Use ?hist to modify the plot }
 
 \CommentTok{# And the boxplot:}
 \KeywordTok{boxplot}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# We can also draw visualize the data using ggplot2}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
 \KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Read more about the violin plots in the post here:}
 \CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
 \end{Highlighting}
@@ -2955,20 +3034,29 @@ multivariate}\label{simulation-and-visualization-multivariate}
 
 \NormalTok{### Pairwise scatter plot}
 \KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### Visualization in ggplot2}
 \KeywordTok{library}\NormalTok{(GGally)}
 \KeywordTok{ggpairs}\NormalTok{(dat.multi)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### For the pair x1 and x3}
 
 \CommentTok{# A more informative scatterplot, using base R }
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Or using ggplot2}
 \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}

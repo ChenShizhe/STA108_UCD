@@ -1,0 +1,145 @@
+---
+title: "Lecture script"
+date: "April 10th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+#  Simulation and visualization   {#ch:sim}
+
+<b>Reading materials</b>: Chapters 3, 5, and 7 in [R for data science](https://r4ds.had.co.nz/index.html) by Garrett Grolemund and Hadley Wickham (optional).
+
+## Simulation and visualization: univariate 
+
+```{r} 
+## Random seed 
+# set.seed(0) #<- 0 is different from other numbers!
+set.seed(8241252) 
+runif(1)
+?runif
+
+set.seed(824) 
+runif(1)
+
+set.seed(824) 
+runif(1)
+```
+
+```{r}
+set.seed(1)
+## Uniform distribution 
+runif(n=10,min=-2,max=0)
+
+## To visualize the probability density function of a uniform distribution
+x.grid=seq(from=-2,to=0,length.out=200)
+unif.pdf= dunif(x=x.grid,min=-2,max=0)
+plot(y=unif.pdf,x=x.grid,type='l')
+```
+```{r}
+rvs =runif(10000,min=-2,max=0)# random variables 
+
+
+hist(rvs,freq=FALSE,main='Uniform',xlab='X')
+lines(y=unif.pdf,x=x.grid,col='blue',lwd=3)
+unif.pdf.est=density(rvs);
+lines(unif.pdf.est,col='red',lwd=3)
+#?hist
+#?density
+```
+```{r}
+## Wrap up the plotting code into one function
+plot.density.STA108<-function(rvs,pdf.true,x.grid,title){
+  hist(rvs,freq=FALSE,main=title,xlab='X')
+  lines(y=pdf.true,x=x.grid,col='blue',lwd=3)
+  pdf.est=density(rvs);
+  lines(pdf.est,col='red',lwd=3)  
+}
+
+plot.density.STA108(rvs=rvs,pdf.true=unif.pdf,x.grid=x.grid,title='Uniform')
+```
+
+```{r}
+## Normal distribution
+
+norm.rvs=rnorm(100,mean=5,sd=0.5) 
+x.grid=seq(from=-20,to=20,length.out=4000)
+norm.pdf =dnorm(x.grid,mean=5,sd=0.5);
+
+plot.density.STA108(rvs=norm.rvs,pdf.true=norm.pdf,x.grid=x.grid,title='Normal')
+```
+```{r}
+## Poisson, exponential, 
+
+# Poisson 
+poisson.rvs=rpois(100,lambda=2) 
+x.grid=0:20;
+pois.pdf =dpois(x.grid,lambda=2);
+
+plot.density.STA108(rvs=poisson.rvs,pdf.true=pois.pdf,x.grid=x.grid,title='Poisson')
+
+# exponential distribution
+# ?rexp
+# Student-t: ?rt; Chi.square: ?rchisq; F-distribution: ?rf
+
+```
+
+```{r}
+## Sampling from a user-specified vector 
+
+?sample
+
+wrd=c("yet","a","new","sentence")
+
+sample(wrd,size=10,replace=T)
+```
+
+```{r}
+boxplot(norm.rvs)
+
+# ggplot2: violin plot
+library(ggplot2)
+ #install.packages('ggplot2')
+dat=data.frame(y=norm.rvs)
+ggplot(dat,aes(x=1, y=y))+
+  geom_violin(trim=F)
+```
+
+## Simulation and visualization: multivariate 
+
+```{r}
+set.seed(1)
+n=100;
+x1=rnorm(n);
+x2=2*x1+runif(n)*2;
+x3=x1*x2*rpois(n,lambda=3)
+
+dat.multi<-data.frame(y1=x1,y2=x2,y3=x3)
+head(dat.multi)
+
+
+### Visualization
+
+## Without ggplot2
+pairs(dat.multi,pch='.',cex=4,col='red')
+```
+```{r}
+## With ggplot2 and GGally
+library(GGally)
+
+ggpairs(dat.multi)
+```
+```{r}
+plot(x=dat.multi$y1,y=dat.multi$y3,pch=16,cex=2)
+lines(lowess(dat.multi$y1,dat.multi$y3),col=2,lwd=3)
+```
+
+```{r}
+ggplot(data=dat.multi)+
+  geom_point(mapping=aes(x=y1,y=y3))+
+  geom_smooth(mapping=aes(x=y1,y=y3))
+
+```
+

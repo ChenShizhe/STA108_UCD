@@ -16,7 +16,7 @@ knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warnin
 ## Simulation and visualization: univariate 
 
 ```{r}
-### Simulate random variables 
+## Random seed
 set.seed(1) # set random number generator seed for reproducibility
 runif(1)
 runif(1) 
@@ -28,24 +28,80 @@ set.seed(1)
 runif(1)
 runif(1)
 
+```
 
+```{r}
+## Uniform distribution
 ### Draw ten uniform random variables:
-
 runif(10)
 # use ?runif to see what other options are available 
 
+# To help understand this function, we can draw the density plot for this distribution
+x.grid=seq(from=0,to=1,length.out=100)
+unif.pdf=dunif(x.grid,min=0,max=1);
+plot(y=unif.pdf,x=x.grid,type='l')
+
+# Compare this with a histogram from a set of random variables from runif:
+
+unif.rv.100=runif(100);
+hist(unif.rv.100,freq=FALSE,main='Uniform',xlab='X')
+lines(y=unif.pdf,x=x.grid,col='blue',lwd=3)
+# Further compare it with a smooth density estimation based on the samples:
+unif.pdf.est=density(unif.rv.100);
+lines(unif.pdf.est,col='red',lwd=3)
+```
+```{r}
+# Wrap up the above plotting code as a function 
+
+plot.density.empirical<-function(rvs,pdf.true,pdf.grid,main){
+hist(rvs,freq=FALSE,main=main,xlab='X')
+lines(y=pdf.true,x=pdf.grid,col='blue',lwd=3)
+# Further compare it with a smooth density estimation based on the samples:
+pdf.est=density(rvs);
+lines(pdf.est,col='red',lwd=3)
+}
+
+
+plot.density.empirical(unif.rv.100,unif.pdf,x.grid,main='Uniform')
+
+```
+
+```{r}
+### Normal
 ### Draw ten normal random variables with mean 0 and variance 2
 rnorm(10,mean=0,sd=sqrt(2))
 
 ### There are many other distributions in R
 ### try ?rchisq, ?rf, ?rt, ?rbeta, ?rpois, ...
 
+
+```
+
+```{r}
+## Other distributions
+### Poisson  ?rpois
+
+### Exponential ?rexp
+
+### t ?rt
+
+
+### Chisq ?rchisq
+
+
+### F ?rf
+
+```
+
+```{r}
+## Sampling from a user-specified vector 
+
 ### Draw samples from any vectors using sample()
 wrd = c("yet", "a","new","sentence")
 sample(wrd,size=2)
 # use ?sample to see other options
-
 ```
+
 
 ```{r} 
 ### Visulize the simulated data

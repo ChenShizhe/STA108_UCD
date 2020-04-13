@@ -8,13 +8,108 @@ output: html_document
 knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
 ```
 
-# Linear regression model 
+# Simple linear regression model 
+
+\[
+z_i = x_i \beta_1 +\beta_0 +\epsilon_i, \quad  i=1,\ldots, n
+\]
+
+Observed data:
+
+- $(x_i, z_i)$ is the $i$th sample or observation among the $n$ samples ($i=1,2,..., n$)
+- $z_i$ (which is $y_i$ in the slides) is the reponse, or dependent variable of the $i$th observation/sample 
+- $x_i$ is the covariate, explanatory variable, or indepedent variable of the $i$th sample  
+- $n$ is the sample size (number of observations)
+
+Unknown (but fixed) parameters:
+
+- $\beta_1$ is the (regression) slope, or regression coefficient of $x$ 
+- $\beta_0$ is the intercept (on y-axis), or  (not very commonly used) regression coefficient of the constant 
+
+Unknown random variable:
+- $\epsilon_i$ is the noise or error term of the $i$th sample 
+
+Assumptions on $\{\epsilon_i\}_{i=1}^{n} \equiv \{\epsilon_1,\epsilon_2,\ldots, \epsilon_n\}$
+
+- $\{\epsilon_i\}_{i=1}^{n}$ are independently, and identically distributed (i.i.d.)
+- $\mathbb{E}[\epsilon_i]=0$ 
+- ${\rm var}(\epsilon_i)=\sigma^2$ 
+
+- $\{\epsilon_i\}_{i=1}^{n}$ are independent with $\{x_i\}_{i=1}^n$ (not considered in this class, because the independent variables are assumed to be constant)
 
 
 # Advertising data 
 
+```{r}
+dat.advertising=read.csv('../data/advertising.csv');
+
+# Visualize the data set:
+library(ggplot2)
+library(GGally)
+
+ggpairs(dat.advertising)
+```
+
+
+\[
+z_i = x_i \beta_1 +\beta_0 +\epsilon_i, \quad  i=1,\ldots, n
+\]
+
+Observed data:
+
+- $(x_i, z_i)$ is the $i$th sample or observation among the $n$ samples ($i=1,2,..., n$)
+- $z_i$ (which is $y_i$ in the slides) is the reponse, which is the `sales` in this dataset 
+- $x_i$ is the covariate, which is the `TV` (advertising budget) in this data set
+- $n=200$ is the sample size (number of observations)
+
+```{r}
+# Fit a simple linear regression
+# with sales as the response, and TV as the independent variable (covariate)
+fit.advertising =lm(sales~TV+1,data=dat.advertising)
+summary(fit.advertising)
+```
+
+We will denote the estimators as $\hat{\beta}_1$ and $\hat{\beta}_0$.
+
+```{r}
+# Draw the fitted line using ggplot2
+ggplot(data = dat.advertising) + 
+  geom_point(mapping = aes(x = TV, y = sales)) +
+  geom_line(data = fortify(fit.advertising ), aes(x = TV, y = .fitted),color='red')
+```
+
+```{r}
+ggplot(data = dat.advertising,aes(x = TV, y = sales)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+```
 
 # Flu shot 
 
+```{r}
+
+dat.flu = read.table("../data/flu240.txt", header = TRUE)
+
+# Take a look at size of the data before proceed:
+dim(dat.flu)
+colnames(dat.flu)
+# Basic visulization:
+ggpairs(dat.flu) # This might take a while..
+```
+
+```{r}
+# Jittering
+ggplot(dat.flu, aes(x=treatment.assigned, y=outcome)) + 
+  geom_point()
+
+ggplot(dat.flu, aes(x=treatment.assigned, y=outcome)) + 
+  geom_jitter(width = 0.25)
+```
+
+```{r}
+ggplot(dat.flu, aes(x=treatment.assigned, y=outcome)) + 
+  geom_jitter(width = 0.25)+
+  geom_smooth(method = "lm")
+```
 
 # Project STAR

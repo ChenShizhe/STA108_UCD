@@ -112,7 +112,7 @@ and $\mathrm{var}(\epsilon_i)=\sigma^2$ for  $i=1,2,\ldots, 2891$. The following
 
 How would you interpret the fitted slope and intercept?
 
-Are there any violations to the assumptions on $\{\epsilon_i\}_{i=1}^2891$?
+Are there any violations to the assumptions on $\{\epsilon_i\}_{i=1}^{2891}$?
 
 ```{r}
 # Fit a simple linear regression

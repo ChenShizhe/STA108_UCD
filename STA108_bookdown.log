@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  10 APR 2020 14:03
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  13 APR 2020 12:59
 entering extended mode
 **./STA108_bookdown.tex
 (STA108_bookdown.tex
@@ -1022,19 +1022,18 @@ Missing character: There is no ， in font [lmmono12-regular]:!
 Underfull \vbox (badness 5189) has occurred while \output is active []
 
 [9]
-Overfull \vbox (0.48355pt too high) detected at line 409
- []
+Underfull \vbox (badness 1577) has occurred while \output is active []
 
 [10] [11] [12
 
 ]
 Chapter 2.
 [13]
-Underfull \vbox (badness 10000) detected at line 532
+Underfull \vbox (badness 10000) detected at line 536
  []
 
 
-Overfull \vbox (0.17397pt too high) detected at line 532
+Overfull \vbox (0.17397pt too high) detected at line 536
  []
 
 [14] [15] [16
@@ -1045,7 +1044,7 @@ Chapter 3.
 Underfull \vbox (badness 1852) has occurred while \output is active []
 
 [18]
-Underfull \vbox (badness 10000) detected at line 681
+Underfull \vbox (badness 10000) detected at line 685
  []
 
 
@@ -1055,18 +1054,18 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [20] [21]
-Underfull \vbox (badness 10000) detected at line 848
+Underfull \vbox (badness 10000) detected at line 852
  []
 
 
-Overfull \vbox (1.92596pt too high) detected at line 848
+Overfull \vbox (1.92596pt too high) detected at line 852
  []
 
 [22]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [23]
-Underfull \vbox (badness 1910) detected at line 937
+Underfull \vbox (badness 1910) detected at line 941
  []
 
 [24] [25] [26
@@ -1074,11 +1073,11 @@ Underfull \vbox (badness 1910) detected at line 937
 ]
 Chapter 4.
 [27]
-Underfull \vbox (badness 10000) detected at line 1084
+Underfull \vbox (badness 10000) detected at line 1088
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1084
+Underfull \vbox (badness 10000) detected at line 1088
  []
 
 [28] [29] [30] [31] [32
@@ -1086,26 +1085,26 @@ Underfull \vbox (badness 10000) detected at line 1084
 ]
 Chapter 5.
 [33]
-Underfull \vbox (badness 10000) detected at line 1310
+Underfull \vbox (badness 10000) detected at line 1314
  []
 
 
-Underfull \vbox (badness 10000) detected at line 1310
+Underfull \vbox (badness 10000) detected at line 1314
  []
 
 [34]
-Underfull \vbox (badness 10000) detected at line 1382
+Underfull \vbox (badness 10000) detected at line 1386
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [35] [36]
-Underfull \vbox (badness 10000) detected at line 1478
+Underfull \vbox (badness 10000) detected at line 1482
  []
 
 
-Overfull \vbox (0.19797pt too high) detected at line 1478
+Overfull \vbox (0.19797pt too high) detected at line 1482
  []
 
 [37] [38]
@@ -1113,7 +1112,7 @@ Chapter 6.
 [39
 
 ] [40]
-Overfull \vbox (1.12202pt too high) detected at line 1666
+Overfull \vbox (1.12202pt too high) detected at line 1670
  []
 
 [41] [42] [43] [44
@@ -1121,17 +1120,17 @@ Overfull \vbox (1.12202pt too high) detected at line 1666
 ]
 Chapter 7.
 
-LaTeX Warning: Reference `lmR' on page 45 undefined on input line 1772.
+LaTeX Warning: Reference `lmR' on page 45 undefined on input line 1776.
 
 [45] [46]
-Underfull \vbox (badness 10000) detected at line 1912
+Underfull \vbox (badness 10000) detected at line 1916
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [47] [48] [49] [50]
-Underfull \vbox (badness 10000) detected at line 2112
+Underfull \vbox (badness 10000) detected at line 2116
  []
 
 
@@ -1144,7 +1143,7 @@ Chapter 8.
 [55] [56]
 Appendix A.
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <17.28> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2298.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2302.
 [57
 
 ] [58] [59]
@@ -1158,26 +1157,26 @@ Appendix B.
 Underfull \vbox (badness 1286) has occurred while \output is active []
 
 [64]
-Underfull \vbox (badness 10000) detected at line 2660
+Underfull \vbox (badness 10000) detected at line 2664
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2660
+Underfull \vbox (badness 10000) detected at line 2664
  []
 
 [65]
-Underfull \vbox (badness 10000) detected at line 2771
+Underfull \vbox (badness 10000) detected at line 2775
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [66]
-Underfull \vbox (badness 10000) detected at line 2771
+Underfull \vbox (badness 10000) detected at line 2775
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2771
+Underfull \vbox (badness 10000) detected at line 2775
  []
 
 [67]
@@ -1192,12 +1191,12 @@ Underfull \vbox (badness 1033) has occurred while \output is active []
 
 [73]
 No file STA108_bookdown.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3070.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3074.
 [74]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3070.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 3074.
 (STA108_bookdown.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 3070.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3070.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 3074.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3074.
 
 Package rerunfilecheck Info: File `STA108_bookdown.out' has not changed.
 (rerunfilecheck)             Checksum: BAD24BDB4766C31738063A6FCE737653.

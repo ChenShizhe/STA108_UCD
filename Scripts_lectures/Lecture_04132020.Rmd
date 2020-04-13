@@ -1,0 +1,20 @@
+---
+title: "Lecture script"
+date: "April 13th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+# Linear regression model 
+
+
+# Advertising data 
+
+
+# Flu shot 
+
+
+# Project STAR

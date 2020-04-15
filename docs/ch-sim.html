@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-13" />
+<meta name="date" content="2020-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -226,8 +226,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co"># To help understand this function, we can draw the density plot for this distribution</span>
 x.grid=<span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span><span class="dv">1</span>,<span class="dt">length.out=</span><span class="dv">100</span>)
 unif.pdf=<span class="kw">dunif</span>(x.grid,<span class="dt">min=</span><span class="dv">0</span>,<span class="dt">max=</span><span class="dv">1</span>);
-<span class="kw">plot</span>(<span class="dt">y=</span>unif.pdf,<span class="dt">x=</span>x.grid,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compare this with a histogram from a set of random variables from runif:</span>
+<span class="kw">plot</span>(<span class="dt">y=</span>unif.pdf,<span class="dt">x=</span>x.grid,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>)
+
+<span class="co"># Compare this with a histogram from a set of random variables from runif:</span>
 
 unif.rv.<span class="dv">100</span>=<span class="kw">runif</span>(<span class="dv">100</span>);
 <span class="kw">hist</span>(unif.rv.<span class="dv">100</span>,<span class="dt">freq=</span><span class="ot">FALSE</span>,<span class="dt">main=</span><span class="st">&#39;Uniform&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;X&#39;</span>)
@@ -275,17 +276,19 @@ wrd =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;y
 
 y&lt;-<span class="kw">rnorm</span>(<span class="dv">100</span>);
 <span class="co"># We start with the very basic histogram </span>
-<span class="kw">hist</span>(y)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Use ?hist to modify the plot </span>
+<span class="kw">hist</span>(y)
+<span class="co"># Use ?hist to modify the plot </span>
 
 <span class="co"># And the boxplot:</span>
-<span class="kw">boxplot</span>(y)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We can also draw visualize the data using ggplot2</span>
+<span class="kw">boxplot</span>(y)
+
+<span class="co"># We can also draw visualize the data using ggplot2</span>
 <span class="kw">library</span>(ggplot2)
 dat=<span class="kw">data.frame</span>(<span class="dt">y=</span>y)
 <span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>y)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_violin</span>(<span class="dt">trim=</span><span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read more about the violin plots in the post here:</span>
+<span class="st">  </span><span class="kw">geom_violin</span>(<span class="dt">trim=</span><span class="ot">FALSE</span>)
+
+<span class="co"># Read more about the violin plots in the post here:</span>
 <span class="co"># http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization</span></code></pre></div>
 </div>
 <div id="simulation-and-visualization-multivariate" class="section level2">
@@ -306,16 +309,22 @@ dat.multi&lt;-<span class="kw">data.frame</span>(<span class="dt">x1=</span>x1,<
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Visualization
 
 ### Pairwise scatter plot
-<span class="kw">pairs</span>(dat.multi,<span class="dt">pch=</span><span class="st">&#39;.&#39;</span>,<span class="dt">cex=</span><span class="dv">4</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Visualization in ggplot2
+<span class="kw">pairs</span>(dat.multi,<span class="dt">pch=</span><span class="st">&#39;.&#39;</span>,<span class="dt">cex=</span><span class="dv">4</span>)
+
+
+### Visualization in ggplot2
 <span class="kw">library</span>(GGally)
-<span class="kw">ggpairs</span>(dat.multi)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### For the pair x1 and x3
+<span class="kw">ggpairs</span>(dat.multi)
+
+
+### For the pair x1 and x3
 
 <span class="co"># A more informative scatterplot, using base R </span>
 <span class="kw">plot</span>(<span class="dt">x=</span>dat.multi<span class="op">$</span>x1,<span class="dt">y=</span>dat.multi<span class="op">$</span>x3,<span class="dt">data=</span>dat.multi,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">cex=</span><span class="dv">2</span>)
-<span class="kw">lines</span>(<span class="kw">lowess</span>(dat.multi<span class="op">$</span>x1, dat.multi<span class="op">$</span>x3), <span class="dt">col=</span><span class="dv">2</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Or using ggplot2</span>
+<span class="kw">lines</span>(<span class="kw">lowess</span>(dat.multi<span class="op">$</span>x1, dat.multi<span class="op">$</span>x3), <span class="dt">col=</span><span class="dv">2</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+
+<span class="co"># Or using ggplot2</span>
 <span class="kw">ggplot</span>(<span class="dt">data =</span> dat.multi) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> x3)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> x1, <span class="dt">y =</span> x3))</code></pre></div>

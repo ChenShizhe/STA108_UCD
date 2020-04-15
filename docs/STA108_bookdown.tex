@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-13}
+    \date{2020-04-15}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -427,12 +427,35 @@ Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
 \begin{Highlighting}[]
 \CommentTok{# Consider the advertising dataset}
 \NormalTok{dat.advertising=}\KeywordTok{read.csv}\NormalTok{(}\StringTok{'./data/advertising.csv'}\NormalTok{);}
-\CommentTok{# obtain the residuals:}
-\NormalTok{x=dat.advertising}\OperatorTok{$}\NormalTok{TV;}
-\NormalTok{y=dat.advertising}\OperatorTok{$}\NormalTok{sales;}
-\NormalTok{beta1=}\DecValTok{1}\NormalTok{;beta0=}\FloatTok{0.2}\NormalTok{; }\CommentTok{# Just two arbitrary numbers }
-\NormalTok{res=y}\OperatorTok{-}\NormalTok{x}\OperatorTok{*}\NormalTok{beta1}\OperatorTok{-}\NormalTok{beta0;}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
 
+
+\CommentTok{# Suppose that we want to draw a line in this scatter plot}
+\NormalTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\FloatTok{0.03}\NormalTok{); }\CommentTok{# beta0=4; beta1=0.03; # Just two arbitrary numbers }
+
+\CommentTok{# Visualize the line in the scatter plot }
+\CommentTok{# This time we use the plotting functions in base R (i.e., not ggplot2)}
+\CommentTok{# With the above function, we can reproduce the plot in Slide 13}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\NormalTok{beta[}\DecValTok{1}\NormalTok{],}\DataTypeTok{b=}\NormalTok{beta[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# To reproduce the plot in Slide 13}
+\CommentTok{# We need to find the corresponding point on the line for each data point}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'black'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\NormalTok{beta[}\DecValTok{1}\NormalTok{],}\DataTypeTok{b=}\NormalTok{beta[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\NormalTok{yout=dat.advertising}\OperatorTok{$}\NormalTok{TV}\OperatorTok{*}\NormalTok{beta[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta[}\DecValTok{1}\NormalTok{];}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{dim}\NormalTok{(dat.advertising)[}\DecValTok{1}\NormalTok{])\{}
+  \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ dat.advertising}\OperatorTok{$}\NormalTok{sales[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{) }
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# What if we want to feed in different numbers? }
 
 \CommentTok{# Write a function that can calculate x*beta1 + beta0}
@@ -445,30 +468,42 @@ Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
   \CommentTok{# How would you generalize it?}
 \NormalTok{\}}
 
-\NormalTok{res.new=dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{-}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
+\NormalTok{fits=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\FloatTok{0.03}\NormalTok{),}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
 
-\KeywordTok{identical}\NormalTok{(res.new,res)}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
+
+\KeywordTok{points}\NormalTok{(fits}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# With the above function, we can reproduce the plot in Slide 14}
-\NormalTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\FloatTok{0.03}\NormalTok{);}
-\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV, }\DataTypeTok{y=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
-\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\NormalTok{beta[}\DecValTok{1}\NormalTok{],}\DataTypeTok{b=}\NormalTok{beta[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\CommentTok{# Furthermore, we can wrap up the plotting code into one function as well }
 
-\NormalTok{yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV);}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{dim}\NormalTok{(dat.advertising)[}\DecValTok{1}\NormalTok{])\{}
-  \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ dat.advertising}\OperatorTok{$}\NormalTok{sales[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{) }
+\NormalTok{plot.scatter.line<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,response)\{}
+  
+  \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{covariate, }\DataTypeTok{y=}\NormalTok{response, }\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\FloatTok{1.3}\NormalTok{,}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'x'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'y'}\NormalTok{)}
+  \KeywordTok{abline}\NormalTok{(}\DataTypeTok{a=}\NormalTok{beta[}\DecValTok{1}\NormalTok{],}\DataTypeTok{b=}\NormalTok{beta[}\DecValTok{2}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
+  
+\NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate);}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{dim}\NormalTok{(dat.advertising)[}\DecValTok{1}\NormalTok{])\{}
+    \KeywordTok{segments}\NormalTok{(}\DataTypeTok{x0=}\NormalTok{covariate[i], }\DataTypeTok{y0=}\NormalTok{yout[i],  }\DataTypeTok{y1 =}\NormalTok{ response[i],}\DataTypeTok{col=}\StringTok{'blue'}\NormalTok{) }
+\NormalTok{  \}}
 \NormalTok{\}}
+
+
+
+\CommentTok{# We can now draw lines }
+\KeywordTok{plot.scatter.line}\NormalTok{(}\DataTypeTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\FloatTok{0.03}\NormalTok{),}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{response=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# We can see that the line is less than ideal}
-\CommentTok{# We will move on to find the minimizer of the squared error loss }
+
+\CommentTok{# Measuring the loss: }
+\NormalTok{## We will move on to find the minimizer of the squared error loss }
 
 \NormalTok{sum.of.squares<-}\ControlFlowTok{function}\NormalTok{(beta,covariate,outcome)\{}
 \NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta,}\DataTypeTok{covariate=}\NormalTok{covariate);}
@@ -482,6 +517,7 @@ Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
 \CommentTok{# 1, Use generic optimizer in R}
 \NormalTok{fit.optim=}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{),sum.of.squares,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 \NormalTok{beta.hat.optim=fit.optim}\OperatorTok{$}\NormalTok{par;}
+
 \CommentTok{# 2. Use analytic form of the optimizer}
 
 \NormalTok{fit.linear.model<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
@@ -566,11 +602,8 @@ where \(\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)\). We set
 
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{### We can run the simulation by putting the above lines into a large for-loop}
 \NormalTok{### We will wrap them up into one function}
 
@@ -910,11 +943,8 @@ distribution.
 \NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{## Simulate the true sampling distribution:}
 \NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
 \NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
@@ -1524,11 +1554,6 @@ choice to detect certain anomalies.
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
 \KeywordTok{plot}\NormalTok{(resid}\OperatorTok{~}\NormalTok{fit.lm}\OperatorTok{$}\NormalTok{fitted.values,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'Fitted values'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
@@ -1555,25 +1580,12 @@ on the relationship. In this example, we will fit two regression
 \CommentTok{#par(mfrow=c(3,1))}
 \KeywordTok{plot}\NormalTok{(fit.log}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\KeywordTok{log}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{TV),}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (log TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'log(TV)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{plot}\NormalTok{(fit.sqrt}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sqrtTV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (sq. rt. TV)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'sqrt(TV)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Residuals'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{#par(mfrow=c(1,1))}
 \end{Highlighting}
 \end{Shaded}
@@ -1626,11 +1638,7 @@ where, for \(i=1,2,\ldots, n\),
 
 \KeywordTok{plot}\NormalTok{(ARfits}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n),}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot 2'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Index i"}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
@@ -1684,18 +1692,11 @@ appropriate function.
 \CommentTok{#par(mfrow=c(3,1))}
 \KeywordTok{plot}\NormalTok{(fit.lm}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (original)'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{plot}\NormalTok{(fit.ylog}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (log)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'residuals'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \KeywordTok{plot}\NormalTok{(fit.ysqrt}\OperatorTok{$}\NormalTok{residuals}\OperatorTok{~}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'Residual plot (sqrt)'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"residuals"}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'TV'}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\DecValTok{0}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
 \end{Highlighting}
@@ -2505,11 +2506,7 @@ useful in this class.
 
 \CommentTok{#?persp}
 \KeywordTok{example}\NormalTok{(persp)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{#data()}
 \end{Highlighting}
 \end{Shaded}
@@ -2903,11 +2900,7 @@ univariate}\label{simulation-and-visualization-univariate}
 \NormalTok{x.grid=}\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from=}\DecValTok{0}\NormalTok{,}\DataTypeTok{to=}\DecValTok{1}\NormalTok{,}\DataTypeTok{length.out=}\DecValTok{100}\NormalTok{)}
 \NormalTok{unif.pdf=}\KeywordTok{dunif}\NormalTok{(x.grid,}\DataTypeTok{min=}\DecValTok{0}\NormalTok{,}\DataTypeTok{max=}\DecValTok{1}\NormalTok{);}
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{y=}\NormalTok{unif.pdf,}\DataTypeTok{x=}\NormalTok{x.grid,}\DataTypeTok{type=}\StringTok{'l'}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Compare this with a histogram from a set of random variables from runif:}
 
 \NormalTok{unif.rv.}\DecValTok{100}\NormalTok{=}\KeywordTok{runif}\NormalTok{(}\DecValTok{100}\NormalTok{);}
@@ -2982,30 +2975,17 @@ univariate}\label{simulation-and-visualization-univariate}
 \NormalTok{y<-}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{);}
 \CommentTok{# We start with the very basic histogram }
 \KeywordTok{hist}\NormalTok{(y)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Use ?hist to modify the plot }
 
 \CommentTok{# And the boxplot:}
 \KeywordTok{boxplot}\NormalTok{(y)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# We can also draw visualize the data using ggplot2}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \NormalTok{dat=}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{y=}\NormalTok{y)}
 \KeywordTok{ggplot}\NormalTok{(dat, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{,}\DataTypeTok{y=}\NormalTok{y)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\DataTypeTok{trim=}\OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{# Read more about the violin plots in the post here:}
 \CommentTok{# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization}
 \end{Highlighting}
@@ -3038,29 +3018,20 @@ multivariate}\label{simulation-and-visualization-multivariate}
 
 \NormalTok{### Pairwise scatter plot}
 \KeywordTok{pairs}\NormalTok{(dat.multi,}\DataTypeTok{pch=}\StringTok{'.'}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{4}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{### Visualization in ggplot2}
 \KeywordTok{library}\NormalTok{(GGally)}
 \KeywordTok{ggpairs}\NormalTok{(dat.multi)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \NormalTok{### For the pair x1 and x3}
 
 \CommentTok{# A more informative scatterplot, using base R }
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x1,}\DataTypeTok{y=}\NormalTok{dat.multi}\OperatorTok{$}\NormalTok{x3,}\DataTypeTok{data=}\NormalTok{dat.multi,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(dat.multi}\OperatorTok{$}\NormalTok{x1, dat.multi}\OperatorTok{$}\NormalTok{x3), }\DataTypeTok{col=}\DecValTok{2}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+
 \CommentTok{# Or using ggplot2}
 \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dat.multi) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x1, }\DataTypeTok{y =}\NormalTok{ x3)) }\OperatorTok{+}

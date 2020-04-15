@@ -18,11 +18,30 @@ knitr::opts_chunk$set(echo = TRUE, eval=TRUE, results = 'hide', fig.show="hide",
 ```{r}
 # Consider the advertising dataset
 dat.advertising=read.csv('./data/advertising.csv');
-# obtain the residuals:
-x=dat.advertising$TV;
-y=dat.advertising$sales;
-beta1=1;beta0=0.2; # Just two arbitrary numbers 
-res=y-x*beta1-beta0;
+plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
+
+
+# Suppose that we want to draw a line in this scatter plot
+beta=c(4,0.03); # beta0=4; beta1=0.03; # Just two arbitrary numbers 
+
+# Visualize the line in the scatter plot 
+# This time we use the plotting functions in base R (i.e., not ggplot2)
+# With the above function, we can reproduce the plot in Slide 13
+plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
+abline(a=beta[1],b=beta[2],col='red',lwd=3)
+
+# To reproduce the plot in Slide 13
+# We need to find the corresponding point on the line for each data point
+plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='black',xlab='x',ylab='y')
+abline(a=beta[1],b=beta[2],col='red',lwd=3)
+yout=dat.advertising$TV*beta[2]+beta[1];
+for(i in 1:dim(dat.advertising)[1]){
+  segments(x0=dat.advertising$TV[i], y0=yout[i],  y1 = dat.advertising$sales[i],col='blue') 
+}
+```
+
+
+```{r}
 
 # What if we want to feed in different numbers? 
 
@@ -36,26 +55,39 @@ linear.model<-function(beta,covariate){
   # How would you generalize it?
 }
 
-res.new=dat.advertising$sales-linear.model(beta=c(0.2,1),covariate=dat.advertising$TV);
+fits=linear.model(beta=c(4,0.03),covariate=dat.advertising$TV);
 
-identical(res.new,res)
+plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
+
+points(fits~dat.advertising$TV,col='red')
+
 ```
 
 ```{r}
-# With the above function, we can reproduce the plot in Slide 14
-beta=c(4,0.03);
-plot(x=dat.advertising$TV, y=dat.advertising$sales, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
-abline(a=beta[1],b=beta[2],col='red',lwd=3)
+# Furthermore, we can wrap up the plotting code into one function as well 
 
-yout=linear.model(beta=beta,covariate=dat.advertising$TV);
-for(i in 1:dim(dat.advertising)[1]){
-  segments(x0=dat.advertising$TV[i], y0=yout[i],  y1 = dat.advertising$sales[i],col='blue') 
+plot.scatter.line<-function(beta,covariate,response){
+  
+  plot(x=covariate, y=response, pch=16,cex=1.3,col='blue',xlab='x',ylab='y')
+  abline(a=beta[1],b=beta[2],col='red',lwd=3)
+  
+  yout=linear.model(beta=beta,covariate=covariate);
+  for(i in 1:dim(dat.advertising)[1]){
+    segments(x0=covariate[i], y0=yout[i],  y1 = response[i],col='blue') 
+  }
 }
+
+
+
+# We can now draw lines 
+plot.scatter.line(beta=c(4,0.03),covariate=dat.advertising$TV,response=dat.advertising$sales)
 ```
 
 ```{r}
 # We can see that the line is less than ideal
-# We will move on to find the minimizer of the squared error loss 
+
+# Measuring the loss: 
+## We will move on to find the minimizer of the squared error loss 
 
 sum.of.squares<-function(beta,covariate,outcome){
   yout=linear.model(beta=beta,covariate=covariate);
@@ -69,6 +101,7 @@ sum.of.squares<-function(beta,covariate,outcome){
 # 1, Use generic optimizer in R
 fit.optim=optim(c(0,0),sum.of.squares,covariate=dat.advertising$TV,outcome=dat.advertising$sales)
 beta.hat.optim=fit.optim$par;
+
 # 2. Use analytic form of the optimizer
 
 fit.linear.model<-function(covariate,outcome){

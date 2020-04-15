@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-13" />
+<meta name="date" content="2020-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -223,8 +223,8 @@ resid=<span class="st"> </span>fit.lm<span class="op">$</span>residuals;
 <span class="kw">plot</span>(resid<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot&#39;</span>)
 <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
 <span class="kw">plot</span>(resid<span class="op">~</span>fit.lm<span class="op">$</span>fitted.values,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;Fitted values&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
 </div>
 <div id="remedies-for-non-linearity" class="section level2">
 <h2><span class="header-section-number">6.2</span> Remedies for non-linearity</h2>
@@ -235,12 +235,14 @@ fit.sqrt =<span class="st"> </span><span class="kw">lm</span>(sales<span class="
 
 <span class="co">#par(mfrow=c(3,1))</span>
 <span class="kw">plot</span>(fit.log<span class="op">$</span>residuals<span class="op">~</span><span class="kw">log</span>(dat.advertising<span class="op">$</span>TV),<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (log TV)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;log(TV)&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Residuals&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit.lm<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (TV)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Residuals&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit.sqrt<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>sqrtTV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (sq. rt. TV)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;sqrt(TV)&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Residuals&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#par(mfrow=c(1,1))</span></code></pre></div>
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+<span class="kw">plot</span>(fit.lm<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (TV)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Residuals&#39;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+<span class="kw">plot</span>(fit.sqrt<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>sqrtTV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (sq. rt. TV)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;sqrt(TV)&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Residuals&#39;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+<span class="co">#par(mfrow=c(1,1))</span></code></pre></div>
 </div>
 <div id="independence" class="section level2">
 <h2><span class="header-section-number">6.3</span> Independence</h2>
@@ -271,8 +273,9 @@ ARfits =<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~<
 <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
 
 <span class="kw">plot</span>(ARfits<span class="op">$</span>residuals<span class="op">~</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>n),<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot 2&#39;</span>,<span class="dt">xlab=</span><span class="st">&quot;Index i&quot;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
 </div>
 <div id="normality" class="section level2">
 <h2><span class="header-section-number">6.4</span> Normality</h2>
@@ -304,10 +307,13 @@ normal_quantiles =<span class="st"> </span><span class="kw">qnorm</span>( (<span
 fit.ysqrt=<span class="kw">lm</span>(<span class="kw">sqrt</span>(sales)<span class="op">~</span>TV<span class="op">+</span><span class="dv">1</span>,<span class="dt">data=</span>dat.advertising)
 <span class="co">#par(mfrow=c(3,1))</span>
 <span class="kw">plot</span>(fit.lm<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (original)&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit.ylog<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (log)&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;residuals&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit.ysqrt<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (sqrt)&#39;</span>,<span class="dt">ylab=</span><span class="st">&quot;residuals&quot;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+<span class="kw">plot</span>(fit.ylog<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (log)&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;residuals&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+
+
+<span class="kw">plot</span>(fit.ysqrt<span class="op">$</span>residuals<span class="op">~</span>dat.advertising<span class="op">$</span>TV,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">main=</span><span class="st">&#39;Residual plot (sqrt)&#39;</span>,<span class="dt">ylab=</span><span class="st">&quot;residuals&quot;</span>,<span class="dt">xlab=</span><span class="st">&#39;TV&#39;</span>)
 <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>,<span class="dt">lwd=</span><span class="dv">3</span>)</code></pre></div>
 </div>
 <div id="influential-observations-and-outliers" class="section level2">

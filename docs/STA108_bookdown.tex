@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-15}
+    \date{2020-04-17}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -544,7 +544,14 @@ Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Calculate the decomposition of sum of squares }
+\CommentTok{# Summary of lm()}
+\KeywordTok{summary}\NormalTok{(fit.advertising)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Decomposition of sum of squares }
 \NormalTok{residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
 \NormalTok{explained.sum.of.squares=}\KeywordTok{sum}\NormalTok{((}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV)}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
 \NormalTok{total.sum.of.squares=}\KeywordTok{sum}\NormalTok{((dat.advertising}\OperatorTok{$}\NormalTok{sales}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(dat.advertising}\OperatorTok{$}\NormalTok{sales))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
@@ -566,8 +573,91 @@ Reading materials: Slides 12 - 22 in STA108\_LinearRegression\_S20.pdf
 \CommentTok{# Verify the identity:}
 \NormalTok{R.sq}
 \NormalTok{cor.hat}\OperatorTok{^}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?}
+
+\CommentTok{# One option is to use simulation to verify if the equality holds in every instance in your simulation }
+\CommentTok{# Simulate N.sim instances}
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+\NormalTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\FloatTok{0.4}\NormalTok{);n=}\DecValTok{50}\NormalTok{;x=}\KeywordTok{runif}\NormalTok{(n,}\DataTypeTok{min=}\OperatorTok{-}\DecValTok{2}\NormalTok{,}\DataTypeTok{max=}\FloatTok{7.5}\NormalTok{);sigma=}\DecValTok{2}\NormalTok{;}
+\NormalTok{out=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DataTypeTok{nrow=}\NormalTok{N.sim,}\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{N.sim)\{}
+\NormalTok{  Ey=x}\OperatorTok{*}\NormalTok{beta[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=sigma}\OperatorTok{*}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+  \CommentTok{# Copying code from the previous trunk:}
+\NormalTok{  residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+\NormalTok{  explained.sum.of.squares=}\KeywordTok{sum}\NormalTok{((}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x)}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(y))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{  total.sum.of.squares=}\KeywordTok{sum}\NormalTok{((y}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(y))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{  R.sq=}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
+\NormalTok{  cor.hat=}\KeywordTok{cor}\NormalTok{(x,y)}
+\NormalTok{  out[i,]=}\KeywordTok{c}\NormalTok{(R.sq,cor.hat)}
+\NormalTok{\}}
+
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{y=}\NormalTok{out[,}\DecValTok{1}\NormalTok{],}\DataTypeTok{x=}\NormalTok{out[,}\DecValTok{2}\NormalTok{],}\DataTypeTok{xlab=}\StringTok{'Correlation'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Coef. of determination'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# It's better to wrap it up into one function:}
+
+\NormalTok{N.sim=}\DecValTok{10000}\NormalTok{;}
+\NormalTok{beta=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\FloatTok{0.4}\NormalTok{);n=}\DecValTok{50}\NormalTok{;x=}\KeywordTok{runif}\NormalTok{(n,}\DataTypeTok{min=}\OperatorTok{-}\DecValTok{2}\NormalTok{,}\DataTypeTok{max=}\FloatTok{7.5}\NormalTok{);sigma=}\DecValTok{2}\NormalTok{;}
+
+\NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta,sigma)\{}
+\NormalTok{  n=}\KeywordTok{length}\NormalTok{(x)}
+\NormalTok{ Ey=x}\OperatorTok{*}\NormalTok{beta[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{beta[}\DecValTok{1}\NormalTok{];}
+\NormalTok{  error.terms=sigma}\OperatorTok{*}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{  y=Ey}\OperatorTok{+}\NormalTok{error.terms;}
+\NormalTok{  beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+
+  \CommentTok{# Copying code from the previous trunk:}
+\NormalTok{  residual.sum.of.squares=}\KeywordTok{sum.of.squares}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y)}
+\NormalTok{  explained.sum.of.squares=}\KeywordTok{sum}\NormalTok{((}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.hat,}\DataTypeTok{covariate=}\NormalTok{x)}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(y))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{  total.sum.of.squares=}\KeywordTok{sum}\NormalTok{((y}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(y))}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{  R.sq=}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
+\NormalTok{  cor.hat=}\KeywordTok{cor}\NormalTok{(x,y)}
+\NormalTok{  out=}\KeywordTok{c}\NormalTok{(R.sq,cor.hat)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{sim=}\KeywordTok{replicate}\NormalTok{(N.sim,}\KeywordTok{simulate.one.instance}\NormalTok{(x,beta,sigma));}
+
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{y=}\NormalTok{sim[}\DecValTok{1}\NormalTok{,],}\DataTypeTok{x=}\NormalTok{sim[}\DecValTok{2}\NormalTok{,],}\DataTypeTok{xlab=}\StringTok{'Correlation'}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{'Coef. of determination'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# However, stimulation only tells us that the equality holds in the scenario that we design}
+\CommentTok{# To establish the equality for all possible scenarios, we still have to use rigorous derivation }
+\CommentTok{# You can derive the property yourself if you are good at algebra }
+\CommentTok{# Or search online to read others' proof and explanation}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log.likelihood<-}\ControlFlowTok{function}\NormalTok{(beta.sigma,covariate,outcome)\{}
+\NormalTok{  yout=}\KeywordTok{linear.model}\NormalTok{(}\DataTypeTok{beta=}\NormalTok{beta.sigma[}\OperatorTok{-}\DecValTok{3}\NormalTok{],}\DataTypeTok{covariate=}\NormalTok{covariate);}
+\NormalTok{  res=outcome}\OperatorTok{-}\NormalTok{yout;}
+\NormalTok{  lglklh=}\OperatorTok{-}\KeywordTok{sum}\NormalTok{( }\KeywordTok{log}\NormalTok{(}\KeywordTok{dnorm}\NormalTok{(}\DataTypeTok{x=}\NormalTok{res,}\DataTypeTok{mean=}\DecValTok{0}\NormalTok{,}\DataTypeTok{sd=}\NormalTok{beta.sigma[}\DecValTok{3}\NormalTok{])   ))}
+  \KeywordTok{return}\NormalTok{(lglklh)}
+\NormalTok{\}}
+
+
+\CommentTok{# 1, Use generic optimizer in R}
+\NormalTok{fit.lglklh.optim=}\KeywordTok{optim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{),log.likelihood,}\DataTypeTok{covariate=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{TV,}\DataTypeTok{outcome=}\NormalTok{dat.advertising}\OperatorTok{$}\NormalTok{sales)}
+\NormalTok{fit.lglklh.optim}
+\NormalTok{fit.optim}
 \end{Highlighting}
 \end{Shaded}
 

@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-15" />
+<meta name="date" content="2020-04-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -299,7 +299,9 @@ fit.advertising=<span class="kw">lm</span>(sales<span class="op">~</span>TV<span
 fit.advertising<span class="op">$</span>coef
 beta.hat
 beta.hat.optim</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the decomposition of sum of squares </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary of lm()</span>
+<span class="kw">summary</span>(fit.advertising)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Decomposition of sum of squares </span>
 residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV,<span class="dt">outcome=</span>dat.advertising<span class="op">$</span>sales)
 explained.sum.of.squares=<span class="kw">sum</span>((<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV)<span class="op">-</span><span class="kw">mean</span>(dat.advertising<span class="op">$</span>sales))<span class="op">^</span><span class="dv">2</span>)
 total.sum.of.squares=<span class="kw">sum</span>((dat.advertising<span class="op">$</span>sales<span class="op">-</span><span class="kw">mean</span>(dat.advertising<span class="op">$</span>sales))<span class="op">^</span><span class="dv">2</span>)
@@ -320,9 +322,72 @@ cor.hat=<span class="kw">cor</span>(dat.advertising<span class="op">$</span>TV,d
 
 <span class="co"># Verify the identity:</span>
 R.sq
-cor.hat<span class="op">^</span><span class="dv">2</span>
+cor.hat<span class="op">^</span><span class="dv">2</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?</span>
 
-<span class="co"># Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?</span></code></pre></div>
+<span class="co"># One option is to use simulation to verify if the equality holds in every instance in your simulation </span>
+<span class="co"># Simulate N.sim instances</span>
+N.sim=<span class="dv">10000</span>;
+beta=<span class="kw">c</span>(<span class="dv">2</span>,<span class="fl">0.4</span>);n=<span class="dv">50</span>;x=<span class="kw">runif</span>(n,<span class="dt">min=</span><span class="op">-</span><span class="dv">2</span>,<span class="dt">max=</span><span class="fl">7.5</span>);sigma=<span class="dv">2</span>;
+out=<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dt">nrow=</span>N.sim,<span class="dt">ncol=</span><span class="dv">2</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N.sim){
+  Ey=x<span class="op">*</span>beta[<span class="dv">2</span>]<span class="op">+</span>beta[<span class="dv">1</span>];
+  error.terms=sigma<span class="op">*</span><span class="kw">rnorm</span>(n);
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+  <span class="co"># Copying code from the previous trunk:</span>
+  residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+  explained.sum.of.squares=<span class="kw">sum</span>((<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x)<span class="op">-</span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)
+  total.sum.of.squares=<span class="kw">sum</span>((y<span class="op">-</span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)
+  R.sq=<span class="st"> </span>explained.sum.of.squares<span class="op">/</span>total.sum.of.squares;
+  cor.hat=<span class="kw">cor</span>(x,y)
+  out[i,]=<span class="kw">c</span>(R.sq,cor.hat)
+}
+
+<span class="kw">plot</span>(<span class="dt">y=</span>out[,<span class="dv">1</span>],<span class="dt">x=</span>out[,<span class="dv">2</span>],<span class="dt">xlab=</span><span class="st">&#39;Correlation&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Coef. of determination&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># It&#39;s better to wrap it up into one function:</span>
+
+N.sim=<span class="dv">10000</span>;
+beta=<span class="kw">c</span>(<span class="dv">2</span>,<span class="fl">0.4</span>);n=<span class="dv">50</span>;x=<span class="kw">runif</span>(n,<span class="dt">min=</span><span class="op">-</span><span class="dv">2</span>,<span class="dt">max=</span><span class="fl">7.5</span>);sigma=<span class="dv">2</span>;
+
+simulate.one.instance&lt;-<span class="cf">function</span>(x,beta,sigma){
+  n=<span class="kw">length</span>(x)
+ Ey=x<span class="op">*</span>beta[<span class="dv">2</span>]<span class="op">+</span>beta[<span class="dv">1</span>];
+  error.terms=sigma<span class="op">*</span><span class="kw">rnorm</span>(n);
+  y=Ey<span class="op">+</span>error.terms;
+  beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+
+  <span class="co"># Copying code from the previous trunk:</span>
+  residual.sum.of.squares=<span class="kw">sum.of.squares</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y)
+  explained.sum.of.squares=<span class="kw">sum</span>((<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.hat,<span class="dt">covariate=</span>x)<span class="op">-</span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)
+  total.sum.of.squares=<span class="kw">sum</span>((y<span class="op">-</span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)
+  R.sq=<span class="st"> </span>explained.sum.of.squares<span class="op">/</span>total.sum.of.squares;
+  cor.hat=<span class="kw">cor</span>(x,y)
+  out=<span class="kw">c</span>(R.sq,cor.hat)
+  <span class="kw">return</span>(out)
+}
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+sim=<span class="kw">replicate</span>(N.sim,<span class="kw">simulate.one.instance</span>(x,beta,sigma));
+
+<span class="kw">plot</span>(<span class="dt">y=</span>sim[<span class="dv">1</span>,],<span class="dt">x=</span>sim[<span class="dv">2</span>,],<span class="dt">xlab=</span><span class="st">&#39;Correlation&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Coef. of determination&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># However, stimulation only tells us that the equality holds in the scenario that we design</span>
+<span class="co"># To establish the equality for all possible scenarios, we still have to use rigorous derivation </span>
+<span class="co"># You can derive the property yourself if you are good at algebra </span>
+<span class="co"># Or search online to read others&#39; proof and explanation</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log.likelihood&lt;-<span class="cf">function</span>(beta.sigma,covariate,outcome){
+  yout=<span class="kw">linear.model</span>(<span class="dt">beta=</span>beta.sigma[<span class="op">-</span><span class="dv">3</span>],<span class="dt">covariate=</span>covariate);
+  res=outcome<span class="op">-</span>yout;
+  lglklh=<span class="op">-</span><span class="kw">sum</span>( <span class="kw">log</span>(<span class="kw">dnorm</span>(<span class="dt">x=</span>res,<span class="dt">mean=</span><span class="dv">0</span>,<span class="dt">sd=</span>beta.sigma[<span class="dv">3</span>])   ))
+  <span class="kw">return</span>(lglklh)
+}
+
+
+<span class="co"># 1, Use generic optimizer in R</span>
+fit.lglklh.optim=<span class="kw">optim</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),log.likelihood,<span class="dt">covariate=</span>dat.advertising<span class="op">$</span>TV,<span class="dt">outcome=</span>dat.advertising<span class="op">$</span>sales)
+fit.lglklh.optim
+fit.optim</code></pre></div>
 
 </div>
             </section>

@@ -125,9 +125,15 @@ beta.hat
 beta.hat.optim
 ```
 
+```{r}
+# Summary of lm()
+summary(fit.advertising)
+
+
+```
 
 ```{r} 
-# Calculate the decomposition of sum of squares 
+# Decomposition of sum of squares 
 residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=dat.advertising$TV,outcome=dat.advertising$sales)
 explained.sum.of.squares=sum((linear.model(beta=beta.hat,covariate=dat.advertising$TV)-mean(dat.advertising$sales))^2)
 total.sum.of.squares=sum((dat.advertising$sales-mean(dat.advertising$sales))^2)
@@ -150,6 +156,87 @@ cor.hat=cor(dat.advertising$TV,dat.advertising$sales)
 R.sq
 cor.hat^2
 
-# Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?
 ```
 
+
+```{r}
+# Q: what if these equalities only hold on this one data set? What would you do to reassure yourself?
+
+# One option is to use simulation to verify if the equality holds in every instance in your simulation 
+# Simulate N.sim instances
+N.sim=10000;
+beta=c(2,0.4);n=50;x=runif(n,min=-2,max=7.5);sigma=2;
+out=matrix(0,nrow=N.sim,ncol=2)
+for(i in 1:N.sim){
+  Ey=x*beta[2]+beta[1];
+  error.terms=sigma*rnorm(n);
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y)
+
+  # Copying code from the previous trunk:
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+  explained.sum.of.squares=sum((linear.model(beta=beta.hat,covariate=x)-mean(y))^2)
+  total.sum.of.squares=sum((y-mean(y))^2)
+  R.sq= explained.sum.of.squares/total.sum.of.squares;
+  cor.hat=cor(x,y)
+  out[i,]=c(R.sq,cor.hat)
+}
+
+plot(y=out[,1],x=out[,2],xlab='Correlation',ylab='Coef. of determination')
+```
+
+
+```{r}
+# It's better to wrap it up into one function:
+
+N.sim=10000;
+beta=c(2,0.4);n=50;x=runif(n,min=-2,max=7.5);sigma=2;
+
+simulate.one.instance<-function(x,beta,sigma){
+  n=length(x)
+ Ey=x*beta[2]+beta[1];
+  error.terms=sigma*rnorm(n);
+  y=Ey+error.terms;
+  beta.hat=fit.linear.model(covariate=x,outcome=y)
+
+  # Copying code from the previous trunk:
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+  explained.sum.of.squares=sum((linear.model(beta=beta.hat,covariate=x)-mean(y))^2)
+  total.sum.of.squares=sum((y-mean(y))^2)
+  R.sq= explained.sum.of.squares/total.sum.of.squares;
+  cor.hat=cor(x,y)
+  out=c(R.sq,cor.hat)
+  return(out)
+}
+
+set.seed(1)
+sim=replicate(N.sim,simulate.one.instance(x,beta,sigma));
+
+plot(y=sim[1,],x=sim[2,],xlab='Correlation',ylab='Coef. of determination')
+
+# However, stimulation only tells us that the equality holds in the scenario that we design
+# To establish the equality for all possible scenarios, we still have to use rigorous derivation 
+# You can derive the property yourself if you are good at algebra 
+# Or search online to read others' proof and explanation
+
+
+```
+
+```{r}
+
+
+log.likelihood<-function(beta.sigma,covariate,outcome){
+  yout=linear.model(beta=beta.sigma[-3],covariate=covariate);
+  res=outcome-yout;
+  lglklh=-sum( log(dnorm(x=res,mean=0,sd=beta.sigma[3])   ))
+  return(lglklh)
+}
+
+
+# 1, Use generic optimizer in R
+fit.lglklh.optim=optim(c(0,0,1),log.likelihood,covariate=dat.advertising$TV,outcome=dat.advertising$sales)
+fit.lglklh.optim
+fit.optim
+
+
+```

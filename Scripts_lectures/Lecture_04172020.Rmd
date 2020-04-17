@@ -1,0 +1,150 @@
+---
+title: "Lecture script"
+date: "April 17th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+dat.advertising=read.csv('../data/Advertising.csv')
+plot(x=dat.advertising$TV,y=dat.advertising$sales,xlab='TV',ylab='Sales',pch=16,cex=1.4,col='blue')
+
+
+beta=c(4,0.03) # beta[1]: beta_0 (intercept); beta[2]: beta_1 (regression slope)
+# Add this line into the scatterplot:
+plot(x=dat.advertising$TV,y=dat.advertising$sales,xlab='TV',ylab='Sales',pch=16,cex=1.4,col='blue')
+abline(a=beta[1],b=beta[2],lwd=3,col='red')
+
+
+
+# Reproduce the plot on Slide 13
+plot(x=dat.advertising$TV,y=dat.advertising$sales,xlab='TV',ylab='Sales',pch=16,cex=1.4,col='blue')
+abline(a=beta[1],b=beta[2],lwd=3,col='red')
+yout=dat.advertising$TV*beta[2]+beta[1];
+for(i in 1:dim(dat.advertising)[1]){
+  segments(x0=dat.advertising$TV[i], y0=dat.advertising$sales[i], x1=dat.advertising$TV[i], y1=yout[i] )
+}
+```
+```{r}
+linear.model<-function(beta,covariate){
+  yout=covariate*beta[2]+beta[1];
+  return(yout)
+}
+
+linear.model(beta=c(4,0.03),covariate=dat.advertising$TV)
+```
+
+```{r}
+
+plot.scatter.line<-function(beta,covariate,response){
+  
+  plot(x=covariate,y=response,xlab='Covariate',ylab='Response',pch=16,cex=1.4,col='blue')
+  abline(a=beta[1],b=beta[2],lwd=3,col='red')
+  yout=linear.model(beta=beta,covariate=covariate)
+  for(i in 1:length(covariate)){
+    segments(x0=covariate[i], y0=response[i], x1=covariate[i], y1=yout[i] )
+  }
+  
+}
+
+plot.scatter.line(beta=c(4,0.03),covariate=dat.advertising$TV,response=dat.advertising$sales)
+
+plot.scatter.line(beta=c(4,0.06),covariate=dat.advertising$TV,response=dat.advertising$sales)
+
+```
+
+```{r}
+sum.of.squares<-function(beta,covariate,response){
+  residuals= response- linear.model(beta=beta,covariate=covariate)
+  sos= sum(residuals^2);
+  return(sos)
+}
+
+sum.of.squares(beta=c(4,0.06),covariate=dat.advertising$TV,response=dat.advertising$sales)
+
+```
+
+```{r}
+# 1. Using general-purpose optimization function optim()
+fit.optim=optim(par=c(0,0), fn=sum.of.squares,covariate=dat.advertising$TV,response=dat.advertising$sales)
+fit.optim
+
+fit.lm=lm(sales~TV+1,data=dat.advertising)
+fit.lm
+```
+
+```{r}
+# 2. Using analytic solution to the optimization problem
+
+fit.linear.model<-function(covariate,response){
+  X=cbind(1,covariate);
+  beta.fit=solve(t(X)%*%X)%*%t(X)%*%response;
+  return(beta.fit)
+}
+
+fit.STA108=fit.linear.model(covariate=dat.advertising$TV,response=dat.advertising$sales)
+
+```
+
+
+\[
+\hat{\beta}= \big( X^T X \big)^{-1} X^T Y
+\]
+
+
+```{r}
+fit.optim$par
+fit.lm$coefficients
+fit.STA108
+```
+```{r}
+summary(fit.lm)
+```
+
+\[
+\hat{y}_i = x_i \hat{\beta}_1 + \hat{\beta}_0
+\]
+
+```{r}
+residual.sum.of.squares=sum.of.squares(beta=fit.STA108,covariate=dat.advertising$TV,response=dat.advertising$sales)
+explained.sum.of.squares = sum( ( linear.model(beta=fit.STA108,covariate=dat.advertising$TV) - mean(dat.advertising$sales)    )^2   )
+total.sum.of.squares  = sum(( dat.advertising$sales- mean(dat.advertising$sales)  )^2)
+
+total.sum.of.squares
+explained.sum.of.squares+residual.sum.of.squares
+
+R.sq = explained.sum.of.squares/total.sum.of.squares;
+
+cor.hat=cor(x=dat.advertising$TV,y=dat.advertising$sales)
+
+cor.hat^2
+R.sq
+```
+
+```{r}
+N.sim=10000;
+beta=c(2,0.5);n=50;x=runif(n,min=-2,max=9.8);sigma=2;
+output=matrix(0,nrow=N.sim,ncol=2)
+for(i in 1:N.sim){
+  y=x*beta[2]+beta[1]+rnorm(n,mean=0,sd=sigma);
+  fit.sim=fit.linear.model(covariate=x,response=y)
+  residual.sum.of.squares=sum.of.squares(beta=fit.sim,covariate=x,response=y)
+  explained.sum.of.squares = sum( ( linear.model(beta=fit.sim,covariate=x) - mean(y)    )^2   )
+  total.sum.of.squares  = sum(( y- mean(y)  )^2)
+  R.sq = explained.sum.of.squares/total.sum.of.squares;
+  cor.hat=cor(x=x,y=y);
+  output[i,]=c(R.sq,cor.hat)
+    
+}
+plot(y=output[,1],x=output[,2]^2,xlab='Correlation^2',ylab='Coef. of determination')
+
+#?replicate
+```
+
+```{r}
+# See Gitbook for MLE
+```

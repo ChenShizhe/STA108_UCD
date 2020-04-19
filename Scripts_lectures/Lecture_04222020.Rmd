@@ -1,0 +1,133 @@
+---
+title: "Lecture script"
+date: "April 22nd 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+\[
+y_i = x_i \beta_1 + \beta_0 +\epsilon_i,\ i=1,\ldots, 50,
+\]
+where $\epsilon_i \sim {\rm Uniform}(-2.5,2.5)$. We can set $\beta_1=0.15$ and $\beta_0=20$. 
+
+```{r}
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15);
+y=x*beta[2]+beta[1]+ runif(n,min=-2.5,max=2.5);
+
+fit.linear.model<-function(covariate,response){
+  X=cbind(1,covariate);
+  beta.fit=solve(t(X)%*%X)%*%t(X)%*%response;
+  return(beta.fit)
+}
+
+```
+
+
+```{r}
+
+linear.model<-function(beta,covariate){
+  yout=covariate*beta[2]+beta[1]
+  return(yout);
+}
+
+sum.of.squares<-function(beta,covariate,outcome){
+  yout=linear.model(beta=beta,covariate=covariate);
+  res=outcome-yout;
+  sos= sum(res^2);
+  return(sos)
+}
+beta.hat= fit.linear.model(covariate=x,response=y)
+residuals= y-linear.model(beta=beta.hat,covariate=x)
+hist(residuals)
+residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+
+sigma.sq.hat=residual.sum.of.squares/(n-2);
+
+sigma.sq=5^2/12;
+
+
+# Write a simulation to verify this estimator of sigma.sq is unbiased
+simulate.one.instance<-function(x,beta){
+  n=length(x);
+  y=x*beta[2]+beta[1]+ runif(n,min=-2.5,max=2.5);
+  beta.hat= fit.linear.model(covariate=x,response=y)
+  residuals= y-linear.model(beta=beta.hat,covariate=x)
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+  sigma.sq.hat=residual.sum.of.squares/(n-2);
+  return(sigma.sq.hat)
+}
+simulate.one.instance(x=x,beta=beta)
+
+N.sim=50000;
+set.seed(1)
+x=runif(40,min=4,max=20);
+beta=c(20,0.15);
+sigma.sq.hat.sim=replicate(N.sim, simulate.one.instance(x=x,beta=beta))
+
+dim(sigma.sq.hat.sim)
+length(sigma.sq.hat.sim)
+
+mean(sigma.sq.hat.sim)
+(sigma.sq=5^2/12)
+```
+
+```{r}
+y=x*beta[2]+beta[1]+ runif(length(x),min=-2.5,max=2.5);
+
+summary(lm(y~x+1))
+
+beta.hat= fit.linear.model(covariate=x,response=y)
+residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=x,outcome=y)
+sigma.sq.hat=residual.sum.of.squares/(length(x)-2);
+
+
+var.beta1.hat=sigma.sq.hat/sum((x-mean(x))^2)
+var.beta0.hat=sigma.sq.hat*sum(x^2)/sum((x-mean(x))^2)/(length(x))
+sqrt(var.beta1.hat)
+sqrt(var.beta0.hat)
+```
+
+```{r}
+estimate.sigma.sq<-function(covariate,response){
+  beta.hat= fit.linear.model(covariate=covariate,response=response)
+  residual.sum.of.squares=sum.of.squares(beta=beta.hat,covariate=covariate,outcome=response)
+  sigma.sq.hat=residual.sum.of.squares/(length(covariate)-2);
+  return(sigma.sq.hat) 
+}
+
+estimate.coef.var<-function(covariate,response){
+  sigma.sq.hat=estimate.sigma.sq(covariate=covariate,response=response);
+  var.beta1.hat=sigma.sq.hat/sum((covariate-mean(covariate))^2)
+  var.beta0.hat=sigma.sq.hat*sum(covariate^2)/sum((covariate-mean(covariate))^2)/(length(covariate))
+  return(c(var.beta0.hat,var.beta1.hat ))
+}
+
+estimate.coef.se<-function(covariate,response){
+   return(sqrt(estimate.coef.var(covariate=covariate,response=response)))
+}
+estimate.coef.se(covariate=x,response=y)
+
+summary(lm(y~x+1))
+```
+
+```{r}
+xgrid=seq(from=-5,to=5,by=0.01);
+norm.density=dnorm(xgrid, mean=0,sd=sqrt(2))
+unif.density=dunif(xgrid,min=-sqrt(6),max=sqrt(6))
+xbin=c(-sqrt(2),sqrt(2));
+ybin=c(0.5,0.5)
+
+plot(norm.density~xgrid,type='l',col='red',lwd=3,ylim=c(0,0.52),ylab='density')
+lines(unif.density~xgrid,col='black',lwd=3)
+segments(xbin[1],0,xbin[1],ybin[1],col='green',lwd=3)
+segments(xbin[2],0,xbin[2],ybin[2],col='green',lwd=3)
+
+legend(x=2.5,y=0.5,legend=c("Normal","Uniform","Bernoulli"), lwd=3,col=c('red','black','green' ) )
+```

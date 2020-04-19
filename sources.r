@@ -51,6 +51,7 @@ conf.int.quantile<-function(alpha,type,...){
   }
   return(out)
 }
+
 boot.fit<-function(covariate,outcome){
   n=length(outcome);
   sample_indices = sample(1:n,n,replace=TRUE) # sampling with replacement
@@ -111,7 +112,7 @@ calculate.pvalue<-function(covariate,outcome,type){
 permutation.test<-function(covariate,outcome){
   n=length(outcome);
   sample_indices = sample(1:n,n,replace=FALSE) # sampling without replacement
-  covariate.perm= covariate[sample_indices]; outcome.perm= outcome[sample_indices];
+  covariate.perm= covariate[sample_indices]; outcome.perm= outcome;
 
   beta.hat.t=calculate.t(covariate.perm,outcome.perm)
 

@@ -1,0 +1,79 @@
+---
+title: "Lecture script"
+date: "April 24th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+```{r}
+source('../sources.r')
+
+simulate.one.instance<-function(x,beta,error.type){
+  # Input: 
+  # Output: 
+  
+  n=length(x);
+  Ey=x*beta[2]+beta[1];
+  vars=0.1+runif(n)*2; # runif(n,min=0.1,max=2.1)
+  
+  # Allow the users to specify distributions of the errors
+  # Conisder three options: Bernoulli, Uniform, and Normal
+  
+  if(error.type=='Uniform'){
+    # Simulate errors from uniform distributions
+    error.terms=(runif(n)-0.5)*sqrt(vars);#runif(n,min=-.5,max=0.5)*sqrt(vars) 
+  }else if(error.type=='Bernoulli'){
+    # Simulate errors from Bernoulli distributions
+    error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars)
+  }else{
+    # Simulate errors from normal distributions
+    error.terms=rnorm(n)*sqrt(vars) # rnorm(n,mean=0,sd=sqrt(vars))
+  }
+  y=Ey+error.terms;
+  
+  # 
+  beta.hat= fit.linear.model(covariate=x,outcome=y)
+  
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+  
+  slope.normalized = (beta.hat[2]-beta[2])/beta.hat.se[2];
+  return(slope.normalized)
+}
+
+
+set.seed(1)
+x=runif(40,min=4,max=20);
+simulate.one.instance(x=x,beta=c(10,5),error.type='Bernoulli')
+
+N.sim=1e4;
+slope.norm.sim.B=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Bernoulli'))
+
+slope.norm.sim.U=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Uniform'))
+
+
+slope.norm.sim.N=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Normal'))
+
+
+
+```
+```{r}
+density.B=density(slope.norm.sim.B)
+density.U=density(slope.norm.sim.U)
+density.N=density(slope.norm.sim.N)
+
+
+xgrid=seq(from=-5,to=5,by=0.01)
+normal.pdf=dnorm(xgrid)
+
+plot(density.B,xlab='Normalized slope',col='red',lwd=3,ylim=c(0,0.5),main='',lty=2)
+lines(density.U,col='green',lwd=3,lty=2)
+lines(density.N,col='blue',lwd=3,lty=2)
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+legend(x=2,y=0.46,legend=c('Bernoulli','Uniform','Normal', 'N(0,1)'),lwd=3,col=c('red','green','blue','black'),lty=c(2,2,2,3))
+
+
+
+```

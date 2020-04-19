@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-17}
+    \date{2020-04-19}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -692,8 +692,11 @@ where \(\epsilon_i \sim {\mathcal{U}}(-2.5, 2,5)\). We set
 
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{### We can run the simulation by putting the above lines into a large for-loop}
 \NormalTok{### We will wrap them up into one function}
 
@@ -743,7 +746,7 @@ Recall from the lecture notes that the variance of \(\hat{\beta}_1\) is
 \end{Highlighting}
 \end{Shaded}
 
-Q: How would you verify the Gauss-Markove theorem in this simulation?
+Q: How would you verify the Gauss-Markov theorem in this simulation?
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1033,8 +1036,11 @@ distribution.
 \NormalTok{beta.hat=}\KeywordTok{fit.linear.model}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{x,}\DataTypeTok{outcome=}\NormalTok{y);}
 \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{y,}\DataTypeTok{pch=}\DecValTok{16}\NormalTok{,}\DataTypeTok{cex=}\DecValTok{2}\NormalTok{)}
 \KeywordTok{abline}\NormalTok{(}\DataTypeTok{b=}\NormalTok{beta.hat[}\DecValTok{2}\NormalTok{],}\DataTypeTok{a=}\NormalTok{beta.hat[}\DecValTok{1}\NormalTok{],}\DataTypeTok{col=}\StringTok{'red'}\NormalTok{,}\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{## Simulate the true sampling distribution:}
 \NormalTok{simulate.one.instance<-}\ControlFlowTok{function}\NormalTok{(x,beta.true)\{}
 \NormalTok{  n=}\KeywordTok{length}\NormalTok{(x);}
@@ -1482,7 +1488,7 @@ We will continue working on synthetic data in this chapter.
 \NormalTok{permutation.test<-}\ControlFlowTok{function}\NormalTok{(covariate,outcome)\{}
 \NormalTok{  n=}\KeywordTok{length}\NormalTok{(outcome);}
 \NormalTok{  sample_indices =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n,n,}\DataTypeTok{replace=}\OtherTok{FALSE}\NormalTok{) }\CommentTok{# sampling without replacement}
-\NormalTok{  covariate.perm=}\StringTok{ }\NormalTok{covariate[sample_indices]; outcome.perm=}\StringTok{ }\NormalTok{outcome[sample_indices];}
+\NormalTok{  covariate.perm=}\StringTok{ }\NormalTok{covariate[sample_indices]; outcome.perm=}\StringTok{ }\NormalTok{outcome;}
 
 \NormalTok{  beta.hat.t=}\KeywordTok{calculate.t}\NormalTok{(covariate.perm,outcome.perm)}
 

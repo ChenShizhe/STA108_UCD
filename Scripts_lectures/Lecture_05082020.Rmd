@@ -1,0 +1,107 @@
+---
+title: "Lecture script"
+date: "May 8th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15);
+Ey=x*beta[2]+beta[1];
+y=Ey+rnorm(n)*2;
+
+fit.lm=lm(y~x+1)
+
+```
+
+
+```{r}
+alpha=0.02;
+simulate.one.instance<-function(x,beta.null,alpha,type){
+  n=length(x);
+  Ey=x*beta.null[2]+beta.null[1];
+  y=Ey+rnorm(n)*2;
+  pval=calculate.pvalue(covariate=x,outcome=y,type=type);
+  rej.flag=pval[2]<alpha;
+  return(rej.flag)
+}
+
+N.sim=1e5;
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta.null=c(20,0);
+sim.typeI=replicate(N.sim,simulate.one.instance(x,beta.null,alpha,type='t'))
+
+mean(sim.typeI)
+alpha
+```
+
+
+```{r}
+N.sim=1e4;
+powers<-numeric(4)
+for(a in 1:4){
+  beta.alt=c(20,a/10);
+  sim.rej=replicate(N.sim,simulate.one.instance(x,beta.alt,alpha,type='t'))
+  powers[a]=mean(sim.rej)
+}
+
+powers
+
+```
+
+```{r}
+permutation.test<-function(covariate,outcome){
+  n=length(outcome);
+  
+  sample_indices = sample(1:n,n,replace=FALSE) # sampling WITHOUT replacement
+  covariate.perm=covariate[sample_indices];outcome.perm=outcome;
+  
+  beta.hat.t=calculate.t(covariate.perm,outcome.perm)
+  return(beta.hat.t[2])
+}
+
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.5);
+Ey=x*beta[2]+beta[1];
+y=Ey+rnorm(n)*2;
+
+beta.hat.t.perm=replicate(1e4,permutation.test(covariate=x,outcome=y))
+
+beta.hat.t=calculate.t(x,y)
+
+
+2*min( mean(beta.hat.t[2]<beta.hat.t.perm),mean(beta.hat.t[2]>beta.hat.t.perm) )
+
+summary(lm(y~x))
+```
+
+
+
+```{r}
+
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.5);
+Ey=x*beta[2]+beta[1];
+y=Ey+rnorm(n)*2;
+
+full_model=lm(y~x+1)
+reduced_model=lm(y~1)
+
+
+anova(reduced_model,full_model)
+summary(full_model)
+```

@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-17" />
+<meta name="date" content="2020-04-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -223,10 +223,8 @@ beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</s
 
 
 <span class="kw">plot</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">cex=</span><span class="dv">2</span>)
-<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)
-
-
-### We can run the simulation by putting the above lines into a large for-loop
+<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### We can run the simulation by putting the above lines into a large for-loop
 ### We will wrap them up into one function
 
 simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
@@ -265,7 +263,7 @@ sigma.sq<span class="op">/</span><span class="kw">sum</span>(  (x<span class="op
 <span class="co"># intercept:</span>
 sigma.sq<span class="op">*</span><span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">sum</span>(  (x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span>  )<span class="op">/</span>n <span class="co"># theoretical value </span>
 <span class="kw">var</span>(beta.sim[<span class="dv">1</span>,<span class="dv">1</span>,]) <span class="co"># variance from the simulation </span></code></pre></div>
-<p>Q: How would you verify the Gauss-Markove theorem in this simulation?</p>
+<p>Q: How would you verify the Gauss-Markov theorem in this simulation?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A very simple simulation to compare the LSE with another linear unbiased estimator: </span>
 simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
   n=<span class="kw">length</span>(x);
@@ -498,10 +496,8 @@ error.terms=<span class="st"> </span><span class="kw">rnorm</span>(n)<span class
 y=Ey<span class="op">+</span>error.terms;
 beta.hat=<span class="kw">fit.linear.model</span>(<span class="dt">covariate=</span>x,<span class="dt">outcome=</span>y);
 <span class="kw">plot</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">cex=</span><span class="dv">2</span>)
-<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)
-
-
-## Simulate the true sampling distribution:
+<span class="kw">abline</span>(<span class="dt">b=</span>beta.hat[<span class="dv">2</span>],<span class="dt">a=</span>beta.hat[<span class="dv">1</span>],<span class="dt">col=</span><span class="st">&#39;red&#39;</span>,<span class="dt">lwd=</span><span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Simulate the true sampling distribution:
 simulate.one.instance&lt;-<span class="cf">function</span>(x,beta.true){
   n=<span class="kw">length</span>(x);
   Ey=<span class="st"> </span>x<span class="op">*</span>beta.true[<span class="dv">2</span>]<span class="op">+</span>beta.true[<span class="dv">1</span>];

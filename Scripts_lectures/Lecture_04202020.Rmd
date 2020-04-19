@@ -1,0 +1,98 @@
+---
+title: "Lecture script"
+date: "April 20th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+\[
+y_i = x_i \beta_1 + \beta_0 +\epsilon_i,\ i=1,\ldots, 50,
+\]
+where $\epsilon_i \sim {\rm Uniform}(-2.5,2.5)$. We can set $\beta_1=0.15$ and $\beta_0=20$. 
+
+```{r}
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15);
+y=x*beta[2]+beta[1]+ runif(n,min=-2.5,max=2.5);
+
+fit.linear.model<-function(covariate,response){
+  X=cbind(1,covariate);
+  beta.fit=solve(t(X)%*%X)%*%t(X)%*%response;
+  return(beta.fit)
+}
+beta.hat=fit.linear.model(covariate=x,response=y)
+
+plot(x=x,y=y,pch=16,cex=2)
+abline(b=beta.hat[2],a=beta.hat[1],col='red',lwd=2)
+abline(b=beta[2],a=beta[1],col='blue',lwd=2)
+
+```
+
+```{r}
+
+simulate.one.instance<-function(x,beta){
+  y=x*beta[2]+beta[1]+ runif(length(x),min=-2.5,max=2.5);
+  beta.hat=fit.linear.model(covariate=x,response=y)
+  return(beta.hat)
+}
+
+N.sim=10000;
+set.seed(1)
+x=rnorm(100,mean=10,sd=2);
+beta=c(20,0.15);
+beta.sim=replicate(N.sim, simulate.one.instance(x=x,beta=beta))
+
+# Draw histograms
+hist(beta.sim[2,1,],xlab='Fitted slope',main='')
+abline(v=beta[2],lwd=3,col='red')
+```
+\[
+{\rm var}(\hat{\beta}_1)=\frac{1}{\sum_{i=1}^n (x_i-\bar{x})^2} \sigma^2.
+\]
+
+
+```{r}
+var(beta.sim[1,1,])
+var(beta.sim[2,1,])
+
+sigma.sq=5^2/12;
+
+var.beta1=sigma.sq/sum((x-mean(x))^2)
+var.beta0=sigma.sq*sum(x^2)/sum((x-mean(x))^2)/(length(x))
+```
+
+
+
+```{r}
+
+simulate.one.instance<-function(x,beta){
+  y=x*beta[2]+beta[1]+ runif(length(x),min=-2.5,max=2.5);
+  beta.hat=fit.linear.model(covariate=x,response=y)
+  
+  slope.hat=beta.hat[2];
+  slope.tilde=(y[2]-y[1])/(x[2]-x[1]);
+  return(c(slope.hat,slope.tilde) )
+}
+
+N.sim=10000;
+set.seed(1)
+x=rnorm(100,mean=10,sd=2);
+beta=c(20,0.15);
+slope.sim=replicate(N.sim, simulate.one.instance(x=x,beta=beta))
+
+apply(slope.sim,1,mean)-beta[2]
+dim(slope.sim)
+mean(slope.sim[1,])
+mean(slope.sim[2,])
+
+apply(slope.sim,1,var)
+```
+
+
+

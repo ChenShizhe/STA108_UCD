@@ -88,7 +88,7 @@ sigma.sq*sum(x^2)/sum(  (x-mean(x))^2  )/n # theoretical value
 var(beta.sim[1,1,]) # variance from the simulation 
 ```
 
-Q: How would you verify the Gauss-Markove theorem in this simulation?
+Q: How would you verify the Gauss-Markov theorem in this simulation?
 
 
 

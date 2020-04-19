@@ -1,0 +1,155 @@
+---
+title: "Lecture script"
+date: "April 27th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+
+source('../sources.r')
+
+simulate.one.instance<-function(x,beta,error.type){
+  n=length(x);
+  Ey=x*beta[2]+beta[1];
+  vars=0.1+runif(n)*2; # runif(n,min=0.1,max=2.1)
+  if(error.type=='Uniform'){
+    # Simulate errors from uniform distributions
+    error.terms=(runif(n)-0.5)*sqrt(vars);#runif(n,min=-.5,max=0.5)*sqrt(vars) 
+  }else if(error.type=='Bernoulli'){
+    # Simulate errors from Bernoulli distributions
+    error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars)
+  }else{
+    # Simulate errors from normal distributions
+    error.terms=rnorm(n)*sqrt(vars) # rnorm(n,mean=0,sd=sqrt(vars))
+  }
+  y=Ey+error.terms;
+  
+  beta.hat= fit.linear.model(covariate=x,outcome=y)
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+  
+  slope.normalized = (beta.hat[2]-beta[2])/beta.hat.se[2];
+  return(slope.normalized)
+}
+
+
+set.seed(1)
+x=runif(40,min=4,max=20);
+N.sim=10000;
+slope.norm.sim.B=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Bernoulli'))
+
+density.B<-density(slope.norm.sim.B)
+plot(density.B)
+
+
+
+```
+```{r}
+set.seed(1)
+x=runif(40,min=4,max=20);
+beta=c(10,5);
+Ey=x*beta[2]+beta[1];
+n=length(x)
+vars=10+runif(n)*10;
+error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars)
+y=Ey+error.terms;
+beta.hat=fit.linear.model(covariate=x,outcome=y)
+
+# Write a function for bootstrap
+
+boot.one.instance<-function(x,y){
+  n=length(x);
+  
+  sample_indices<-sample(x=1:n,size=n,replace=TRUE)
+  x.boot=x[sample_indices];y.boot=y[sample_indices]
+  
+  # bootstrap the residuals: 
+  # beta.hat= fit.linear.model(covariate=x,outcome=y)
+  # residuals = y-linear.model(beta=beta.hat,covariate=x)
+  # residuals.boot=residuals[sample_indices]
+  # y.boot= residuals.boot + linear.model(beta=beta.hat,covariate=x);
+  # x.boot=x;
+  
+  beta.hat= fit.linear.model(covariate=x.boot,outcome=y.boot)
+  
+  return(beta.hat[2])
+}
+
+N.boot<-10000; # B in the notes
+
+boot.one.instance(x=x,y=y)
+set.seed(1)
+slope.hat.boot=replicate(N.boot,boot.one.instance(x=x,y=y))
+```
+
+```{r}
+slope.norm.boot.B <- (slope.hat.boot -mean(slope.hat.boot))/sd(slope.hat.boot)
+density.boot.B<-density(slope.norm.boot.B)
+
+
+plot(density.B,col='black',lwd=3)
+lines(density.boot.B,col='red',lwd=3,lty=2)
+
+```
+
+
+```{r}
+set.seed(1)
+x=runif(100,min=4,max=20);
+beta=c(10,5);
+Ey=x*beta[2]+beta[1];
+n=length(x)
+vars=10+runif(n)*10;
+error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars)
+y=Ey+error.terms;
+
+
+simulate.one.instance<-function(x,beta,error.type){
+  n=length(x);
+  Ey=x*beta[2]+beta[1];
+  vars=10+runif(n)*10; # runif(n,min=0.1,max=2.1)
+  if(error.type=='Uniform'){
+    # Simulate errors from uniform distributions
+    error.terms=(runif(n)-0.5)*sqrt(vars);#runif(n,min=-.5,max=0.5)*sqrt(vars) 
+  }else if(error.type=='Bernoulli'){
+    # Simulate errors from Bernoulli distributions
+    error.terms=(rbinom(n,size=1,prob=0.5)-0.5)*sqrt(vars)
+  }else{
+    # Simulate errors from normal distributions
+    error.terms=rnorm(n)*sqrt(vars) # rnorm(n,mean=0,sd=sqrt(vars))
+  }
+  y=Ey+error.terms;
+  
+  beta.hat= fit.linear.model(covariate=x,outcome=y)
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+  
+  slope.normalized = (beta.hat[2]-beta[2])/beta.hat.se[2];
+  return(slope.normalized)
+}
+
+
+
+N.sim=10000;
+slope.norm.sim.B=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Bernoulli'))
+
+
+slope.hat.boot=replicate(N.boot,boot.one.instance(x=x,y=y))
+
+slope.norm.boot.B <- (slope.hat.boot -mean(slope.hat.boot))/sd(slope.hat.boot)
+density.boot.B<-density(slope.norm.boot.B)
+density.B<-density(slope.norm.sim.B)
+
+
+xgrid=seq(from=-5,to=5,by=0.01)
+normal.pdf=dnorm(xgrid)
+
+
+plot(density.B,col='red',lwd=3,lty=2,ylim=c(0,0.6))
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+lines(density.boot.B,col='blue',lwd=3,lty=2)
+
+```

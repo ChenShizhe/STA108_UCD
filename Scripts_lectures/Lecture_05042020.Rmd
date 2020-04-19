@@ -1,0 +1,66 @@
+---
+title: "Lecture script"
+date: "May 4th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15);
+Ey=x*beta[2]+beta[1];
+y=Ey+rnorm(n)*2;
+
+fit.lm=lm(y~x+1)
+
+alpha=0.05;
+
+dat.new=data.frame(x=c(10,20))
+
+predict(fit.lm,newdata=dat.new,interval='prediction',level=1-alpha)
+
+predict(fit.lm,newdata=dat.new,interval='confidence',level=1-alpha)
+
+
+```
+
+```{r}
+dat.advertising = read.csv('../data/advertising.csv')
+fit.lm=lm(sales~TV+1,data=dat.advertising)
+fit.lm.sum=summary(fit.lm)
+alpha=0.05;
+xgrid_pred=seq(from=5,to=50,by=2.5)
+
+dat.new=data.frame(TV=xgrid_pred)
+
+pointwise=predict(fit.lm,newdata=dat.new,interval='confidence',level=1-alpha)
+
+Bonf=predict(fit.lm,newdata=dat.new,interval='confidence',level=1-alpha/length(xgrid_pred))
+
+fstat= qf(1-alpha,2,length(dat.advertising$TV)-2);
+xdense=seq(from=0,to=50,by=0.1);
+Sxx= sum( (dat.advertising$TV-mean(dat.advertising$TV))^2);
+pivot=sqrt(2*fstat)*fit.lm.sum$sigma*sqrt(1/length(dat.advertising$TV)+(xdense-mean(dat.advertising$TV))^2/Sxx);
+ylb=fit.lm$coefficients[2]*xdense+fit.lm$coefficients[1]-pivot;
+yub=fit.lm$coefficients[2]*xdense+fit.lm$coefficients[1]+pivot;
+
+plot(dat.advertising$sales~dat.advertising$TV,pch=16,xlim=c(0,50),ylim=c(4,12),xlab='TV',ylab='Sales')
+abline(b=fit.lm$coefficients[2],a=fit.lm$coefficients[1],lwd=3)
+for(i in 1:length(xgrid_pred)){
+
+segments(xgrid_pred[i]-1,Bonf[i,2],xgrid_pred[i]-1,Bonf[i,3],lwd=3,col='green')
+segments(xgrid_pred[i]-1,pointwise[i,2],xgrid_pred[i]-1,pointwise[i,3],lwd=3,col='red')
+
+}
+lines(ylb~xdense,col='blue',lwd=3)
+
+lines(yub~xdense,col='blue',lwd=3)
+legend(x=32,y=6,legend=c("Pointwise", "Bonferroni", "W-H band"), lwd=3, col=c("red","green","blue"))
+```

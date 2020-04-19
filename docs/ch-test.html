@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-17" />
+<meta name="date" content="2020-04-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -312,7 +312,7 @@ powers</code></pre></div>
 permutation.test&lt;-<span class="cf">function</span>(covariate,outcome){
   n=<span class="kw">length</span>(outcome);
   sample_indices =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n,n,<span class="dt">replace=</span><span class="ot">FALSE</span>) <span class="co"># sampling without replacement</span>
-  covariate.perm=<span class="st"> </span>covariate[sample_indices]; outcome.perm=<span class="st"> </span>outcome[sample_indices];
+  covariate.perm=<span class="st"> </span>covariate[sample_indices]; outcome.perm=<span class="st"> </span>outcome;
 
   beta.hat.t=<span class="kw">calculate.t</span>(covariate.perm,outcome.perm)
 

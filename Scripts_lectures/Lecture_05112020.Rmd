@@ -1,0 +1,74 @@
+---
+title: "Lecture script"
+date: "May 11th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+set.seed(1)
+n=50;m=1000;
+x=rnorm(n,mean=10,sd=2);
+beta=c(10,0.6);
+Y=matrix(0,nrow=n,ncol=m)
+for(i in 1:m){
+  Ey=x*beta[2]*(i<101)+beta[1];
+  Y[,i]=Ey+rnorm(n)*2;
+}
+
+pvalues=numeric(m);
+for(i in 1:m){
+  pval=calculate.pvalue(covariate=x,outcome=Y[,i],type='z')
+  pvalues[i]=pval[2]
+}
+
+plot(log(pvalues)~ c(1:m),pch=16)
+abline(h=log(0.05),col='red')
+```
+
+```{r}
+alpha=0.05;
+alpha.Bonf=alpha/m;
+rej.flag=pvalues<alpha.Bonf
+
+# True positive:
+sum(rej.flag & ( c(1:m)<101 ) )
+# False positive:
+sum(rej.flag & ( c(1:m)>100  ) )
+# True negative 
+sum(!rej.flag & (c(1:m)>100) )
+# False negative 
+sum(!rej.flag & (c(1:m)<101))
+
+```
+
+```{r}
+?p.adjust
+
+pvalues.sorted<-sort(pvalues,index.return=T)
+alpha.BH<-c(1:m)*alpha/m
+k.hat<-max( which(pvalues.sorted$x<alpha.BH)    )
+rej.flag.BH=numeric(m);
+rej.flag.BH[pvalues.sorted$ix[1:k.hat]]=TRUE;
+
+
+# True positive:
+sum(rej.flag.BH & ( c(1:m)<101 ) )
+# False positive:
+sum(rej.flag.BH & ( c(1:m)>100  ) )
+# True negative 
+sum(!rej.flag.BH & (c(1:m)>100) )
+# False negative 
+sum(!rej.flag.BH & (c(1:m)<101))
+
+# False discovery proportion
+sum(rej.flag.BH & ( c(1:m)>100  ) ) / sum(rej.flag.BH)
+
+alpha
+
+```

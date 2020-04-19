@@ -1,0 +1,90 @@
+---
+title: "Lecture script"
+date: "May 6th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15);
+Ey=x*beta[2]+beta[1];
+y=Ey+rnorm(n)*2;
+
+fit.lm=lm(y~x+1)
+
+```
+
+
+```{r}
+fit.lm.summary<-summary(fit.lm)
+fit.lm.summary
+```
+
+```{r}
+beta.hat=fit.linear.model(covariate=x,outcome=y);
+beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y);
+beta.hat.t=(beta.hat-0)/beta.hat.se;
+
+calculate.t<-function(covariate,outcome){
+  beta.hat=fit.linear.model(covariate=covariate,outcome=outcome);
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=covariate,outcome=outcome);
+  beta.hat.t=(beta.hat-0)/beta.hat.se;
+  return(beta.hat.t)
+}
+
+beta.hat.t=calculate.t(covariate=x,outcome=y)
+
+2*min(pt(beta.hat.t[2],df=n-2),1-pt(beta.hat.t[2],df=n-2))
+
+2*apply(cbind(pt(beta.hat.t,df=n-2),1-pt(beta.hat.t,df=n-2)),1,min)
+
+2*apply(cbind(pnorm(beta.hat.t),1-pnorm(beta.hat.t)),1,min)
+
+
+
+beta.hat.boot=replicate(1e4,boot.fit(covariate=x,outcome=y))
+
+pval=numeric(length(beta.hat))
+for(i in 1:length(beta.hat)){
+  boot.est=beta.hat.boot[1,i,];
+  pval[i]=2*min(mean(0<boot.est),mean(0>boot.est) )
+}
+
+
+## Write a function here:
+calculate.pvalue<-function(covariate,outcome,type,B=1e4){
+  
+  beta.hat.t=calculate.t(covariate=covariate,outcome=outcome)
+  if(type=='t'){
+    n=length(outcome)
+    # Student-t
+    pval=2*apply(cbind(pt(beta.hat.t,df=n-2),1-pt(beta.hat.t,df=n-2)),1,min)
+    
+  }else if(type=='z'){
+    # Normal (CLT)
+    pval=2*apply(cbind(pnorm(beta.hat.t),1-pnorm(beta.hat.t)),1,min)
+    
+  } else if (type=='bootstrap'){
+    # Bootstrap
+    beta.hat.boot=replicate(B,boot.fit(covariate=x,outcome=y))
+    pval=numeric(length(beta.hat))
+    for(i in 1:length(beta.hat)){
+      boot.est=beta.hat.boot[1,i,];
+      pval[i]=2*min(mean(0<boot.est),mean(0>boot.est) )
+    }  
+  }
+  return(pval);
+  
+}
+
+calculate.pvalue(covariate=x,outcome=y,type='bootstrap')
+
+```

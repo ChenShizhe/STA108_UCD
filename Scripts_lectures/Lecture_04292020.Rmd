@@ -1,0 +1,81 @@
+---
+title: "Lecture script"
+date: "April 29th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+
+set.seed(1)
+x=runif(5,min=4,max=20);
+beta=c(10,5);
+Ey=x*beta[2]+beta[1];
+n=length(x)
+error.terms=rnorm(n)*4; # rnorm(n,mean=0,sd=4)
+y=Ey+error.terms;
+
+simulate.one.instance<-function(x,beta,error.type){
+  n=length(x);
+  Ey=x*beta[2]+beta[1];
+  if(error.type=='Uniform'){
+    # Simulate errors from uniform distributions
+    error.terms=(runif(n)-0.5);#runif(n,min=-.5,max=0.5)*sqrt(vars) 
+  }else if(error.type=='Bernoulli'){
+    # Simulate errors from Bernoulli distributions
+    error.terms=(rbinom(n,size=1,prob=0.5)-0.5)
+  }else{
+    # Simulate errors from normal distributions
+  error.terms=rnorm(n)*4; # rnorm(n,mean=0,sd=4)
+  }
+  y=Ey+error.terms;
+  
+  beta.hat= fit.linear.model(covariate=x,outcome=y)
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+  slope.normalized = (beta.hat[2]-beta[2])/beta.hat.se[2];
+  return(slope.normalized)
+}
+
+
+N.sim=10000;
+slope.norm.sim.N=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Normal'))
+
+slope.norm.sim.U=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Uniform'))
+
+slope.norm.sim.B=replicate(N.sim, simulate.one.instance(x=x,beta=c(10,5),error.type='Bernoulli'))
+
+
+density.N<-density(slope.norm.sim.N)
+density.B<-density(slope.norm.sim.B)
+density.U<-density(slope.norm.sim.U)
+
+xgrid=seq(from=-5,to=5,by=0.01)
+normal.pdf=dnorm(xgrid)
+student.pdf=dt(x=xgrid, df=n-2)
+
+plot(density.N,col='red',lwd=3,lty=2,ylim=c(0,0.5),xlim=c(-4,4))
+lines(normal.pdf~xgrid,lwd=2,lty=3)
+lines(student.pdf~xgrid,lwd=2,lty=3,col='blue')
+lines(density.B,lwd=3,lty=2,col='green')
+lines(density.U,lwd=3,lty=2,col='purple')
+
+```
+
+
+```{r}
+summary(lm(y~x))
+
+xgrid=seq(from=-5,to=5,by=0.01)
+normal.pdf=dnorm(xgrid)
+student.pdf=dt(x=xgrid, df=100)
+
+plot(normal.pdf~xgrid,col='red',type='l',lwd=2,lty=1,ylim=c(0,0.5),xlim=c(-4,4))
+lines(student.pdf~xgrid,lwd=3,lty=3,col='blue')
+
+
+```

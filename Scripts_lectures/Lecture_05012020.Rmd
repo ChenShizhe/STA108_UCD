@@ -1,0 +1,133 @@
+---
+title: "Lecture script"
+date: "May 1st 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15)
+Ey=x*beta[2]+beta[1];
+error.terms=rnorm(n)*5;
+y=Ey+error.terms;
+
+plot(y~x)
+points(Ey~x,col='red')
+```
+```{r}
+alpha=0.024 # Confidence level is 1-0.024 = 0.976
+fit.lm=lm(y~x+1);
+confint(fit.lm,level=1-alpha)
+```
+```{r}
+beta.hat=fit.linear.model(covariate=x,outcome=y)
+beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+
+## Write a function to obtain the quantiles
+conf.int.quantile<-function(alpha,type,...){
+  if(type=='t'){
+    out=qt(c(1-alpha/2,alpha/2),...)
+  }else if(type=='normal'){
+    out=qnorm(c(1-alpha/2,alpha/2),mean=0,sd=1)
+  }
+  return(out)
+}
+
+#quants=conf.int.quantile(alpha=0.05,type='normal')
+
+quants=conf.int.quantile(alpha=0.05,type='t',df=n-2)
+
+beta.hat%*%c(1,1)-beta.hat.se%*%quants
+
+confint(fit.lm,level=1-0.05)
+```
+
+```{r}
+
+boot.one.instance<-function(x,y){
+  n=length(x);
+  sample_indices<-sample(x=1:n,size=n,replace=TRUE)
+  x.boot=x[sample_indices];y.boot=y[sample_indices]
+  beta.hat= fit.linear.model(covariate=x.boot,outcome=y.boot)
+  return(beta.hat)
+}
+N.boot=1e4;
+beta.hat.boot=replicate(N.boot,boot.one.instance(x=x,y=y))
+
+dim(beta.hat.boot)
+t(apply(beta.hat.boot[,1,],1,quantile,probs=c(0.05/2,1-0.05/2)))
+
+
+```
+
+```{r}
+# Implement the confint function:
+conf.int<-function(alpha,type,x,y,N.boot=1e4){
+  
+  beta.hat=fit.linear.model(covariate=x,outcome=y)
+  beta.hat.se=estimate.coef.sd(beta=beta.hat,covariate=x,outcome=y)
+
+  if (type=='t'){
+    n=length(y);
+    quants=conf.int.quantile(alpha=alpha,type=type,df=n-2)
+    out=beta.hat%*%c(1,1)-beta.hat.se%*%quants
+  } else if (type=='normal'){
+    quants=conf.int.quantile(alpha=alpha,type='normal') 
+    out=beta.hat%*%c(1,1)-beta.hat.se%*%quants
+  } else if (type=='bootstrap'){
+    beta.hat.boot=replicate(N.boot,boot.one.instance(x=x,y=y))
+    out=t(apply(beta.hat.boot[,1,],1,quantile,probs=c(alpha/2,1-alpha/2)))
+  }
+  colnames(out)=c( paste(round(alpha*100/2,digits=3),"%"),paste(round(100-alpha*100/2,digits=3),"%")  )
+  rownames(out)=c('(Intercept)','x')
+  return(out)
+  
+}
+
+conf.int(alpha=0.05,type='t',x=x,y=y)
+confint(fit.lm,level=1-0.05)
+```
+
+```{r}
+
+simulate.one.instance<-function(x,beta,alpha){
+  n=length(x);
+  Ey=x*beta[2]+beta[1];
+  error.terms=rnorm(n)*5;
+  y=Ey+error.terms;
+  CIs=conf.int(alpha=alpha,type='t',x=x,y=y)
+  return(CIs)
+}
+
+
+N.sim=1e4;
+set.seed(1)
+n=50;
+x=rnorm(n,mean=10,sd=2);
+beta=c(20,0.15)
+sim.CIs=replicate(N.sim,simulate.one.instance(x,beta,alpha));
+```
+
+```{r}
+
+# Verify the coverage for the regressin slope
+coverage=sum((sim.CIs[2,1,] < beta[2] ) & (beta[2]<sim.CIs[2,2,]))/N.sim
+1-alpha
+
+
+plot(0,0,col="white",xlim=c(min(sim.CIs[2,1,]),max(sim.CIs[2,2,])),ylim=c(0,20),xlab="Slope",ylab="Index",main=paste('Average Coverage:', signif(coverage,3)))
+abline(v=beta[2],lwd=3,col='red')
+for(i in 1:19){
+  segments(sim.CIs[2,1,i],i,sim.CIs[2,2,i],i,lwd=3)
+}
+
+```

@@ -1,0 +1,61 @@
+---
+title: "Lecture script"
+date: "May 22nd 2020"
+output: html_document
+---
+
+
+```{r}
+library(AER)
+data("Fatalities")
+
+dat.fat=Fatalities
+
+?Fatalities
+
+y=dat.fat$fatal;
+X=as.matrix(dat.fat[,c('spirits','unemp','income','beertax','baptist','mormon','drinkage','dry','youngdrivers','miles','gsp')])
+
+linear.model<-function(beta,covariate){
+  # beta: a 2-vector, where the first entry is the intercept
+  yout=covariate*beta[2]+beta[1]
+  return(yout);
+  # Note: this function only works with simple linear regression model
+  # How would you generalize it?
+}
+
+linear.model(beta=c(0,1,2,3),covariate=X)
+
+
+linear.model<-function(beta,covariate){
+  beta=as.matrix(beta,nrow=length(beta))
+  yout=covariate%*%beta[-1]+beta[1]
+  return(yout);
+}
+dim(X)
+
+linear.model(beta=rep(1,12),covariate=X )
+
+sum.of.squares<-function(beta,covariate,outcome){
+  yout=linear.model(beta=beta,covariate=covariate);
+  res=outcome-yout;
+  sos= sum(res^2);
+  return(sos)
+}
+
+sum.of.squares(beta=rep(1,12),covariate=X,outcome=y)
+# optim 
+
+
+fit.linear.model<-function(covariate,outcome){
+  X=cbind(1,covariate);
+  beta.fit=solve( t(X)%*%X )%*%t(X)%*%outcome;
+  return(beta.fit)
+}
+
+
+beta.hat=fit.linear.model(covariate=X,outcome=y)
+beta.hat.lm=lm(y~X+1)$coef
+
+beta.hat-beta.hat.lm
+```

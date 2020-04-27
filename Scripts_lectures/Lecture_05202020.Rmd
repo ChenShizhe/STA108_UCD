@@ -1,0 +1,86 @@
+---
+title: "Lecture script"
+date: "May 20th 2020"
+output: html_document
+---
+
+
+```{r}
+source('../sources.r')
+
+simulate.one.instance.data<-function(){
+n=100;
+confounder = rnorm(n)*2; # rnorm(n,mean=0,sd=2)
+precision = runif(n);
+instrument = rbinom(n,size=1,prob=0.4);
+trt=rnorm(n) + confounder*0.4-instrument;
+y=trt*1-0.5*confounder+precision*0.7+0.5*rnorm(n);
+out=data.frame(y=y,trt=trt,confounder=confounder, precision=precision, instrument=instrument)
+return(out)
+}
+
+```
+
+```{r}
+# Igorning the confounder 
+
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat=fit.linear.model(covariate=dat[,'trt'],outcome=dat$y);
+  beta.hat.confounder=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder')]), outcome=dat$y)
+  return(c(beta.hat[2],beta.hat.confounder[2]))
+}
+
+N.sim=10000;
+set.seed(1);
+sim.confounder=replicate(N.sim,simulate.one.instance())
+
+apply(sim.confounder,1,mean)
+
+apply( sim.confounder-1,1,function(x){sum(x^2)})
+```
+
+```{r}
+
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder')]),outcome=dat$y);
+  beta.hat.precision=fit.linear.model(covariate=as.matrix(dat[,c('trt','confounder','precision')]), outcome=dat$y)
+  return(c(beta.hat[2],beta.hat.precision[2]))
+}
+
+N.sim=10000;
+set.seed(1);
+sim.precision=replicate(N.sim,simulate.one.instance())
+
+apply(sim.precision,1,mean)
+
+apply( sim.precision-1,1,function(x){sum(x^2)})
+
+
+```
+
+```{r}
+# Instrumental variable
+simulate.one.instance<-function(){
+  dat=simulate.one.instance.data();
+  beta.hat.naive=fit.linear.model(covariate=as.matrix(dat[,c('trt')]),outcome=dat$y);
+  
+  yiv=fit.linear.model(covariate=as.matrix(dat[,'instrument']), outcome=dat$y)
+  trtiv=fit.linear.model(covariate=as.matrix(dat[,'instrument']), outcome=dat$trt)
+  
+  return(c(beta.hat.naive[2],yiv[2]/trtiv[2]))
+  
+}
+
+
+N.sim=10000;
+set.seed(1);
+sim.iv=replicate(N.sim,simulate.one.instance())
+
+apply(sim.iv,1,mean)
+
+apply( sim.iv-1,1,function(x){sum(x^2)})
+
+
+```

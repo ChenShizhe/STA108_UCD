@@ -26,7 +26,7 @@ We now consider all the covariates in the data set. The resulting model is
 	\[
 	y_i =  \beta_0 + \sum_{j=1}^3 x_{i,j} \beta_j  +  \epsilon_i, i=1,\ldots, 200,
 	\]
-	where $y_i$ is the `sales` (1 unit = 1000 dollars) for the $i$th entry, $x_{i,1}$ is the TV advertising budget for the $i$th entry,  $x_{i,2}$ is the radio advertising budget for the $i$th entry, $x_{i,3}$ is the newspaper advertising budget for the $i$th entry. In addition, we assume that the errors $\{\epsilon_i\}_{i=1}^{200}$ satisfy that $\epsilon_1,\ldots, \epsilon_200$ are independently and identically distributed (i.i.d.),  $\mathbb{E}[\epsilon_i]= 0$ for  $i=1,2,\ldots, 200$
+	where $y_i$ is the `sales` (1 unit = 1000 dollars) for the $i$th entry, $x_{i,1}$ is the TV advertising budget for the $i$th entry,  $x_{i,2}$ is the radio advertising budget for the $i$th entry, $x_{i,3}$ is the newspaper advertising budget for the $i$th entry. In addition, we assume that the errors $\{\epsilon_i\}_{i=1}^{200}$ satisfy that $\epsilon_1,\ldots, \epsilon_{200}$ are independently and identically distributed (i.i.d.),  $\mathbb{E}[\epsilon_i]= 0$ for  $i=1,2,\ldots, 200$
 and $\mathrm{var}(\epsilon_i)=\sigma^2$ for  $i=1,2,\ldots, 200$. Recall that we consider fixed design (i.e., $x_i$ is not random) in this course for simplicity. 
 
 ```{r}

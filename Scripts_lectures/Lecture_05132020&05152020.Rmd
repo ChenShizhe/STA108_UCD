@@ -1,0 +1,116 @@
+---
+title: "Lecture script"
+date: "May 13th & 15th 2020"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(include=TRUE,echo = TRUE, eval=FALSE, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+source('../sources.r')
+dat.advertising=read.csv('../data/Advertising.csv');
+fit.lm=lm(sales~TV+1,data=dat.advertising);
+
+resid=fit.lm$residuals;
+
+attach(dat.advertising)
+
+plot(resid~TV,xlab='TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+```
+```{r}
+plot(resid~sales,pch=16,col='red',main='Wrong plot!!!')
+abline(h=0,lwd=3)
+
+```
+
+```{r}
+
+par(mfrow=c(1,2))
+plot(resid~TV,xlab='TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+plot(resid~fit.lm$fitted.values,xlab='Fitted y',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+par(mfrow=c(1,1))
+
+```
+
+
+```{r}
+fit.log=lm(sales~log(TV)+1)
+fit.sqrt=lm(sales~sqrt(TV)+1)
+
+
+par(mfrow=c(1,3))
+plot(resid~TV,xlab='TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+plot(fit.log$residuals~log(TV),xlab='log TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+
+plot(fit.sqrt$residuals~sqrt(TV),xlab='sqrt TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+par(mfrow=c(1,1))
+
+```
+
+```{r}
+n=500;
+distributions=matrix(0,n,4)
+distributions[,1] =-exp(rnorm(n));
+distributions[,2] =exp(rnorm(n));
+distributions[,3]=rt(n,df=3);
+distributions[,4]=runif(n);
+
+titles = c('Left skewed', 'Right skewed', 'Heavy-tailed', 'Light-tailed' )
+par(mfrow=c(2,2))
+for ( i in 1:4){
+this_dist=sort(distributions[,i]);
+normal_mean =mean(this_dist);normal_sd = sd(this_dist);
+this_dist=(this_dist - normal_mean)/normal_sd;
+normal_quantiles = qnorm( (1:length(this_dist))/length(this_dist));
+
+plot(this_dist~normal_quantiles,pch=16,col='red',main=titles[i],xlab='Normal quantiles', ylab='Sample quantiles',xlim=c(-4,4),ylim=c(-4,4))
+abline(a=0,b=1,lwd=3)
+}
+
+```
+
+```{r}
+plot(resid~TV,xlab='TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+```
+```{r}
+fit.ylog=lm(log(sales)~TV+1);
+fit.ysqrt=lm(sqrt(sales)~TV+1);
+
+
+
+
+par(mfrow=c(1,3))
+plot(resid~TV,xlab='TV',ylab='Residuals',pch=16,col='red')
+abline(h=0,lwd=3)
+
+plot(fit.ylog$residuals~TV,xlab='TV',ylab='Residuals (log)',pch=16,col='red')
+abline(h=0,lwd=3)
+
+
+plot(fit.ysqrt$residuals~TV,xlab='TV',ylab='Residuals (sqrt)',pch=16,col='red')
+abline(h=0,lwd=3)
+
+par(mfrow=c(1,1))
+```
+```{r}
+fit.logsqrt=lm(log(sales)~sqrt(TV)+1);
+
+plot(fit.logsqrt$residuals~sqrt(TV),xlab='sqrt TV',ylab='Residuals (log)',pch=16,col='red')
+abline(h=0,lwd=3)
+```

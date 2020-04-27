@@ -1,0 +1,40 @@
+---
+title: "Lecture script"
+date: "May 18th 2020"
+output: html_document
+---
+
+
+```{r}
+dat.advertising=read.csv('../data/advertising.csv')
+pairs(dat.advertising)
+
+fit.ad=lm(sales~TV+radio+newspaper+1,data=dat.advertising)
+
+summary(fit.ad)
+
+summary(lm(sales~TV+1,data=dat.advertising))
+```
+
+
+```{r}
+dat.flu=read.table("../data/flu240.txt",header=TRUE)
+fit.flu=lm(outcome~treatment.received+age+female+1,data=dat.flu)
+
+summary(fit.flu)
+summary(lm(outcome~treatment.received+1,data=dat.flu))
+```
+
+
+
+
+```{r}
+library(AER)
+data("STAR")
+dat.STAR=STAR;
+
+
+fit.STAR=lm(math2~as.factor(star2)+as.factor(schoolid2)+1,data=dat.STAR)
+summary(fit.STAR)$coef[1:3,]
+
+```

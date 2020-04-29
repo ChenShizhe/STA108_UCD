@@ -1,0 +1,80 @@
+---
+title: "Lecture script"
+date: "May 29th 2020"
+output: html_document
+---
+
+```{r}
+## Underfitting 
+source('../sources.r')
+
+simulate.one.instance<-function(beta,X,Z){
+  eta=c(3,4);
+  n=dim(X)[1];
+  noise=rnorm(n)/2;
+  y.XZ=X%*%beta+Z%*%eta+noise;
+  
+  beta.full=fit.linear.model(covariate=cbind(X,Z),outcome=y.XZ);
+  beta.under=fit.linear.model(covariate=X,outcome=y.XZ);
+  return(cbind(beta.full[2:3]-beta,beta.under[2:3]-beta))
+}
+
+beta=c(1,2);
+n=100;
+set.seed(1)
+X=matrix(rnorm(2*n),ncol=2);
+Z=matrix(rnorm(2*n),ncol=2);
+
+N.sim=1e4;
+under.sim=replicate(N.sim,simulate.one.instance(beta,X,Z))
+apply(under.sim[1,,],1,mean)
+
+
+
+simulate.one.instance.pre<-function(beta){
+  eta=c(3,4);
+  n=100;
+  X=matrix(rnorm(2*n),ncol=2);
+  Z=matrix(rnorm(2*n),ncol=2);
+  noise=rnorm(n)/2;
+  y.XZ=X%*%beta+Z%*%eta+noise;
+  
+  beta.full=fit.linear.model(covariate=cbind(X,Z),outcome=y.XZ);
+  beta.under=fit.linear.model(covariate=X,outcome=y.XZ);
+  return(cbind(beta.full[2:3]-beta,beta.under[2:3]-beta))
+}
+
+N.sim=1e4;
+pre.sim=replicate(N.sim,simulate.one.instance.pre(beta))
+apply(pre.sim[2,,],1,mean)
+
+
+
+```
+
+```{r}
+simulate.one.instance<-function(beta,X,Z){
+  eta=c(3,4);
+  n=dim(X)[1];
+  noise=rnorm(n)/2;
+  y.X=X%*%beta+noise;
+  
+  beta.over=fit.linear.model(covariate=cbind(X,Z),outcome=y.X);
+  beta.true=fit.linear.model(covariate=X,outcome=y.X);
+  return(cbind(beta.true[2:3]-beta,beta.over[2:3]-beta))
+}
+
+
+beta=c(1,2);
+n=100;
+set.seed(1)
+X=matrix(rnorm(2*n),ncol=2);
+Z=matrix(rnorm(2*n),ncol=2);
+
+N.sim=1e4;
+over.sim=replicate(N.sim,simulate.one.instance(beta,X,Z))
+apply(over.sim[1,,],1,mean)
+
+
+
+```

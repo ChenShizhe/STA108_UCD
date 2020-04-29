@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  26 APR 2020 09:57
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6800 64-bit) (preloaded format=xelatex 2019.1.4)  27 APR 2020 22:02
 entering extended mode
 **./STA108_bookdown.tex
 (STA108_bookdown.tex
@@ -1144,7 +1144,7 @@ Underfull \vbox (badness 10000) detected at line 2013
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [49] [50] [51] [52]
-Underfull \vbox (badness 10000) detected at line 2213
+Underfull \vbox (badness 10000) detected at line 2218
  []
 
 
@@ -1157,7 +1157,7 @@ Chapter 8.
 [57] [58]
 Appendix A.
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <17.28> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2399.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2404.
 [59
 
 ] [60] [61]
@@ -1171,26 +1171,26 @@ Appendix B.
 Underfull \vbox (badness 1286) has occurred while \output is active []
 
 [66]
-Underfull \vbox (badness 10000) detected at line 2757
+Underfull \vbox (badness 10000) detected at line 2762
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2757
+Underfull \vbox (badness 10000) detected at line 2762
  []
 
 [67]
-Underfull \vbox (badness 10000) detected at line 2868
+Underfull \vbox (badness 10000) detected at line 2873
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [68]
-Underfull \vbox (badness 10000) detected at line 2868
+Underfull \vbox (badness 10000) detected at line 2873
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2868
+Underfull \vbox (badness 10000) detected at line 2873
  []
 
 [69]
@@ -1202,12 +1202,12 @@ Appendix C.
 
 ] [74] [75]
 No file STA108_bookdown.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3141.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3146.
 [76]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3141.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 3146.
 (STA108_bookdown.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 3141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3141.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 3146.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3146.
 
 Package rerunfilecheck Info: File `STA108_bookdown.out' has not changed.
 (rerunfilecheck)             Checksum: BAD24BDB4766C31738063A6FCE737653.

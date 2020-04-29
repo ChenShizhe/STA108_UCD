@@ -1,0 +1,65 @@
+---
+title: "Lecture script"
+date: "June 1st 2020"
+output: html_document
+---
+
+```{r}
+dat.ad=read.csv('../data/advertising.csv')
+
+attach(dat.ad)
+
+full.model=lm(sales~TV+radio+newspaper)
+reduced.model=lm(sales~TV)
+
+
+anova(reduced.model,full.model)
+
+RSS.Reduced<-sum((summary(reduced.model)$residuals)^2);
+RSS.Full<-sum((summary(full.model)$residuals)^2);
+df.Reduced <- summary(reduced.model)$df[2];
+df.Full <- summary(full.model)$df[2];
+
+tF<-((RSS.Reduced-RSS.Full)/(df.Reduced-df.Full))/(RSS.Full/df.Full);
+tF
+```
+
+\[
+H_0: \beta_1 - 2\beta_2 = 0 \quad {\rm v.s.}\quad H_a: \beta_1 -2\beta_2 \neq 0.
+\]
+```{r}
+covariance.LSE=vcov(full.model);
+coef.LSE=coef(full.model)
+covariance.test=covariance.LSE[2:3,2:3]
+coef.test=coef.LSE[2:3]
+R=matrix(0,1,2);
+R[1,1]=1;R[1,2]=-2;
+
+test.stat=t(R%*%coef.test)%*%solve(R%*%covariance.test%*%t(R))%*%(R%*%coef.test)
+
+p.value=1-pchisq(test.stat,df=1)
+
+p.value
+```
+\[
+H_0: \beta_1 = \beta_2 = 0 \quad {\rm v.s.} \quad \beta_1\neq 0, \beta_2 \neq 0
+\]
+```{r}
+covariance.LSE=vcov(full.model);
+coef.LSE=coef(full.model)
+covariance.test=covariance.LSE[2:3,2:3]
+coef.test=coef.LSE[2:3]
+R=matrix(0,2,2);
+R[1,1]=1;R[2,2]=1;
+
+test.stat=t(R%*%coef.test)%*%solve(R%*%covariance.test%*%t(R))%*%(R%*%coef.test)
+
+p.value=1-pchisq(test.stat,df=2)
+
+p.value
+test.stat
+
+reduced.model=lm(sales~newspaper)
+anova(reduced.model,full.model)
+
+```

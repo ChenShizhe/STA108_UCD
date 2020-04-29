@@ -24,7 +24,7 @@
 <meta name="author" content="Shizhe Chen" />
 
 
-<meta name="date" content="2020-04-26" />
+<meta name="date" content="2020-04-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -391,25 +391,30 @@ residual.sum.of.squares=<span class="kw">t</span>(y)<span class="op">%*%</span>(
 <span class="co"># Check if it is true</span>
 <span class="kw">sum.of.squares</span>(beta.hat,<span class="dt">covariate =</span> X,<span class="dt">outcome =</span> y)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># R^2</span>
-R.sq =<span class="st"> </span>explained.sum.of.squares<span class="op">/</span>total.sum.of.squares;
-
-<span class="co"># Through more variables into X</span>
-<span class="co"># These variables are meaningless</span>
+<span class="co"># Simulate data from a new model</span>
+n=<span class="dv">100</span>;
 <span class="kw">set.seed</span>(<span class="dv">1</span>)
-Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">5</span><span class="op">*</span>n),<span class="dt">nrow=</span>n,<span class="dt">ncol=</span><span class="dv">5</span>);
-X.Z=<span class="kw">cbind</span>(X,Z);
+X=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(n<span class="op">*</span><span class="dv">4</span>),<span class="dt">nrow=</span>n,<span class="dt">ncol=</span><span class="dv">4</span>);
+y=X<span class="op">%*%</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)<span class="op">+</span><span class="dv">4</span><span class="op">*</span><span class="kw">rnorm</span>(n);
+Z=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(n<span class="op">*</span><span class="dv">10</span>),<span class="dt">nrow=</span>n,<span class="dt">ncol=</span><span class="dv">10</span>)
 
-P.Z=<span class="kw">calculate.hat</span>(<span class="dt">covariate=</span>X.Z);
+
+
+P=<span class="kw">calculate.hat</span>(<span class="dt">covariate=</span>X);
+P.Z=<span class="kw">calculate.hat</span>(<span class="dt">covariate=</span><span class="kw">cbind</span>(X,Z));
+
+n=<span class="kw">length</span>(y);J=<span class="kw">matrix</span>(<span class="dv">1</span>,n,n);I=<span class="kw">diag</span>(n)
+
+
+R.sq =<span class="kw">t</span>(y)<span class="op">%*%</span>(P<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span><span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y;
 
 R.sq.Z=<span class="st"> </span><span class="kw">t</span>(y)<span class="op">%*%</span>(P.Z<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span><span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y;
 
-R.sq.Z
-R.sq
 
 <span class="co"># Hence the adjusted R^2:</span>
-R.sq.adj=<span class="dv">1</span><span class="op">-</span>(residual.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(total.sum.of.squares<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));
+R.sq.adj=<span class="dv">1</span><span class="op">-</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>P)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));
 
-R.sq.Z.adj=<span class="dv">1</span><span class="op">-</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>P.Z)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X.Z)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));</code></pre></div>
+R.sq.Z.adj=<span class="dv">1</span><span class="op">-</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>P.Z)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="kw">dim</span>(X)[<span class="dv">2</span>]<span class="op">-</span><span class="kw">dim</span>(Z)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>) )<span class="op">/</span>(<span class="kw">t</span>(y)<span class="op">%*%</span>(I<span class="op">-</span>J<span class="op">/</span>n)<span class="op">%*%</span>y<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>));</code></pre></div>
 </div>
 <div id="underfitting-and-overfitting" class="section level2">
 <h2><span class="header-section-number">7.4</span> Underfitting and overfitting</h2>

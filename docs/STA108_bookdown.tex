@@ -125,7 +125,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-04-26}
+    \date{2020-04-27}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2101,25 +2101,30 @@ STA108\_LinearRegression\_S20.pdf.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# R^2}
-\NormalTok{R.sq =}\StringTok{ }\NormalTok{explained.sum.of.squares}\OperatorTok{/}\NormalTok{total.sum.of.squares;}
-
-\CommentTok{# Through more variables into X}
-\CommentTok{# These variables are meaningless}
+\CommentTok{# Simulate data from a new model}
+\NormalTok{n=}\DecValTok{100}\NormalTok{;}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{5}\OperatorTok{*}\NormalTok{n),}\DataTypeTok{nrow=}\NormalTok{n,}\DataTypeTok{ncol=}\DecValTok{5}\NormalTok{);}
-\NormalTok{X.Z=}\KeywordTok{cbind}\NormalTok{(X,Z);}
+\NormalTok{X=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n}\OperatorTok{*}\DecValTok{4}\NormalTok{),}\DataTypeTok{nrow=}\NormalTok{n,}\DataTypeTok{ncol=}\DecValTok{4}\NormalTok{);}
+\NormalTok{y=X}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}\OperatorTok{+}\DecValTok{4}\OperatorTok{*}\KeywordTok{rnorm}\NormalTok{(n);}
+\NormalTok{Z=}\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(n}\OperatorTok{*}\DecValTok{10}\NormalTok{),}\DataTypeTok{nrow=}\NormalTok{n,}\DataTypeTok{ncol=}\DecValTok{10}\NormalTok{)}
 
-\NormalTok{P.Z=}\KeywordTok{calculate.hat}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X.Z);}
+
+
+\NormalTok{P=}\KeywordTok{calculate.hat}\NormalTok{(}\DataTypeTok{covariate=}\NormalTok{X);}
+\NormalTok{P.Z=}\KeywordTok{calculate.hat}\NormalTok{(}\DataTypeTok{covariate=}\KeywordTok{cbind}\NormalTok{(X,Z));}
+
+\NormalTok{n=}\KeywordTok{length}\NormalTok{(y);J=}\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\NormalTok{,n,n);I=}\KeywordTok{diag}\NormalTok{(n)}
+
+
+\NormalTok{R.sq =}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(P}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y;}
 
 \NormalTok{R.sq.Z=}\StringTok{ }\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(P.Z}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y;}
 
-\NormalTok{R.sq.Z}
-\NormalTok{R.sq}
 
 \CommentTok{# Hence the adjusted R^2:}
-\NormalTok{R.sq.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(residual.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(total.sum.of.squares}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
+\NormalTok{R.sq.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{P)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
 
-\NormalTok{R.sq.Z.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{P.Z)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X.Z)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
+\NormalTok{R.sq.Z.adj=}\DecValTok{1}\OperatorTok{-}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{P.Z)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\KeywordTok{dim}\NormalTok{(Z)[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\DecValTok{1}\NormalTok{) )}\OperatorTok{/}\NormalTok{(}\KeywordTok{t}\NormalTok{(y)}\OperatorTok{%*%}\NormalTok{(I}\OperatorTok{-}\NormalTok{J}\OperatorTok{/}\NormalTok{n)}\OperatorTok{%*%}\NormalTok{y}\OperatorTok{/}\NormalTok{(n}\OperatorTok{-}\DecValTok{1}\NormalTok{));}
 \end{Highlighting}
 \end{Shaded}
 

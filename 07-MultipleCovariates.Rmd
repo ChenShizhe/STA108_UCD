@@ -255,25 +255,30 @@ sum.of.squares(beta.hat,covariate = X,outcome = y)
 
 ```{r}
 # R^2
-R.sq = explained.sum.of.squares/total.sum.of.squares;
-
-# Through more variables into X
-# These variables are meaningless
+# Simulate data from a new model
+n=100;
 set.seed(1)
-Z=matrix(rnorm(5*n),nrow=n,ncol=5);
-X.Z=cbind(X,Z);
+X=matrix(rnorm(n*4),nrow=n,ncol=4);
+y=X%*%c(1,2,3,4)+4*rnorm(n);
+Z=matrix(rnorm(n*10),nrow=n,ncol=10)
 
-P.Z=calculate.hat(covariate=X.Z);
+
+
+P=calculate.hat(covariate=X);
+P.Z=calculate.hat(covariate=cbind(X,Z));
+
+n=length(y);J=matrix(1,n,n);I=diag(n)
+
+
+R.sq =t(y)%*%(P-J/n)%*%y/t(y)%*%(I-J/n)%*%y;
 
 R.sq.Z= t(y)%*%(P.Z-J/n)%*%y/t(y)%*%(I-J/n)%*%y;
 
-R.sq.Z
-R.sq
 
 # Hence the adjusted R^2:
-R.sq.adj=1-(residual.sum.of.squares/(n-dim(X)[2]-1) )/(total.sum.of.squares/(n-1));
+R.sq.adj=1-(t(y)%*%(I-P)%*%y/(n-dim(X)[2]-1) )/(t(y)%*%(I-J/n)%*%y/(n-1));
 
-R.sq.Z.adj=1-(t(y)%*%(I-P.Z)%*%y/(n-dim(X.Z)[2]-1) )/(t(y)%*%(I-J/n)%*%y/(n-1));
+R.sq.Z.adj=1-(t(y)%*%(I-P.Z)%*%y/(n-dim(X)[2]-dim(Z)[2]-1) )/(t(y)%*%(I-J/n)%*%y/(n-1));
 
 ```
 
